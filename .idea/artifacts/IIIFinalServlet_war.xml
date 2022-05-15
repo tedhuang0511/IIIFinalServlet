@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="IIIFinalServlet:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>IIIFinalServlet</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="IIIFinalServlet-1.0-SNAPSHOT.war">
+      <element id="artifact" artifact-name="IIIFinalServlet:war exploded" />
+    </root>
+  </artifact>
+</component>
