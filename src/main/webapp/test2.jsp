@@ -26,5 +26,9 @@
     </thead>
 </table>
 </div>
+
+<div>
+    <img src="https://assets.juksy.com/files/articles/107984/800x_100_w-61a09ad30e45d.jpg" width="300px">
+</div>
 </body>
 </html>
