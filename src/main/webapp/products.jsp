@@ -33,45 +33,7 @@
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
     <script src="js/queryEditButtons.js"></script>
-    <style>
-        .button-54 {
-            font-family: "Open Sans", sans-serif;
-            font-size: 14px;
-            letter-spacing: 2px;
-            text-decoration: none;
-            text-transform: uppercase;
-            color: #000;
-            cursor: pointer;
-            border: 3px solid;
-            padding: 0.25em 0.5em;
-            box-shadow: 1px 1px 0 0, 2px 2px 0 0, 3px 3px 0 0, 4px 4px 0 0, 5px 5px 0 0;
-            position: relative;
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: manipulation;
-            margin-right: 2px;
-        }
-
-        .button-54:active {
-            box-shadow: 0 0 0 0;
-            top: 5px;
-            left: 5px;
-        }
-
-        @media (min-width: 768px) {
-            .button-54 {
-                padding: 0.25em 0.75em;
-            }
-        }
-
-        .edit {
-            width: 19px;
-        }
-
-        .edit:hover {
-            width: 22px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="css/mycss.css">
 </head>
 <body>
 <div id="product01" class="d-block">
@@ -227,16 +189,16 @@
 
                         </th>
                         <tr>
-                            <td>照片1  <button onclick="delImg()">刪除</button></td>
-                            <td>照片2</td>
+                            <td>照片1<span class="delbutspan"><a href="" id="img1" onclick="return confirm('確認刪除?');">刪除圖片</a></span></td>
+                            <td>照片2<span class="delbutspan"><a href="" id="img2" onclick="return confirm('確認刪除?');">刪除圖片</a></span></td>
                         </tr>
                         <tr>
                             <td><img id="prodimg1" src="" alt="Product Image1" width="300px"></td>
                             <td><img id="prodimg2" src="" alt="Product Image2" width="300px"></td>
                         </tr>
                         <tr>
-                            <td>照片3</td>
-                            <td>照片4</td>
+                            <td>照片3<span class="delbutspan"><a href="" id="img3" onclick="return confirm('確認刪除?');">刪除圖片</a></span></td>
+                            <td>照片4<span class="delbutspan"><a href="" id="img4" onclick="return confirm('確認刪除?');">刪除圖片</a></span></td>
                         </tr>
                         <tr>
                             <td><img id="prodimg3" src="" alt="Product Image3" width="300px"></td>
@@ -251,7 +213,7 @@
 </div><!--產品編輯的區域控制 END-->
 
 <script>
-    //產品清單的編輯按鈕被點擊時觸發fnc1
+        //產品清單的編輯按鈕被點擊時觸發fnc1
     function fnc1(pname, ptype, price, pdesc, pimg1, pimg2, pimg3, pimg4) {
         $('#queryTab').removeClass("active").addClass('nav-link')
         $('#editTab').prop('class', 'nav-link active')
@@ -266,7 +228,10 @@
         $('#prodimg2').prop('src', pimg2)
         $('#prodimg3').prop('src', pimg3)
         $('#prodimg4').prop('src', pimg4)
-
+        $('#img1').prop('href', 'deleteProductImage.jsp?pdname='+pname+'&x=1')
+        $('#img2').prop('href', 'deleteProductImage.jsp?pdname='+pname+'&x=2')
+        $('#img3').prop('href', 'deleteProductImage.jsp?pdname='+pname+'&x=3')
+        $('#img4').prop('href', 'deleteProductImage.jsp?pdname='+pname+'&x=4')
     }
 
     function delConfirm(pname) {
@@ -278,17 +243,6 @@
         const isDel = confirm("確定新增/修改?");
         return isDel;
     }
-
-    function delImg(){
-        const isDel = confirm("確定刪除??")
-        if (isDel==true){
-            const pid = $('#pdname').val();
-            console.log(pid);
-        //TODO
-        }
-    }
-
-
 
     $('.p-query').on('click', function () {
         $('#productList').removeClass('d-none')
