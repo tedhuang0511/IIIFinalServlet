@@ -60,7 +60,7 @@
             <td>${row.product_price }</td>
             <td>${row.product_stock }</td>
             <td><a href="products.jsp?delid=${row.product_id}"
-                   onclick="return delConfirm('${row.product_name}');">刪除</a></td>
+                   onclick="return delConfirm('${row.product_name}');">刪除品項</a></td>
         </tr>
     </c:forEach>
     </tbody>
