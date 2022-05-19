@@ -18,10 +18,6 @@
     <c:redirect url="home.jsp"></c:redirect>
 </c:if>
 
-<sql:query var="rs">
-    SELECT * FROM products
-</sql:query>
-
 <html>
 <head>
     <meta charset="utf-8">
@@ -72,7 +68,7 @@
                 <tbody>
                 <tr>
                     <th scope="row" style="text-align: end">產品名稱</th>
-                    <td><input type="text"></td>
+                    <td><input type="text" id="pdqueryname"></td>
                     <td style="text-align: end; font-weight: bold">產品編號</td>
                     <td><input type="text"></td>
                 </tr>
@@ -86,35 +82,9 @@
             </table>
         </div>
         <div id="productList" class="d-none">
-            <table class="table table-success table-hover table-striped w-100">
-                <thead>
-                <tr>
-                    <th scope="col">序號</th>
-                    <th scope="col">編輯</th>
-                    <th scope="col">產品名稱</th>
-                    <th scope="col">產品類別</th>
-                    <th scope="col">產品價格</th>
-                    <th scope="col">庫存量</th>
-                    <th scope="col">  </th>
-                </tr>
-                </thead>
-                <tbody>
-                <c:forEach items="${rs.rows }" var="row" varStatus="status">
-                    <tr>
-                        <td>${status.count }</td>
-                        <td><img class="edit" src="images/edit.png" alt=""
-                                 onclick="fnc1('${row.product_name }','${row.product_catalog }','${row.product_price }','${row.product_desc }','${row.product_img1}', '${row.product_img2}', '${row.product_img3}', '${row.product_img4}')">
-                        </td>
-                        <td>${row.product_name }</td>
-                        <td>${row.product_catalog }</td>
-                        <td>${row.product_price }</td>
-                        <td>${row.product_stock }</td>
-                        <td><a href="products.jsp?delid=${row.product_id}"
-                               onclick="return delConfirm('${row.product_name}');">刪除</a></td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-            </table>
+                <div id="test99">
+                    <%--從AJAX取得DB select result--%>
+                </div>
         </div>
     </div> <!--產品維護搜尋條件與結果的區域控制 END-->
     <!--產品編輯的區域控制 START-->
@@ -142,7 +112,8 @@
                             <td><input type="text" name="pdname" id="pdname" class="productquery" value=""></td>
                             <td style="text-align: end; font-weight: bold">產品類別</td>
                             <td>
-                                <input type="text" name="pdtypeselect" class="pdtypeselect productquery" list="pdtypeselect"
+                                <input type="text" name="pdtypeselect" class="pdtypeselect productquery"
+                                       list="pdtypeselect"
                                        value="">
                                 <datalist id="pdtypeselect">
                                     <option value="3C">
@@ -189,16 +160,20 @@
 
                         </th>
                         <tr>
-                            <td>照片1<span class="delbutspan"><a href="" id="img1" onclick="return confirm('確認刪除?');">刪除圖片</a></span></td>
-                            <td>照片2<span class="delbutspan"><a href="" id="img2" onclick="return confirm('確認刪除?');">刪除圖片</a></span></td>
+                            <td>照片1<span class="delbutspan"><a href="" id="img1"
+                                                               onclick="return confirm('確認刪除?');">刪除圖片</a></span></td>
+                            <td>照片2<span class="delbutspan"><a href="" id="img2"
+                                                               onclick="return confirm('確認刪除?');">刪除圖片</a></span></td>
                         </tr>
                         <tr>
                             <td><img id="prodimg1" src="" alt="Product Image1" width="300px"></td>
                             <td><img id="prodimg2" src="" alt="Product Image2" width="300px"></td>
                         </tr>
                         <tr>
-                            <td>照片3<span class="delbutspan"><a href="" id="img3" onclick="return confirm('確認刪除?');">刪除圖片</a></span></td>
-                            <td>照片4<span class="delbutspan"><a href="" id="img4" onclick="return confirm('確認刪除?');">刪除圖片</a></span></td>
+                            <td>照片3<span class="delbutspan"><a href="" id="img3"
+                                                               onclick="return confirm('確認刪除?');">刪除圖片</a></span></td>
+                            <td>照片4<span class="delbutspan"><a href="" id="img4"
+                                                               onclick="return confirm('確認刪除?');">刪除圖片</a></span></td>
                         </tr>
                         <tr>
                             <td><img id="prodimg3" src="" alt="Product Image3" width="300px"></td>
@@ -213,7 +188,7 @@
 </div><!--產品編輯的區域控制 END-->
 
 <script>
-        //產品清單的編輯按鈕被點擊時觸發fnc1
+    //產品清單的編輯按鈕被點擊時觸發fnc1
     function fnc1(pname, ptype, price, pdesc, pimg1, pimg2, pimg3, pimg4) {
         $('#queryTab').removeClass("active").addClass('nav-link')
         $('#editTab').prop('class', 'nav-link active')
@@ -228,10 +203,10 @@
         $('#prodimg2').prop('src', pimg2)
         $('#prodimg3').prop('src', pimg3)
         $('#prodimg4').prop('src', pimg4)
-        $('#img1').prop('href', 'deleteProductImage.jsp?pdname='+pname+'&x=1')
-        $('#img2').prop('href', 'deleteProductImage.jsp?pdname='+pname+'&x=2')
-        $('#img3').prop('href', 'deleteProductImage.jsp?pdname='+pname+'&x=3')
-        $('#img4').prop('href', 'deleteProductImage.jsp?pdname='+pname+'&x=4')
+        $('#img1').prop('href', 'deleteProductImage.jsp?pdname=' + pname + '&x=1')
+        $('#img2').prop('href', 'deleteProductImage.jsp?pdname=' + pname + '&x=2')
+        $('#img3').prop('href', 'deleteProductImage.jsp?pdname=' + pname + '&x=3')
+        $('#img4').prop('href', 'deleteProductImage.jsp?pdname=' + pname + '&x=4')
     }
 
     function delConfirm(pname) {
@@ -270,9 +245,24 @@
         $('#editTab').prop('class', 'nav-link active')
         $('#productContent').prop('class', 'd-none')
         $('#productEdit').prop('class', 'd-block')
-        $('.productquery').prop('value','')
+        $('.productquery').prop('value', '')  //把欄位清空
         $('#productImages').prop('class', 'd-none');
     })
+
+    $('.p-query').click(
+        function () {
+            $.ajax({
+                url: "selectProduct.jsp",
+                method: "post",
+                data: {
+                    pdname: $('#pdqueryname').val() //從搜尋欄位取值送去selectProduct.jsp
+                },
+                success: function (responseText) {
+                    $('#test99').html(responseText);
+                }
+            });
+        }
+    );
 
 </script>
 </body>
