@@ -15,9 +15,7 @@ public class Logout extends HttpServlet {
     protected void doGet(
             HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        if(request.getSession().getAttribute("login")!=null){
-            request.getSession().invalidate(); //令目前的httpSession失效
-        }
+        request.getSession().invalidate();
         response.sendRedirect(LOGIN_PATH);
     }
 }
