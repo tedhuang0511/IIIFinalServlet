@@ -74,7 +74,7 @@
     </div>
     <div class="navbar-nav">
         <div class="nav-item text-nowrap bg-primary mx-3">
-            <a class="nav-link px-3 text-white" href="index.html">登出</a>
+            <a class="nav-link px-3 text-white" href="logout">登出</a>
         </div>
     </div>
 </header>
