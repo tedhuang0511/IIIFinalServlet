@@ -9,52 +9,13 @@
     <!--    <link rel="stylesheet" href="../test/css/bootstrap.css">-->
     <!-- Custom styles for this template -->
     <link href="css/dashboard.css" rel="stylesheet">
-    <script src="js/jquery-3.6.0.js"></script>
+    <link href="css/mycss.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
-    <script src="js/queryEditButtons.js"></script>
-    <style>
-        .button-54 {
-            font-family: "Open Sans", sans-serif;
-            font-size: 14px;
-            letter-spacing: 2px;
-            text-decoration: none;
-            text-transform: uppercase;
-            color: #000;
-            cursor: pointer;
-            border: 3px solid;
-            padding: 0.25em 0.5em;
-            box-shadow: 1px 1px 0 0, 2px 2px 0 0, 3px 3px 0 0, 4px 4px 0 0, 5px 5px 0 0;
-            position: relative;
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: manipulation;
-            margin-right: 2px;
-        }
-
-        .button-54:active {
-            box-shadow: 0 0 0 0;
-            top: 5px;
-            left: 5px;
-        }
-
-        @media (min-width: 768px) {
-            .button-54 {
-                padding: 0.25em 0.75em;
-            }
-        }
-
-        .edit {
-            width: 19px;
-        }
-
-        .edit:hover{
-            width: 22px;
-        }
-    </style>
+    <script src="js/jquery-3.6.0.js"></script>
 </head>
 
 <body>

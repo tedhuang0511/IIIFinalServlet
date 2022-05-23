@@ -41,20 +41,16 @@ public class Login extends HttpServlet {
         userService = new UserService(username);
 
         String page;
-        try {
-            if(isInputted(username,password)&&userService.login(username,password)){
-                if(request.getSession(false)!=null){
-                    request.changeSessionId(); //新增session
-                }
-                request.getSession().setAttribute("login",username);//為session設定屬性("login"),值=username
-                page= SUCCESS_PATH;
-            }else{
-                page= ERROR_PATH;
+        if(isInputted(username,password)&&userService.login(username,password)){
+            if(request.getSession(false)!=null){
+                request.changeSessionId(); //新增session
             }
-        response.sendRedirect(page);
-        } catch (SQLException e) {
-            e.printStackTrace();
+            request.getSession().setAttribute("login",username);//為session設定屬性("login"),值=username
+            page= SUCCESS_PATH;
+        }else{
+            page= ERROR_PATH;
         }
+        response.sendRedirect(page);
     }
 
     private boolean isInputted(String username, String password){

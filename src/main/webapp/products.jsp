@@ -28,7 +28,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
-    <script src="js/queryEditButtons.js"></script>
+    <script src="js/myJs.js"></script>
     <link rel="stylesheet" type="text/css" href="css/mycss.css">
 </head>
 <body>
@@ -98,7 +98,6 @@
                             alt="">新增/儲存
                     </button>
                     </input>
-
                     <table class="table table-hover">
                         <thead>
                         <tr>
@@ -130,29 +129,60 @@
                             <td><textarea form="p-add-form" name="pdesc" id="pdesc" class="productquery" cols="35"
                                           wrap="soft"></textarea></td>
                         </tr>
-                        <tr>
-                            <th scope="row" style="text-align: end">產品照片1</th>
-                            <td>
-                                <input class="form-control" type="file" id="formFile1" name="formFile1">
-                            </td>
-                            <td scope="row" style="text-align: end;font-weight: bold">產品照片2</td>
-                            <td>
-                                <input class="form-control" type="file" id="formFile2" name="formFile2">
-                            </td>
-                        </tr>
-                        <tr>
-                            <th scope="row" style="text-align: end">產品照片3</th>
-                            <td>
-                                <input class="form-control" type="file" id="formFile3" name="formFile3">
-                            </td>
-                            <td scope="row" style="text-align: end;font-weight: bold">產品照片4</td>
-                            <td>
-                                <input class="form-control" type="file" id="formFile4" name="formFile4">
-                            </td>
-                        </tr>
                         </tbody>
                     </table>
                 </form>
+                <%--圖片上傳區域,每一個form獨立作業,一次上傳一張--%>
+                <table class="table table-hover">
+                    <tbody>
+                    <tr>
+                        <th scope="row" style="text-align: end">產品照片1</th>
+                        <td>
+                            <form id="p-img1-form" method="post" action="Brad17" enctype="multipart/form-data">
+                                <input class="form-control" type="file" id="formFile1" name="upload">
+                                <%--透過兩個hidden column把產品名稱跟第幾個欄位傳給Brad17,其中pdImageName是透過fnc1給值--%>
+                                <input type="hidden" name="pdImageColumn" value="product_img1">
+                                <input type="hidden" class="pdImg1" name="pdImageName" value="">
+                                <button type="submit" onclick="return saveConfirm()">上傳圖片1</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td scope="row" style="text-align: end;font-weight: bold">產品照片2</td>
+                        <td>
+                            <form id="p-img2-form" method="post" action="Brad17" enctype="multipart/form-data">
+                                <input class="form-control" type="file" id="formFile2" name="upload">
+                                <input type="hidden" name="pdImageColumn" value="product_img2">
+                                <input type="hidden" class="pdImg1" name="pdImageName" value="">
+                                <button type="submit" onclick="return saveConfirm()">上傳圖片2</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" style="text-align: end">產品照片3</th>
+                        <td>
+                            <form id="p-img3-form" method="post" action="Brad17" enctype="multipart/form-data">
+                                <input class="form-control" type="file" id="formFile3" name="upload">
+                                <input type="hidden" name="pdImageColumn" value="product_img3">
+                                <input type="hidden" class="pdImg1" name="pdImageName" value="">
+                                <button type="submit" onclick="return saveConfirm()">上傳圖片3</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td scope="row" style="text-align: end;font-weight: bold">產品照片4</td>
+                        <td>
+                            <form id="p-img4-form" method="post" action="Brad17" enctype="multipart/form-data">
+                                <input class="form-control" type="file" id="formFile4" name="upload">
+                                <input type="hidden" name="pdImageColumn" value="product_img4">
+                                <input type="hidden" class="pdImg1" name="pdImageName" value="">
+                                <button type="submit" onclick="return saveConfirm()">上傳圖片4</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <%--圖片上傳區域,每一個form獨立作業,一次上傳一張--%>
                 <%--產品照片區--%>
                 <div id="productImages" class="d-none">
                     <table>
@@ -176,7 +206,7 @@
                                                                onclick="return confirm('確認刪除?');">刪除圖片</a></span></td>
                         </tr>
                         <tr>
-                            <td><img id="prodimg3" src="" alt="Product Image3" width="300px"></td>
+                            <td><img id="prodimg3" src="" alt="Product Image3" width="300px" onerror=""></td>
                             <td><img id="prodimg4" src="" alt="Product Image4" width="300px"></td>
                         </tr>
                     </table>
@@ -207,6 +237,7 @@
         $('#img2').prop('href', 'deleteProductImage.jsp?pdname=' + pname + '&x=2')
         $('#img3').prop('href', 'deleteProductImage.jsp?pdname=' + pname + '&x=3')
         $('#img4').prop('href', 'deleteProductImage.jsp?pdname=' + pname + '&x=4')
+        $('.pdImg1').prop('value',pname);
     }
 
     function delConfirm(pname) {

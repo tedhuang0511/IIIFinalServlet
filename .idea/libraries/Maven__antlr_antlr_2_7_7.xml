@@ -2,9 +2,6 @@
   <library name="Maven: antlr:antlr:2.7.7">
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/antlr/antlr/2.7.7/antlr-2.7.7.jar!/" />
-      <root url="jar://$PROJECT_DIR$/src/main/webapp/WEB-INF/lib/json-20220320.jar!/" />
-      <root url="jar://$PROJECT_DIR$/src/main/webapp/WEB-INF/lib/mysql-connector-java-8.0.28.jar!/" />
-      <root url="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/lib" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$MAVEN_REPOSITORY$/antlr/antlr/2.7.7/antlr-2.7.7-javadoc.jar!/" />
@@ -12,6 +9,5 @@
     <SOURCES>
       <root url="jar://$MAVEN_REPOSITORY$/antlr/antlr/2.7.7/antlr-2.7.7-sources.jar!/" />
     </SOURCES>
-    <jarDirectory url="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/lib" recursive="false" />
   </library>
 </component>

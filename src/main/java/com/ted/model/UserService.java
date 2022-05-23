@@ -14,17 +14,20 @@ public class UserService {
         this.USERS = USERS;
     }
 
-    public boolean login(String username, String password) throws IOException, SQLException {
-        var conn = DBConnection.connectDB();//拿到DB連線
-        var sql = "select * from members where username = ?";
-        var pstmt = conn.prepareStatement(sql);
-        pstmt.setString(1, username);
-        var res = pstmt.executeQuery();
-        if(res.next()){
-            String name = res.getString("username");
-            String pw = res.getString("password");
-            System.out.printf(name + ":" + pw);
-            return username.equals(name) && password.equals(pw);
+    public boolean login(String username, String password) {
+        try(var conn = DBConnection.connectDB()) {  //拿到DB連線,自動關閉連線
+            var sql = "select * from members where username = ?";
+            var pstmt = conn.prepareStatement(sql);
+                pstmt.setString(1, username);
+                var res = pstmt.executeQuery();
+                if(res.next()){
+                    String name = res.getString("username");
+                    String pw = res.getString("password");
+                    System.out.printf(name + ":" + pw);
+                    return username.equals(name) && password.equals(pw);
+                }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return false;
     }
