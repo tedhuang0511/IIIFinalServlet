@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-@WebServlet("/Brad17")
+@WebServlet("/UploadImageToS3")
 @MultipartConfig(
         location = "D:\\Program Files\\IIIFinalServlet\\src\\main\\webapp\\upload"
 )
@@ -25,7 +25,7 @@ public class UploadImageToS3 extends HttpServlet {
         String columnName = request.getParameter("pdImageColumn");
         String productName = request.getParameter("pdImageName");
 
-        Part part = request.getPart("upload");
+        Part part = request.getPart("files");
         String filename = createNewFilename();
         String path = "D:\\Program Files\\IIIFinalServlet\\src\\main\\webapp\\upload\\"+filename;
         part.write(filename);
@@ -40,12 +40,16 @@ public class UploadImageToS3 extends HttpServlet {
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, imgUrl);
             pstmt.setString(2, productName);
-            int res = pstmt.executeUpdate();
-            System.out.println(res);
+            pstmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            cleanUploadFolder(file);
         }
-
+    }
+    //把本地端暫存資料刪除
+    private void cleanUploadFolder(File file) {
+        file.delete();
     }
 
     private String createNewFilename() {

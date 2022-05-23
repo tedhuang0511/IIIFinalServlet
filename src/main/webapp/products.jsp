@@ -138,45 +138,46 @@
                     <tr>
                         <th scope="row" style="text-align: end">產品照片1</th>
                         <td>
-                            <form id="p-img1-form" method="post" action="Brad17" enctype="multipart/form-data">
-                                <input class="form-control" type="file" id="formFile1" name="upload">
-                                <%--透過兩個hidden column把產品名稱跟第幾個欄位傳給Brad17,其中pdImageName是透過fnc1給值--%>
+                            <form class="p-img-form" method="post" enctype="multipart/form-data" name="fileinfo">
+                                <input class="form-control" type="file" name="files">
+                                <%--透過兩個hidden column把產品名稱跟第幾個欄位傳給Brad17,其中pdImageName是透過fnc1給值
+                                input file name的files對應到request.getPart(:name)--%>
                                 <input type="hidden" name="pdImageColumn" value="product_img1">
-                                <input type="hidden" class="pdImg1" name="pdImageName" value="">
-                                <button type="submit" onclick="return saveConfirm()">上傳圖片1</button>
+                                <input type="hidden" class="pdImg" name="pdImageName" value="">
+                                <button type="button" value="上傳" onclick="return uploadConfirm(0)">上傳圖片1</button>
                             </form>
                         </td>
                     </tr>
                     <tr>
                         <td scope="row" style="text-align: end;font-weight: bold">產品照片2</td>
                         <td>
-                            <form id="p-img2-form" method="post" action="Brad17" enctype="multipart/form-data">
-                                <input class="form-control" type="file" id="formFile2" name="upload">
+                            <form class="p-img-form" method="post" enctype="multipart/form-data" name="fileinfo">
+                                <input class="form-control" type="file" name="files">
                                 <input type="hidden" name="pdImageColumn" value="product_img2">
-                                <input type="hidden" class="pdImg1" name="pdImageName" value="">
-                                <button type="submit" onclick="return saveConfirm()">上傳圖片2</button>
+                                <input type="hidden" class="pdImg" name="pdImageName" value="">
+                                <button type="button" value="上傳" onclick="return uploadConfirm(1)">上傳圖片2</button>
                             </form>
                         </td>
                     </tr>
                     <tr>
                         <th scope="row" style="text-align: end">產品照片3</th>
                         <td>
-                            <form id="p-img3-form" method="post" action="Brad17" enctype="multipart/form-data">
-                                <input class="form-control" type="file" id="formFile3" name="upload">
+                            <form class="p-img-form" method="post" enctype="multipart/form-data" name="fileinfo">
+                                <input class="form-control" type="file" name="files">
                                 <input type="hidden" name="pdImageColumn" value="product_img3">
-                                <input type="hidden" class="pdImg1" name="pdImageName" value="">
-                                <button type="submit" onclick="return saveConfirm()">上傳圖片3</button>
+                                <input type="hidden" class="pdImg" name="pdImageName" value="">
+                                <button type="button" value="上傳" onclick="return uploadConfirm(2)">上傳圖片3</button>
                             </form>
                         </td>
                     </tr>
                     <tr>
                         <td scope="row" style="text-align: end;font-weight: bold">產品照片4</td>
                         <td>
-                            <form id="p-img4-form" method="post" action="Brad17" enctype="multipart/form-data">
-                                <input class="form-control" type="file" id="formFile4" name="upload">
+                            <form class="p-img-form" method="post" enctype="multipart/form-data" name="fileinfo">
+                                <input class="form-control" type="file" name="files">
                                 <input type="hidden" name="pdImageColumn" value="product_img4">
-                                <input type="hidden" class="pdImg1" name="pdImageName" value="">
-                                <button type="submit" onclick="return saveConfirm()">上傳圖片4</button>
+                                <input type="hidden" class="pdImg" name="pdImageName" value="">
+                                <button type="button" value="上傳" onclick="return uploadConfirm(3)">上傳圖片4</button>
                             </form>
                         </td>
                     </tr>
@@ -237,7 +238,7 @@
         $('#img2').prop('href', 'deleteProductImage.jsp?pdname=' + pname + '&x=2')
         $('#img3').prop('href', 'deleteProductImage.jsp?pdname=' + pname + '&x=3')
         $('#img4').prop('href', 'deleteProductImage.jsp?pdname=' + pname + '&x=4')
-        $('.pdImg1').prop('value',pname);
+        $('.pdImg').prop('value',pname);
     }
 
     function delConfirm(pname) {
@@ -248,6 +249,13 @@
     function saveConfirm() {
         const isDel = confirm("確定新增/修改?");
         return isDel;
+    }
+
+    function uploadConfirm(index) {
+        const isDel = confirm("確定新增圖片?");
+        if(isDel==true){
+            doUpload(index);
+        }
     }
 
     $('.p-query').on('click', function () {
@@ -279,7 +287,7 @@
         $('.productquery').prop('value', '')  //把欄位清空
         $('#productImages').prop('class', 'd-none');
     })
-
+    //根據搜尋欄位給的資訊使用ajax抓資料
     $('.p-query').click(
         function () {
             $.ajax({
@@ -294,6 +302,25 @@
             });
         }
     );
+    //透過ajax把圖片上傳的form傳給servlet處理
+    function doUpload(index) {
+        var formData = new FormData($( ".p-img-form" )[index]);
+        $.ajax({
+            url: 'UploadImageToS3',
+            type: 'POST',
+            data: formData,
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function () {
+                alert("新增成功");
+            },
+            error: function () {
+                alert("新增失敗");
+            }
+        });
+    }
 
 </script>
 </body>
