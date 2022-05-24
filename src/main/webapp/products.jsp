@@ -1,5 +1,3 @@
-<%@page import="java.util.Properties" %>
-<%@page import="java.sql.*" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
@@ -67,10 +65,12 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <th scope="row" style="text-align: end">產品名稱</th>
+                    <th scope="row" style="text-align: end"><label for="pdqueryname">產品名稱</label></th>
                     <td><input type="text" id="pdqueryname"></td>
-                    <td style="text-align: end; font-weight: bold">產品編號</td>
-                    <td><input type="text"></td>
+                    <td style="text-align: end; font-weight: bold"><label for="aaa">產品編號</label></td>
+                    <td>
+                        <input type="text" id="aaa">
+                    </td>
                 </tr>
                 <tr>
                     <th scope="row" style="text-align: end">產品類別</th>
@@ -97,7 +97,7 @@
                             src="images/search.png" style="width: 20px"
                             alt="">新增/儲存
                     </button>
-                    </input>
+
                     <table class="table table-hover">
                         <thead>
                         <tr>
@@ -187,9 +187,6 @@
                 <%--產品照片區--%>
                 <div id="productImages" class="d-none">
                     <table>
-                        <th>
-
-                        </th>
                         <tr>
                             <td>照片1<span class="delbutspan"><a href="" id="img1"
                                                                onclick="return confirm('確認刪除?');">刪除圖片</a></span></td>
@@ -242,18 +239,16 @@
     }
 
     function delConfirm(pname) {
-        const isDel = confirm("確定刪除 " + pname + "?");
-        return isDel;
+        return confirm("確定刪除 " + pname + "?");
     }
 
     function saveConfirm() {
-        const isDel = confirm("確定新增/修改?");
-        return isDel;
+        return confirm("確定新增/修改?");
     }
 
     function uploadConfirm(index) {
         const isDel = confirm("確定新增圖片?");
-        if(isDel==true){
+        if(isDel===true){
             doUpload(index);
         }
     }

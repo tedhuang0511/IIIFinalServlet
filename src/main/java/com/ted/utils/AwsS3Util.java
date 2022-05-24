@@ -18,8 +18,8 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 public class AwsS3Util {
 
     static AmazonS3 s3;
-    static String AWS_ACCESS_KEY = "AKIA2KDLRLFETF5GZLUW"; // 【你的 access_key】
-    static String AWS_SECRET_KEY = "39OjVTwInwaszyN6jwTFtD7EV6y6rJWJZeULHV5R"; // 【你的 aws_secret_key】
+    static String AWS_ACCESS_KEY = ""; // 【你的 access_key】
+    static String AWS_SECRET_KEY = ""; // 【你的 aws_secret_key】
     static String bucketName = "tedawsbucket20220523"; // 【你 bucket 的名字】 # 首先需要保證 s3 上已經存在該儲存桶
 
     static {
