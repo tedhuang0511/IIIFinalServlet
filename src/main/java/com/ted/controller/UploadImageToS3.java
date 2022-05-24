@@ -1,4 +1,7 @@
-package com.ted.utils;
+package com.ted.controller;
+
+import com.ted.utils.AwsS3Util;
+import com.ted.utils.DBConnection;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +26,7 @@ public class UploadImageToS3 extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String columnName = request.getParameter("pdImageColumn");
-        String productName = request.getParameter("pdImageName");
+        String productId = request.getParameter("imgPdId");
 
         Part part = request.getPart("files");
         String filename = createNewFilename();
@@ -35,12 +38,13 @@ public class UploadImageToS3 extends HttpServlet {
 
         try(var conn = DBConnection.connectDB();){ //拿到db連線,自動關閉連線
             var presql = "UPDATE PRODUCTS SET " + columnName;
-            var sql = presql + " = ? WHERE PRODUCT_NAME = ?";
+            var sql = presql + " = ? WHERE PRODUCT_ID = ?";
             PreparedStatement pstmt;
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, imgUrl);
-            pstmt.setString(2, productName);
-            pstmt.executeUpdate();
+            pstmt.setString(2, productId);
+            var test = pstmt.executeUpdate();
+            System.out.println(test);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

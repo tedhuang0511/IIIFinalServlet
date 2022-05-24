@@ -53,7 +53,7 @@
         <tr>
             <td>${status.count }</td>
             <td><img class="edit" src="images/edit.png" alt=""
-                     onclick="fnc1('${row.product_name }','${row.product_catalog }','${row.product_price }','${row.product_desc }','${row.product_img1}', '${row.product_img2}', '${row.product_img3}', '${row.product_img4}')">
+                     onclick="fnc1('${row.product_id}','${row.product_name }','${row.product_catalog }','${row.product_price }','${row.product_desc }','${row.product_img1}', '${row.product_img2}', '${row.product_img3}', '${row.product_img4}')">
             </td>
             <td>${row.product_name }</td>
             <td>${row.product_catalog }</td>
