@@ -180,24 +180,20 @@
                 <div id="productImages" class="d-none">
                     <table>
                         <tr>
-                            <td>照片1<span class="delbutspan"><a href="" id="img1"
-                                                               onclick="return confirm('確認刪除?');">刪除圖片</a></span></td>
-                            <td>照片2<span class="delbutspan"><a href="" id="img2"
-                                                               onclick="return confirm('確認刪除?');">刪除圖片</a></span></td>
+                            <td>照片1<span class="delbutspan" data-pid=""><button onclick="return deleteImgConfirm(1);">刪除圖片</button></span></td>
+                            <td>照片2<span class="delbutspan" data-pid=""><button onclick="return deleteImgConfirm(2);">刪除圖片</button></span></td>
                         </tr>
                         <tr>
-                            <td><img id="prodimg1" src="https://i.imgur.com/7sPQA0H.jpg" alt="Product Image1" width="300px"></td>
-                            <td><img id="prodimg2" src="https://i.imgur.com/7sPQA0H.jpg" alt="Product Image2" width="300px"></td>
+                            <td><img id="prodimg1" src="" alt="Product Image1" width="300px"></td>
+                            <td><img id="prodimg2" src="" alt="Product Image2" width="300px"></td>
                         </tr>
                         <tr>
-                            <td>照片3<span class="delbutspan"><a href="" id="img3"
-                                                               onclick="return confirm('確認刪除?');">刪除圖片</a></span></td>
-                            <td>照片4<span class="delbutspan"><a href="" id="img4"
-                                                               onclick="return confirm('確認刪除?');">刪除圖片</a></span></td>
+                            <td>照片3<span class="delbutspan" data-pid=""><button onclick="return deleteImgConfirm(3);">刪除圖片</button></span></td>
+                            <td>照片4<span class="delbutspan" data-pid=""><button onclick="return deleteImgConfirm(4);">刪除圖片</button></span></td>
                         </tr>
                         <tr>
-                            <td><img id="prodimg3" src="https://i.imgur.com/7sPQA0H.jpg" alt="Product Image3" width="300px" onerror=""></td>
-                            <td><img id="prodimg4" src="https://i.imgur.com/7sPQA0H.jpg" alt="Product Image4" width="300px"></td>
+                            <td><img id="prodimg3" src="" alt="Product Image3" width="300px"></td>
+                            <td><img id="prodimg4" src="" alt="Product Image4" width="300px"></td>
                         </tr>
                     </table>
                 </div>
@@ -224,10 +220,7 @@
         $('#prodimg2').prop('src', pimg2)
         $('#prodimg3').prop('src', pimg3)
         $('#prodimg4').prop('src', pimg4)
-        $('#img1').prop('href', 'deleteProductImage.jsp?pdname=' + pname + '&x=1') //刪除圖片
-        $('#img2').prop('href', 'deleteProductImage.jsp?pdname=' + pname + '&x=2')
-        $('#img3').prop('href', 'deleteProductImage.jsp?pdname=' + pname + '&x=3')
-        $('#img4').prop('href', 'deleteProductImage.jsp?pdname=' + pname + '&x=4')
+        $('.delbutspan').data('pid', pid) //把產品ID放到刪除圖片按鈕的標籤上 傳給servlet處裡
         $('.imgPdId').prop('value', pid);
     }
 
@@ -246,6 +239,13 @@
         const isDel = confirm("確定新增圖片?");
         if (isDel === true) {
             doUpload(index);
+        }
+    }
+
+    function deleteImgConfirm(index){
+        const isDel = confirm("確定刪除圖片?");
+        if(isDel===true){
+            doDeleteImg(index);
         }
     }
 
@@ -332,6 +332,24 @@
             },
             error: function () {
                 alert("新增/修改失敗");
+            }
+        });
+    }
+
+    //確認刪除後執行>>刪除產品圖片servlet
+    function doDeleteImg(index) {
+        $.ajax({
+            url: "DeleteProductImage",
+            method: "post",
+            data: {
+                imgIndex : index,
+                pid : $('.delbutspan').data("pid")
+            },
+            success: function () {
+                alert("移除圖片成功");
+            },
+            error: function () {
+                alert("移除圖片失敗");
             }
         });
     }
