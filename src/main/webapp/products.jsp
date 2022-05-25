@@ -180,16 +180,16 @@
                 <div id="productImages" class="d-none">
                     <table>
                         <tr>
-                            <td>照片1<span class="delbutspan" data-pid=""><button onclick="return deleteImgConfirm(1);">刪除圖片</button></span></td>
-                            <td>照片2<span class="delbutspan" data-pid=""><button onclick="return deleteImgConfirm(2);">刪除圖片</button></span></td>
+                            <td>照片1<button onclick="return deleteImgConfirm(1);">刪除圖片</button></td>
+                            <td>照片2<button onclick="return deleteImgConfirm(2);">刪除圖片</button></td>
                         </tr>
                         <tr>
                             <td><img id="prodimg1" src="" alt="Product Image1" width="300px"></td>
                             <td><img id="prodimg2" src="" alt="Product Image2" width="300px"></td>
                         </tr>
                         <tr>
-                            <td>照片3<span class="delbutspan" data-pid=""><button onclick="return deleteImgConfirm(3);">刪除圖片</button></span></td>
-                            <td>照片4<span class="delbutspan" data-pid=""><button onclick="return deleteImgConfirm(4);">刪除圖片</button></span></td>
+                            <td>照片3<button onclick="return deleteImgConfirm(3);">刪除圖片</button></td>
+                            <td>照片4<button onclick="return deleteImgConfirm(4);">刪除圖片</button></td>
                         </tr>
                         <tr>
                             <td><img id="prodimg3" src="" alt="Product Image3" width="300px"></td>
@@ -214,18 +214,13 @@
         $('#pdprice').prop('value', price)
         $('.pdtypeselect').prop('value', ptype)
         $('#pdesc').prop('value', pdesc)
-        $('#editProductId').prop('value', pid)
+        $('#editProductId').prop('value', pid)  //把產品id帶到編輯頁面
         $('#productImages').prop('class', 'd-block');
         $('#prodimg1').prop('src', pimg1) //既有產品的圖片從DB把url撈出來填上去
         $('#prodimg2').prop('src', pimg2)
         $('#prodimg3').prop('src', pimg3)
         $('#prodimg4').prop('src', pimg4)
-        $('.delbutspan').data('pid', pid) //把產品ID放到刪除圖片按鈕的標籤上 傳給servlet處裡
-        $('.imgPdId').prop('value', pid);
-    }
-
-    function delConfirm(pname) {
-        return confirm("確定刪除 " + pname + "?");
+        $('.imgPdId').prop('value', pid); //把產品id帶到新增圖片的隱藏欄位
     }
 
     function saveOrModifyConfirm() {
@@ -254,7 +249,6 @@
     })
 
     $('#editTab').on('click', function () {
-        console.log("123123")
         $('#queryTab').removeClass("active").addClass('nav-link')
         $('#editTab').prop('class', 'nav-link active')
         $('#productContent').prop('class', 'd-none')
@@ -262,7 +256,6 @@
     })
 
     $('#queryTab').on('click', function () {
-        console.log("123123")
         $('#editTab').removeClass("active").addClass('nav-link')
         $('#queryTab').prop('class', 'nav-link active')
         $('#productContent').prop('class', 'd-block')
@@ -270,7 +263,6 @@
     })
 
     $('.p-add').on('click', function () {
-        console.log("p-add")
         $('#queryTab').removeClass("active").addClass('nav-link')
         $('#editTab').prop('class', 'nav-link active')
         $('#productContent').prop('class', 'd-none')
@@ -343,7 +335,7 @@
             method: "post",
             data: {
                 imgIndex : index,
-                pid : $('.delbutspan').data("pid")
+                pid : $("#editProductId").val()
             },
             success: function () {
                 alert("移除圖片成功");
