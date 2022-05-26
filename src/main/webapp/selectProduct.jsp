@@ -10,7 +10,6 @@
 />
 
 <c:choose>
-
     <c:when test="${!empty param.pdname }">
         <sql:query var="rs">
             SELECT * FROM products where product_name = ?
@@ -22,7 +21,6 @@
             SELECT * FROM products
         </sql:query>
     </c:otherwise>
-
 </c:choose>
 
 <html>
@@ -59,8 +57,7 @@
             <td>${row.product_catalog }</td>
             <td>${row.product_price }</td>
             <td>${row.product_stock }</td>
-            <td><a href="products.jsp?delid=${row.product_id}"
-                   onclick="return delConfirm('${row.product_name}');">刪除品項</a></td>
+            <td><button onclick="return deleteProductItemConfirm('${row.product_id}');">刪除品項</button></td>
         </tr>
     </c:forEach>
     </tbody>

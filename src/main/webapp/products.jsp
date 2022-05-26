@@ -1,20 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
-
-<sql:setDataSource
-        driver="com.mysql.cj.jdbc.Driver"
-        url="jdbc:mysql://localhost/iii"
-        user="root"
-        password=""
-/>
-<c:if test="${!empty param.delid }">
-    <sql:update>
-        DELETE FROM PRODUCTS WHERE PRODUCT_id = ?
-        <sql:param>${param.delid }</sql:param>
-    </sql:update>
-    <c:redirect url="home.jsp"></c:redirect>
-</c:if>
 
 <html>
 <head>
@@ -244,6 +228,13 @@
         }
     }
 
+    function deleteProductItemConfirm(pid){
+        const isDel = confirm("確定刪除品項?");
+        if(isDel===true){
+            doDeleteProduct(pid);
+        }
+    }
+
     $('.p-query').on('click', function () {
         $('#productList').removeClass('d-none')
     })
@@ -334,6 +325,7 @@
             url: "DeleteProductImage",
             method: "post",
             data: {
+                action : "deleteImg",
                 imgIndex : index,
                 pid : $("#editProductId").val()
             },
@@ -342,6 +334,21 @@
             },
             error: function () {
                 alert("移除圖片失敗");
+            }
+        });
+    }
+
+    //確認刪除後執行>>刪除產品單一產品品項
+    function doDeleteProduct(pid) {
+        $.ajax({
+            url: "DeleteProductImage",
+            method: "post",
+            data: {
+                action : "deleteProductItem",
+                pid : pid
+            },
+            success: function () {
+                alert("刪除品項成功");
             }
         });
     }
