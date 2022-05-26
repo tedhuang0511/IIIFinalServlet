@@ -234,7 +234,7 @@
     function timer() {
         const date = new Date();
         document.getElementById("time").innerHTML =
-            "Hello 城武! 現在時間:" + date.toLocaleTimeString();
+            "Hello ${sessionScope.login}! 現在時間:" + date.toLocaleTimeString();
     }
     setInterval(timer, 500);
 

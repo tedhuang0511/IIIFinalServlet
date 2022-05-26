@@ -31,7 +31,6 @@ public class DeleteProductImage extends HttpServlet {
                 pstmt.setString(2, productId);
                 pstmt.executeUpdate();
             }else if(action!=null && action.equals("deleteProductItem")){
-                //DELETE FROM customers WHERE Name='王二';
                 var sql  = "DELETE FROM PRODUCTS WHERE PRODUCT_ID = ?";
                 PreparedStatement pstmt;
                 pstmt = conn.prepareStatement(sql);

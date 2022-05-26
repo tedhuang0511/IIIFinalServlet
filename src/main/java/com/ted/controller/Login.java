@@ -3,7 +3,6 @@ package com.ted.controller;
 import com.ted.model.UserService;
 
 import java.io.*;
-import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebInitParam;
