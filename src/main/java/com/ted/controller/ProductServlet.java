@@ -18,7 +18,7 @@ public class ProductServlet extends HttpServlet {
 
     private ProductService productService;
 
-    public void init() throws ServletException {
+    public void init() {
         ServletContext application = this.getServletContext();
         ApplicationContext context = (ApplicationContext) application.getAttribute(
                 WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
