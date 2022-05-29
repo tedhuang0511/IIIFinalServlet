@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #myprogress {
+            position: fixed;
+            width: 200px;
+            height: 150px;
+            top: 50%;
+            left: 50%;
+            margin-top: -100px; /* Negative half of height. */
+            margin-left: -150px; /* Negative half of width. */
+            background: powderblue;
+            color: cadetblue;
+            font-size: 22px;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            line-height: 1.2;
+            min-height: 6vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .progressbar {
+            position: relative;
+            max-width: 500px;
+            width: 100%;
+            margin: 30px auto 0;
+            height: 30px;
+            background: powderblue;
+            overflow: hidden;
+        }
+
+        span.progress {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 0;
+            background: #326666;
+            transition: all .3s;
+        }
+        .upload-btn {
+            --pathA: polygon(0.75em 0em,1.5em 0.45em,1.05em 0.45em,1.05em 0.9em,1.5em 0.9em,1.5em 1em,0.75em 1em,0.75em 1em,0.75em 1em,0em 1em,0em 0.9em,0.45em 0.9em,0.45em 0.45em,0em 0.45em);
+            --pathB: polygon(0.75em 0em,0.975em 0.25em,0.975em 0.45em,0.975em 0.65em,1.125em 0.8em,1.125em 1em,0.9em 1em,0.75em 1em,0.6em 1em,0.375em 1em,0.375em 0.8em,0.525em 0.65em,0.525em 0.45em,0.525em 0.25em);
+            --pathC: polygon(0.75em 0em,0.975em 0.25em,0.975em 0.45em,0.975em 0.65em,1.125em 0.8em,1.125em 1em,0.9em 1em,0.75em 1.5em,0.6em 1em,0.375em 1em,0.375em 0.8em,0.525em 0.65em,0.525em 0.45em,0.525em 0.25em);
+            background: #255ff4;
+            border-radius: 1.25em;
+            color: #fff;
+            cursor: pointer;
+            overflow: hidden;
+            padding: 0.5em 1em 0.5em 3em;
+            position: relative;
+            transition: all 0.1s linear;
+            width: 10em;
+            -webkit-tap-highlight-color: #0000;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+        .upload-btn:disabled {
+            cursor: not-allowed;
+        }
+        .upload-btn:not(:disabled):focus,
+        .upload-btn:not(:disabled):hover {
+            background: #0b46da;
+        }
+        .upload-btn:focus {
+            outline: transparent;
+        }
+        .upload-btn:before,
+        .upload-btn:after {
+            content: "";
+            display: block;
+            position: absolute;
+        }
+        .upload-btn:before {
+            background:
+                    radial-gradient(0.2em 0.2em at 1.2em 0.4em,#fff 45%,#fff0 50%),
+                    radial-gradient(0.1em 0.1em at 0.6em 0.8em,#fff 45%,#fff0 50%),
+                    radial-gradient(0.2em 0.2em at 0.4em 1.4em,#fff 45%,#fff0 50%),
+                    radial-gradient(0.1em 0.1em at 1em 1.3em,#fff 45%,#fff0 50%),
+                    radial-gradient(0.1em 0.1em at 0.6em 2em,#fff 45%,#fff0 50%),
+                    radial-gradient(0.1em 0.1em at 1.2em 1.9em,#fff 45%,#fff0 50%),
+                    radial-gradient(0.2em 0.2em at 0.9em 2.3em,#fff 45%,#fff0 50%),
+
+                    radial-gradient(0.2em 0.2em at 0.4em 2.7em,#fff 45%,#fff0 50%),
+                    radial-gradient(0.1em 0.1em at 1.2em 3.1em,#fff 45%,#fff0 50%),
+                    radial-gradient(0.2em 0.2em at 0.6em 3.3em,#fff 45%,#fff0 50%),
+                    radial-gradient(0.1em 0.1em at 1em 3.7em,#fff 45%,#fff0 50%),
+                    radial-gradient(0.1em 0.1em at 0.4em 4em,#fff 45%,#fff0 50%),
+                    radial-gradient(0.1em 0.1em at 1.2em 4.7em,#fff 45%,#fff0 50%),
+                    radial-gradient(0.2em 0.2em at 0.8em 4.4em,#fff 45%,#fff0 50%),
+                    radial-gradient(0.1em 0.1em at 0.3em 4.8em,#fff 45%,#fff0 50%),
+
+                    radial-gradient(0.2em 0.2em at 1.2em 5.4em,#fff 45%,#fff0 50%),
+                    radial-gradient(0.1em 0.1em at 0.6em 5.8em,#fff 45%,#fff0 50%),
+                    radial-gradient(0.2em 0.2em at 0.4em 6.4em,#fff 45%,#fff0 50%),
+                    radial-gradient(0.1em 0.1em at 1em 6.3em,#fff 45%,#fff0 50%),
+                    radial-gradient(0.1em 0.1em at 0.6em 7em,#fff 45%,#fff0 50%),
+                    radial-gradient(0.1em 0.1em at 1.2em 6.9em,#fff 45%,#fff0 50%),
+                    radial-gradient(0.2em 0.2em at 0.9em 7.3em,#fff 45%,#fff0 50%);
+            background-repeat: no-repeat;
+            bottom: 0;
+            left: 1em;
+            width: 1.5em;
+            height: 10em;
+        }
+        .upload-btn:after {
+            background: linear-gradient(#fff 67%,#f4b925 67%);
+            clip-path: var(--pathA);
+            top: 0.75em;
+            left: 1em;
+            width: 1.5em;
+            height: 1.5em;
+        }
+        .upload-btn--running:before,
+        .upload-btn--done:before {
+            animation: riseOnce 0.5s 0.3s linear, riseLoop 1s 0.8s linear infinite;
+        }
+        .upload-btn--running:after,
+        .upload-btn--done:after {
+            clip-path: var(--pathC);
+        }
+        .upload-btn--running:after {
+            animation: flyStart 1.3s ease-in-out, fly 2s 1.3s ease-in-out infinite;
+        }
+        .upload-btn--done:before {
+            animation: riseLoop 1s 0.8s linear infinite paused;
+        }
+        .upload-btn--done:after {
+            animation: flyEnd 0.8s linear forwards;
+        }
+        /* Dark theme */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #17181c;
+                --fg: #e3e4e8;
+            }
+        }
+        /* Animation */
+        @keyframes riseOnce {
+            from {
+                transform: translateY(0);
+            }
+            to {
+                transform: translateY(2.5em);
+            }
+        }
+        @keyframes riseLoop {
+            from {
+                transform: translateY(2.5em);
+            }
+            to {
+                transform: translateY(7.5em);
+            }
+        }
+        @keyframes flyStart {
+            from {
+                clip-path: var(--pathA);
+                transform: translateY(0);
+            }
+            17% {
+                clip-path: var(--pathB);
+                transform: translateY(0);
+            }
+            33% {
+                clip-path: var(--pathC);
+                transform: translateY(0);
+            }
+            to {
+                transform: translateY(-10%);
+            }
+        }
+        @keyframes fly {
+            from, to {
+                transform: translateY(-10%);
+            }
+            50% {
+                transform: translateY(3%);
+            }
+        }
+        @keyframes flyEnd {
+            from {
+                transform: translateY(0);
+            }
+            to {
+                transform: translateY(-5em);
+            }
+        }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+</head>
+<body>
+<button onclick="showQQ()">Click ME</button>
+<button onclick="hideQQ()">Click ME</button>
+<div id="myprogress" class="d-none">
+    <div class="counter">0</div>
+    <div class="progressbar">
+        <span class="progress"></span>
+    </div>
+</div>
+<div>
+    <button id="upload" class="upload-btn" type="button">Upload</button>
+</div>
+
+<script>
+
+    function showQQ() {
+        $('#myprogress').removeClass("d-none");
+        counterInit(0, 100);
+    }
+
+    function hideQQ() {
+        $('.counter').text(0);
+        $('#myprogress').addClass("d-none");
+    }
+
+    var progress = $('.progressbar .progress')
+
+    function counterInit(fValue, lValue) {
+        var counter_value = parseInt($('.counter').text());
+        counter_value++;
+        if (counter_value >= fValue && counter_value <= lValue) {
+
+            $('.counter').text(counter_value + '%');
+            progress.css({'width': counter_value + '%'});
+
+            setTimeout(function () {
+                counterInit(fValue, lValue);
+            }, 30);
+        }
+
+    }
+
+    document.addEventListener("DOMContentLoaded",function(){
+        let btn = this.getElementById("upload");
+
+        if (btn) {
+            btn.addEventListener("click",function(){
+                let cl = this.classList,
+                    r = "upload-btn--running",
+                    d = "upload-btn--done",
+                    dur = 4000;
+
+                if (!cl.contains(r) && !cl.contains(d) && !this.disabled) {
+                    cl.add(r);
+                    this.disabled = true;
+                    this.innerHTML = "Uploading…";
+
+                    setTimeout(() => {
+                        cl.remove(r);
+                        cl.add(d);
+                        this.innerHTML = "Done!";
+
+                        setTimeout(() => {
+                            cl.remove(d);
+                            this.disabled = false;
+                            this.innerHTML = "Upload";
+                        },1500);
+                    },dur);
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

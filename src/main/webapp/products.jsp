@@ -77,9 +77,13 @@
              aria-labelledby="productEdit-tab">
             <div style="margin-top: -18px; margin-bottom: -8px">
                 <input type="hidden" id="editProductId" name="editProductId" value="">
-                <button class="button-54 p-save" onclick="return saveOrModifyConfirm()"><img
+                <button class="button-54" onclick="return saveOrModifyConfirm(`Insert`)"><img
                         src="images/search.png" style="width: 20px"
-                        alt="">新增/儲存
+                        alt="">新增品項insert
+                </button>
+                <button class="button-54" onclick="return saveOrModifyConfirm(`Update`)"><img
+                        src="images/search.png" style="width: 20px"
+                        alt="">更新品項update
                 </button>
                 <table class="table table-hover">
                     <tbody>
@@ -207,10 +211,10 @@
         $('.imgPdId').prop('value', pid); //把產品id帶到新增圖片的隱藏欄位
     }
 
-    function saveOrModifyConfirm() {
+    function saveOrModifyConfirm(action) {
         const isSave = confirm("確定新增/修改?");
         if (isSave === true) {
-            doSaveOrModify();
+            doSaveOrModify(action);
         }
     }
 
@@ -260,6 +264,7 @@
         $('#productEdit').prop('class', 'd-block')
         $('.productquery').prop('value', '')  //把欄位清空
         $('#productImages').prop('class', 'd-none');
+        $('#editProductId').prop('value',''); //如果使用者點新增品項按鈕,可能之前有先編輯過某產品,所以要把此id欄位清空
     })
     //根據搜尋欄位給的資訊使用ajax抓資料
     $('.p-query').click(
@@ -288,17 +293,20 @@
             cache: false,
             contentType: false,
             processData: false,
+            beforeSend: function(){
+                console.log("start upload...");
+            },
+            complete: function(){
+                console.log("finish upload...");
+            },
             success: function () {
                 alert("新增成功");
-            },
-            error: function () {
-                alert("新增失敗");
             }
         });
     }
 
     //新增儲存的按鈕按下去之後用Ajax送去servlet處裡
-    function doSaveOrModify() {
+    function doSaveOrModify(action) {
         $.ajax({
             url: "ProductDataInsert",
             method: "post",
@@ -307,7 +315,8 @@
                 pdname: $('#pdname').val(),
                 pdtypeselect: $('.pdtypeselect').val(),
                 pdprice: $('#pdprice').val(),
-                pdesc: $('#pdesc').val()
+                pdesc: $('#pdesc').val(),
+                pdaction: action
             },
             success: function (e) {
                 console.log(e);
