@@ -308,7 +308,7 @@
     //新增儲存的按鈕按下去之後用Ajax送去servlet處裡
     function doSaveOrModify(action) {
         $.ajax({
-            url: "ProductDataInsert",
+            url: "ProductServlet",
             method: "post",
             data: {
                 editProductId: $("#editProductId").val(),
@@ -331,7 +331,7 @@
     //確認刪除後執行>>刪除產品圖片servlet
     function doDeleteImg(index) {
         $.ajax({
-            url: "ProductDataInsert",
+            url: "ProductServlet",
             method: "post",
             data: {
                 pdaction : "DeleteImg",
@@ -350,7 +350,7 @@
     //確認刪除後執行>>刪除產品單一產品品項
     function doDeleteProduct(pid) {
         $.ajax({
-            url: "ProductDataInsert",
+            url: "ProductServlet",
             method: "post",
             data: {
                 pdaction : "Delete",

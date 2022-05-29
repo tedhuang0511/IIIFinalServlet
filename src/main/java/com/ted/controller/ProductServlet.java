@@ -2,7 +2,6 @@ package com.ted.controller;
 
 import com.ted.model.ProductBean;
 import com.ted.model.ProductService;
-import com.ted.utils.DBConnection;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -10,14 +9,11 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-@WebServlet(name = "ProductDataInsert", value = "/ProductDataInsert")
-public class ProductDataInsert extends HttpServlet {
+@WebServlet(name = "ProductServlet", value = "/ProductServlet")
+public class ProductServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
     private ProductService productService;
