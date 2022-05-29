@@ -30,7 +30,7 @@ public class ProductDataInsert extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         //接收參數
         request.setCharacterEncoding("UTF-8");
         var username = (String) request.getSession().getAttribute("login");
@@ -41,14 +41,26 @@ public class ProductDataInsert extends HttpServlet {
         var pdPrice = request.getParameter("pdprice");
         var pDesc = request.getParameter("pdesc");
         var pdaction = request.getParameter("pdaction");
+        var imgIndex1 = request.getParameter("imgIndex");
         System.out.println(pdaction + " from productservelet" + pid);
 
         //驗證資料
         Map<String, String> errors = new HashMap<>();
         request.setAttribute("errors", errors);
 
+        //轉換資料 //TODO 把資料轉一轉 imgIndex用字串就好
+        int imgIndex = 0;
+        if(imgIndex1!=null && imgIndex1.length()!=0) {
+            try {
+                imgIndex = Integer.parseInt(imgIndex1);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                errors.put("id", "Id must be an integer");
+            }
+        }
+
         if (pdaction != null) {
-            if (pdaction.equals("Insert") || pdaction.equals("Update") || pdaction.equals("Delete")) {  // --pdaction.equals("Insert") ||--   把這段拿掉因為insert沒有PID 202205292359
+            if (pdaction.equals("Insert") || pdaction.equals("Update") || pdaction.equals("Delete")) {
                 if (pid == null || pid.length() == 0) {
                     errors.put("id", "Please enter Id for " + pdaction);
                 }
@@ -57,12 +69,16 @@ public class ProductDataInsert extends HttpServlet {
 
         //呼叫Model
         ProductBean bean = new ProductBean();
-        bean.setProductId(Integer.valueOf(pid));
-        bean.setProductName(pdName);
-        bean.setProductCatalog(pdType);
-        bean.setProductPrice(Integer.parseInt(pdPrice));
-        bean.setProductDesc(pDesc);
-        bean.setUpdateUser(username);
+        try{
+            bean.setProductId(Integer.valueOf(pid));
+            bean.setProductName(pdName);
+            bean.setProductCatalog(pdType);
+            bean.setProductPrice(Integer.parseInt(pdPrice));
+            bean.setProductDesc(pDesc);
+            bean.setUpdateUser(username);
+        }catch (Exception e){
+            System.out.println(e);
+        }
 
 
         if (pdaction != null && pdaction.equals("Select")) {
@@ -92,7 +108,9 @@ public class ProductDataInsert extends HttpServlet {
 //            request.getRequestDispatcher(
 //                    "/pages/product.jsp").forward(request, response);
         } else if (pdaction != null && pdaction.equals("Delete")) {
-//            boolean result = productService.delete(bean);
+            System.out.println("send delete to product service");
+            boolean result = productService.delete(bean);
+            System.out.println(result);
 //            if(!result) {
 //                request.setAttribute("delete", 0);
 //            } else {
@@ -100,6 +118,9 @@ public class ProductDataInsert extends HttpServlet {
 //            }
 //            request.getRequestDispatcher(
 //                    "/pages/product.jsp").forward(request, response);
+        }else if (pdaction != null && pdaction.equals("DeleteImg")) {
+            System.out.println("send img delete to ps");
+            ProductBean result = productService.deleteImg(bean, imgIndex);
         } else {
             errors.put("action", "Unknown Action:" + pdaction);
 //            request.getRequestDispatcher(

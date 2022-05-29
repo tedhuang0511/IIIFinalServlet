@@ -57,6 +57,30 @@ public class ProductDAOHibernate implements ProductDAO {
 		}
 		return null;
 	}
+
+	public ProductBean updateImg(Integer index, Integer id) {
+		if(id!=null) {
+			ProductBean temp = this.getSession().get(ProductBean.class, id);
+			System.out.println("deleteImg DAO: " + id + " " + index);
+			if(temp!=null) {
+				switch (index){
+					case 1:
+						temp.setProductImg1("https://i.imgur.com/7sPQA0H.jpg");
+						break;
+					case 2:
+						temp.setProductImg2("https://i.imgur.com/7sPQA0H.jpg");
+						break;
+					case 3:
+						temp.setProductImg3("https://i.imgur.com/7sPQA0H.jpg");
+						break;
+					case 4:
+						temp.setProductImg4("https://i.imgur.com/7sPQA0H.jpg");
+				}
+				return temp;
+			}
+		}
+		return null;
+	}
 	
 	@Override
 	public boolean delete(Integer id) {

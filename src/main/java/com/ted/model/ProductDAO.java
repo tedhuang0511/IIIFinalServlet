@@ -13,6 +13,8 @@ public interface ProductDAO {
 	public abstract ProductBean update(String name, Integer price,
 									   String desc, String catalog, Integer id);
 
+	public abstract ProductBean updateImg(Integer imgIndex, Integer id);
+
 	public abstract boolean delete(Integer id);
 
 }

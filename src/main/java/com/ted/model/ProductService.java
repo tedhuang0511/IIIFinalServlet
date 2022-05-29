@@ -44,4 +44,21 @@ public class ProductService {
         }
         return result;
     }
+
+    public ProductBean deleteImg(ProductBean bean, Integer index) {
+        ProductBean result = null;
+        if(bean!=null && bean.getProductId()!=null) {
+            result = productDao.updateImg(index, bean.getProductId());
+        }
+        return result;
+    }
+
+    public boolean delete(ProductBean bean) {
+        boolean result = false;
+        if(bean!=null && bean.getProductId()!=null) {
+            result = productDao.delete(bean.getProductId());
+        }
+        return result;
+    }
+
 }

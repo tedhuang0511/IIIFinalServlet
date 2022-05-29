@@ -331,12 +331,12 @@
     //確認刪除後執行>>刪除產品圖片servlet
     function doDeleteImg(index) {
         $.ajax({
-            url: "DeleteProductImage",
+            url: "ProductDataInsert",
             method: "post",
             data: {
-                action : "deleteImg",
+                pdaction : "DeleteImg",
                 imgIndex : index,
-                pid : $("#editProductId").val()
+                editProductId : $("#editProductId").val()
             },
             success: function () {
                 alert("移除圖片成功");
@@ -350,14 +350,17 @@
     //確認刪除後執行>>刪除產品單一產品品項
     function doDeleteProduct(pid) {
         $.ajax({
-            url: "DeleteProductImage",
+            url: "ProductDataInsert",
             method: "post",
             data: {
-                action : "deleteProductItem",
-                pid : pid
+                pdaction : "Delete",
+                editProductId : pid
             },
             success: function () {
                 alert("刪除品項成功");
+            },
+            error: function(){
+                alert("刪除失敗");
             }
         });
     }
