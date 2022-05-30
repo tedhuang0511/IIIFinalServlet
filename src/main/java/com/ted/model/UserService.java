@@ -16,13 +16,13 @@ public class UserService {
 
     public boolean login(String username, String password) {
         try(var conn = DBConnection.connectDB()) {  //拿到DB連線,自動關閉連線
-            var sql = "select * from members where username = ?";
+            var sql = "select * from user where user_account = ?";
             var pstmt = conn.prepareStatement(sql);
                 pstmt.setString(1, username);
                 var res = pstmt.executeQuery();
                 if(res.next()){
-                    String name = res.getString("username");
-                    String pw = res.getString("password");
+                    String name = res.getString("user_account");
+                    String pw = res.getString("user_password");
                     System.out.printf(name + ":" + pw);
                     return username.equals(name) && password.equals(pw);
                 }

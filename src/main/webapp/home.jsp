@@ -49,7 +49,7 @@
                         <a class="nav-link dropdown-toggle show" href="#" id="dropdown01" data-bs-toggle="dropdown"
                            aria-expanded="true">權限設定</a>
                         <ul class="submenu collapse" aria-labelledby="dropdown01">
-                            <li><a class="dropdown-item" href="#">使用者維護</a></li>
+                            <li><a class="dropdown-item users" href="#">使用者維護</a></li>
                             <li><a class="dropdown-item" href="#" id="accountInfo">帳號資訊</a></li>
                         </ul>
                     </li>
@@ -107,11 +107,17 @@
                 <canvas class="my-4 w-100" id="myChart" width="900" height="380"></canvas>
             </div>
 
-            <div id="product01" class="d-none">
-                <jsp:include page="products.jsp">
+            <div id="user01" class="d-none">
+                <jsp:include page="UserPages/displayUser.jsp">
                     <jsp:param name="key1" value="123"/>
                 </jsp:include>
-            </div><!--產品編輯的區域控制 END-->
+            </div>
+
+            <div id="product01" class="d-none">
+                <jsp:include page="ProductPages/displayProduct.jsp">
+                    <jsp:param name="key1" value="123"/>
+                </jsp:include>
+            </div>
 
             <div id="main_members" class="d-none">
                 <div
@@ -238,9 +244,12 @@
     }
     setInterval(timer, 500);
 
+    $('.users').on('click', function () {
+        $('main>div').prop('class', 'd-none')
+        $('#user01').removeClass('d-none')
+    })
     $('.products').on('click', function () {
         $('main>div').prop('class', 'd-none')
-        $('#productList').prop('class', 'd-none')
         $('#product01').removeClass('d-none')
     })
     $('.members').on('click', function () {

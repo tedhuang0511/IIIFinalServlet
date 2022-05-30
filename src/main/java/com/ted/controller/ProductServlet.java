@@ -91,7 +91,7 @@ public class ProductServlet extends HttpServlet {
             List<ProductBean> result = productService.select(bean);
             request.setAttribute("select", result);
             request.getRequestDispatcher(
-                    "selectProduct.jsp").forward(request, response);
+                    "ProductPages/selectProduct.jsp").forward(request, response);
         } else if (pdaction != null && pdaction.equals("Insert")) {
             System.out.println("come in insert statement at ProductServlet");
             ProductBean result = productService.insert(bean);
