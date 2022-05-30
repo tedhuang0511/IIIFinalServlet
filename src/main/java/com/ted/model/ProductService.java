@@ -24,6 +24,7 @@ public class ProductService {
                 result.add(temp);
             }
         } else {
+            assert bean != null;
             String pdname = bean.getProductName();
             String pdtype = bean.getProductCatalog();
             System.out.println("in PS multiple select method"+":"+pdname+":"+pdtype);

@@ -1,6 +1,7 @@
 package com.ted.model;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
@@ -43,18 +44,18 @@ public class ProductDAOHibernate implements ProductDAO {
 		//如果使用者有輸入產品名稱 或 產品類別才進來
 		Predicate p1,p2;
 		try{
-			if(pdname!="XX" || pdtype!="XX"){
-				if(pdname!="XX" && pdname.length()!=0){
+			if(!Objects.equals(pdname, "XX") || !Objects.equals(pdtype, "XX")){
+				if(!Objects.equals(pdname, "XX") && pdname.length()!=0){
 					//name like '%xxx%'
 					p1 = criteriaBuilder.like(root.get("productName"), "%"+pdname+"%");
 					criteriaQuery.where(p1);
 				}
-				if(pdtype!="XX" && pdtype.length()!=0){
+				if(!Objects.equals(pdtype, "XX") && pdtype.length()!=0){
 					//product_catalog = ?
 					p2 = criteriaBuilder.equal(root.get("productCatalog"),pdtype);
 					criteriaQuery.where(p2);
 				}
-				if(pdname!="XX" && pdtype!="XX"){
+				if(!pdname.equals("XX") && !pdtype.equals("XX")){
 					p1 = criteriaBuilder.like(root.get("productName"), "%"+pdname+"%");
 					p2 = criteriaBuilder.equal(root.get("productCatalog"),pdtype);
 					criteriaQuery.where(p1,p2);
@@ -67,7 +68,6 @@ public class ProductDAOHibernate implements ProductDAO {
 		//criteriaQuery = criteriaQuery.orderBy(criteriaBuilder.asc(root.get("productId")));
 		TypedQuery<ProductBean> typedQuery = this.getSession().createQuery(criteriaQuery);
 		List<ProductBean> result = typedQuery.getResultList();
-		System.out.println(result.size());
 		if(result!=null && !result.isEmpty()) {
 			return result;
 		}
@@ -75,7 +75,6 @@ public class ProductDAOHibernate implements ProductDAO {
 	}
 	@Override
 	public ProductBean insert(ProductBean bean) {
-		System.out.println("DAO:"+bean.getProductId());
 		if(bean!=null && bean.getProductId()!=null) {
 			ProductBean temp = this.getSession().get(ProductBean.class, bean.getProductId());
 			if(temp==null) {

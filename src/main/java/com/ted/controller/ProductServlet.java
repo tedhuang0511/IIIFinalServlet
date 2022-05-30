@@ -126,7 +126,7 @@ public class ProductServlet extends HttpServlet {
 //                    "/pages/product.jsp").forward(request, response);
         } else if (pdaction != null && pdaction.equals("DeleteImg")) {
             System.out.println("send img delete to ps");
-            ProductBean result = productService.deleteImg(bean, imgIndex);
+            productService.deleteImg(bean, imgIndex);
         } else {
             errors.put("action", "Unknown Action:" + pdaction);
 //            request.getRequestDispatcher(
