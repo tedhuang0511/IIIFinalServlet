@@ -38,53 +38,54 @@ public class ProductServlet extends HttpServlet {
         var pDesc = request.getParameter("pdesc");
         var pdaction = request.getParameter("pdaction");
         var imgIndex = request.getParameter("imgIndex");
-        System.out.println(pdaction + " from productservelet" + pid0 +" : "+ pdName0+" : "+ pdType0);
+        System.out.println(pdaction + " from productservelet " + pid0 + " : " + pdName0 + " : " + pdType0);
 
         //驗證資料
         Map<String, String> errors = new HashMap<>();
         request.setAttribute("errors", errors);
 
-        //轉換資料
-        int pid = 0; //如果抓不到id就給預設id為0
-        if(pid0!=null && pid0.length()!=0) {
-            try {
-                pid = Integer.parseInt(pid0);
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-                errors.put("id", "Id must be an integer");
-            }
-        }
-        int pdPrice = 0;
-        if(pdPrice0!=null && pdPrice0.length()!=0) {
-            try {
-                pdPrice = Integer.parseInt(pdPrice0);
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-                errors.put("price", "Price must be an integer");
-            }
-        }
-        String pdName = "XX"; //
-        String pdType = "XX"; //
-        if(pdName0!=null & pdName0.length()!=0){
-            pdName = pdName0;
-        }
-        if(pdType0!=null & pdType0.length()!=0){
-            pdType = pdType0;
-        }
-
-        //呼叫Model
         ProductBean bean = new ProductBean();
-        try{
+        try {
+            //轉換資料
+            int pid = 0; //如果抓不到id就給預設id為0
+            if (pid0 != null && pid0.length() != 0) {
+                try {
+                    pid = Integer.parseInt(pid0);
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    errors.put("id", "Id must be an integer");
+                }
+            }
+            int pdPrice = 0;
+            if (pdPrice0 != null && pdPrice0.length() != 0) {
+                try {
+                    pdPrice = Integer.parseInt(pdPrice0);
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                    errors.put("price", "Price must be an integer");
+                }
+            }
+            String pdName = "XX"; //
+            String pdType = "XX"; //
+            if (pdName0 != null && pdName0.length() != 0) {
+                pdName = pdName0;
+            }
+            if (pdType0 != null && pdType0.length() != 0) {
+                pdType = pdType0;
+            }
+
+            //呼叫Model
             bean.setProductId(pid);
             bean.setProductName(pdName);
             bean.setProductCatalog(pdType);
             bean.setProductPrice(pdPrice);
             bean.setProductDesc(pDesc);
             bean.setUpdateUser(username);
-        }catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e);
         }
 
+        //判斷增刪修查
         if (pdaction != null && pdaction.equals("Select")) {
             System.out.println("come in select statement at ProductServlet");
             List<ProductBean> result = productService.select(bean);
@@ -123,7 +124,7 @@ public class ProductServlet extends HttpServlet {
 //            }
 //            request.getRequestDispatcher(
 //                    "/pages/product.jsp").forward(request, response);
-        }else if (pdaction != null && pdaction.equals("DeleteImg")) {
+        } else if (pdaction != null && pdaction.equals("DeleteImg")) {
             System.out.println("send img delete to ps");
             ProductBean result = productService.deleteImg(bean, imgIndex);
         } else {
