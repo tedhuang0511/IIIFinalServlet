@@ -4,17 +4,19 @@ import java.util.List;
 
 public interface ProductDAO {
 
-	public abstract ProductBean select(Integer id);
+	ProductBean select(Integer id);
 
-	public abstract List<ProductBean> select();
+	List<ProductBean> select();
 
-	public abstract ProductBean insert(ProductBean bean);
+	List<ProductBean> select(String pdname, String pdtype);
 
-	public abstract ProductBean update(String name, Integer price,
+	ProductBean insert(ProductBean bean);
+
+	ProductBean update(String name, Integer price,
 									   String desc, String catalog, Integer id);
 
-	public abstract ProductBean updateImg(Integer imgIndex, Integer id);
+	ProductBean updateImg(String imgIndex, Integer id);
 
-	public abstract boolean delete(Integer id);
+	boolean delete(Integer id);
 
 }

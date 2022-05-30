@@ -1,28 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
-
-<sql:setDataSource
-        driver="com.mysql.cj.jdbc.Driver"
-        url="jdbc:mysql://localhost/iii"
-        user="root"
-        password=""
-/>
-
-<c:choose>
-    <c:when test="${!empty param.pdname }">
-        <sql:query var="rs">
-            SELECT * FROM products where product_name = ?
-            <sql:param>${param.pdname}</sql:param>
-        </sql:query>
-    </c:when>
-    <c:otherwise>
-        <sql:query var="rs">
-            SELECT * FROM products
-        </sql:query>
-    </c:otherwise>
-</c:choose>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <html>
 <head>
     <meta charset="utf-8">
@@ -34,6 +13,8 @@
             crossorigin="anonymous"></script>
 </head>
 <body>
+<h6>Select Product Table Result : ${fn:length(select)} row(s) selected</h6>
+<c:if test="${not empty select}">
 <table class="table table-success table-hover table-striped w-100">
     <thead>
     <tr>
@@ -47,20 +28,21 @@
     </tr>
     </thead>
     <tbody>
-    <c:forEach items="${rs.rows }" var="row" varStatus="status">
+    <c:forEach var="row" items="${select}">
         <tr>
-            <td>${status.count }</td>
+            <td>${row.productId }</td>
             <td><img class="edit" src="images/edit.png" alt=""
-                     onclick="fnc1('${row.product_id}','${row.product_name }','${row.product_catalog }','${row.product_price }','${row.product_desc }','${row.product_img1}', '${row.product_img2}', '${row.product_img3}', '${row.product_img4}')">
+                     onclick="fnc1('${row.productId}','${row.productName }','${row.productCatalog }','${row.productPrice }','${row.productDesc }','${row.productImg1}', '${row.productImg2}', '${row.productImg3}', '${row.productImg4}')">
             </td>
-            <td>${row.product_name }</td>
-            <td>${row.product_catalog }</td>
-            <td>${row.product_price }</td>
-            <td>${row.product_stock }</td>
-            <td><button onclick="return deleteProductItemConfirm('${row.product_id}');">刪除品項</button></td>
+            <td>${row.productName }</td>
+            <td>${row.productCatalog }</td>
+            <td>${row.productPrice }</td>
+            <td>${row.productStock }</td>
+            <td><button onclick="return deleteProductItemConfirm('${row.productId}');">刪除品項</button></td>
         </tr>
     </c:forEach>
     </tbody>
 </table>
+</c:if>
 </body>
 </html>

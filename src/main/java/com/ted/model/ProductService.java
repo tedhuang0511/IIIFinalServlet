@@ -15,15 +15,19 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public List<ProductBean> select(ProductBean bean) {
+        System.out.println("in PS select method");
         List<ProductBean> result = null;
-        if(bean!=null && bean.getProductId()!=null && !bean.getProductId().equals(0)) {
-            ProductBean temp = productDao.select(bean.getProductId());
+        if(bean!=null && bean.getProductId()!=null && !bean.getProductId().equals(0)) { //如果傳進來的bean不是空 && getId不是空 && id != 0
+            ProductBean temp = productDao.select(bean.getProductId());  //呼叫DAO有id參數的select方法
             if(temp!=null) {
-                result = new ArrayList<ProductBean>();
+                result = new ArrayList<>();
                 result.add(temp);
             }
         } else {
-            result = productDao.select();
+            String pdname = bean.getProductName();
+            String pdtype = bean.getProductCatalog();
+            System.out.println("in PS multiple select method"+":"+pdname+":"+pdtype);
+            result = productDao.select(pdname,pdtype); //呼叫DAO無參數的select方法
         }
         return result;
     }
@@ -45,7 +49,7 @@ public class ProductService {
         return result;
     }
 
-    public ProductBean deleteImg(ProductBean bean, Integer index) {
+    public ProductBean deleteImg(ProductBean bean, String index) {
         ProductBean result = null;
         if(bean!=null && bean.getProductId()!=null) {
             result = productDao.updateImg(index, bean.getProductId());

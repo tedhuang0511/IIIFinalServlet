@@ -10,6 +10,7 @@ import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @WebServlet(name = "ProductServlet", value = "/ProductServlet")
@@ -26,62 +27,70 @@ public class ProductServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         //接收參數
         request.setCharacterEncoding("UTF-8");
         var username = (String) request.getSession().getAttribute("login");
-        var pid = request.getParameter("editProductId");
-        pid = pid.length()==0 ? String.valueOf(7788) : pid; //如果抓不到id就給預設id為7788
-        var pdName = request.getParameter("pdname");
-        var pdType = request.getParameter("pdtypeselect");
-        var pdPrice = request.getParameter("pdprice");
+        var pid0 = request.getParameter("editProductId");
+        var pdName0 = request.getParameter("pdname");
+        var pdType0 = request.getParameter("pdtypeselect");
+        var pdPrice0 = request.getParameter("pdprice");
         var pDesc = request.getParameter("pdesc");
         var pdaction = request.getParameter("pdaction");
-        var imgIndex1 = request.getParameter("imgIndex");
-        System.out.println(pdaction + " from productservelet" + pid);
+        var imgIndex = request.getParameter("imgIndex");
+        System.out.println(pdaction + " from productservelet" + pid0 +" : "+ pdName0+" : "+ pdType0);
 
         //驗證資料
         Map<String, String> errors = new HashMap<>();
         request.setAttribute("errors", errors);
 
-        //轉換資料 //TODO 把資料轉一轉 imgIndex用字串就好
-        int imgIndex = 0;
-        if(imgIndex1!=null && imgIndex1.length()!=0) {
+        //轉換資料
+        int pid = 0; //如果抓不到id就給預設id為0
+        if(pid0!=null && pid0.length()!=0) {
             try {
-                imgIndex = Integer.parseInt(imgIndex1);
+                pid = Integer.parseInt(pid0);
             } catch (NumberFormatException e) {
                 e.printStackTrace();
                 errors.put("id", "Id must be an integer");
             }
         }
-
-        if (pdaction != null) {
-            if (pdaction.equals("Insert") || pdaction.equals("Update") || pdaction.equals("Delete")) {
-                if (pid == null || pid.length() == 0) {
-                    errors.put("id", "Please enter Id for " + pdaction);
-                }
+        int pdPrice = 0;
+        if(pdPrice0!=null && pdPrice0.length()!=0) {
+            try {
+                pdPrice = Integer.parseInt(pdPrice0);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                errors.put("price", "Price must be an integer");
             }
+        }
+        String pdName = "XX"; //
+        String pdType = "XX"; //
+        if(pdName0!=null & pdName0.length()!=0){
+            pdName = pdName0;
+        }
+        if(pdType0!=null & pdType0.length()!=0){
+            pdType = pdType0;
         }
 
         //呼叫Model
         ProductBean bean = new ProductBean();
         try{
-            bean.setProductId(Integer.valueOf(pid));
+            bean.setProductId(pid);
             bean.setProductName(pdName);
             bean.setProductCatalog(pdType);
-            bean.setProductPrice(Integer.parseInt(pdPrice));
+            bean.setProductPrice(pdPrice);
             bean.setProductDesc(pDesc);
             bean.setUpdateUser(username);
         }catch (Exception e){
             System.out.println(e);
         }
 
-
         if (pdaction != null && pdaction.equals("Select")) {
-//            List<ProductBean> result = productService.select(bean);
-//            request.setAttribute("select", result);
-//            request.getRequestDispatcher(
-//                    "/pages/display.jsp").forward(request, response);
+            System.out.println("come in select statement at ProductServlet");
+            List<ProductBean> result = productService.select(bean);
+            request.setAttribute("select", result);
+            request.getRequestDispatcher(
+                    "selectProduct.jsp").forward(request, response);
         } else if (pdaction != null && pdaction.equals("Insert")) {
             System.out.println("come in insert statement at ProductServlet");
             ProductBean result = productService.insert(bean);

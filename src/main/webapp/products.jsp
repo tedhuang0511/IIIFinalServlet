@@ -58,7 +58,16 @@
                 </tr>
                 <tr>
                     <th scope="row" style="text-align: end">產品類別</th>
-                    <td><input type="text"></td>
+                    <td>
+                    <input type="text" name="pdquerycatalog" list="pdquerycatalog" class="pdquerycatalog" value="">
+                    <datalist id="pdquerycatalog">
+                        <option value="3C">
+                        <option value="家電">
+                        <option value="服飾">
+                        <option value="配件">
+                    </datalist>
+                    </td>
+<%--                    <td><input type="text" id ="pdquerycatalog"></td>--%>
                     <td scope="row" style="text-align: end;font-weight: bold">產品價格</td>
                     <td><input type="text"></td>
                 </tr>
@@ -168,16 +177,16 @@
                 <div id="productImages" class="d-none">
                     <table>
                         <tr>
-                            <td>照片1<button onclick="return deleteImgConfirm(1);">刪除圖片</button></td>
-                            <td>照片2<button onclick="return deleteImgConfirm(2);">刪除圖片</button></td>
+                            <td>照片1<button onclick="return deleteImgConfirm(`1`);">刪除圖片</button></td>
+                            <td>照片2<button onclick="return deleteImgConfirm(`2`);">刪除圖片</button></td>
                         </tr>
                         <tr>
                             <td><img id="prodimg1" src="" alt="Product Image1" width="300px"></td>
                             <td><img id="prodimg2" src="" alt="Product Image2" width="300px"></td>
                         </tr>
                         <tr>
-                            <td>照片3<button onclick="return deleteImgConfirm(3);">刪除圖片</button></td>
-                            <td>照片4<button onclick="return deleteImgConfirm(4);">刪除圖片</button></td>
+                            <td>照片3<button onclick="return deleteImgConfirm(`3`);">刪除圖片</button></td>
+                            <td>照片4<button onclick="return deleteImgConfirm(`4`);">刪除圖片</button></td>
                         </tr>
                         <tr>
                             <td><img id="prodimg3" src="" alt="Product Image3" width="300px"></td>
@@ -270,10 +279,12 @@
     $('.p-query').click(
         function () {
             $.ajax({
-                url: "selectProduct.jsp",
+                url: "ProductServlet",
                 method: "post",
                 data: {
-                    pdname: $('#pdqueryname').val() //從搜尋欄位取值送去selectProduct.jsp
+                    pdaction: "Select",
+                    pdname: $('#pdqueryname').val(), //從搜尋欄位取值送去selectProduct.jsp
+                    pdtypeselect: $('.pdquerycatalog').val()
                 },
                 success: function (responseText) {
                     $('#test99').html(responseText);
