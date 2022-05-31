@@ -208,21 +208,33 @@
 
 <script>
     //產品清單的編輯按鈕被點擊時觸發fnc1
-    function fnc1(pid, pname, ptype, price, pdesc, pimg1, pimg2, pimg3, pimg4) {
+    function fnc1(pid) {
+        var settings = {
+            "url": "http://bosian.ddns.net:8080/IIIFinalServlet_war_exploded/ProductServlet?pdaction=Select1&editProductId="+pid,
+            "method": "GET",
+            "timeout": 0,
+            "headers": {
+                "Cookie": "JSESSIONID=9456E36BD1F5E383BC4944B9D78F5940"
+            }
+        };
+        $.ajax(settings).done(function (response) {
+            var res = JSON.parse(response)
+            alert(res[0].productName)
+            $('#pdname').prop('value', res[0].productName)  //當使用者點下編輯icon把產品資訊傳到編輯頁面
+            $('#pdprice').prop('value', res[0].productPrice)
+            $('.pdtypeselect').prop('value', res[0].productCatalog)
+            $('#pdesc').prop('value', res[0].productDesc)
+            $('#prodimg1').prop('src', res[0].productImg1) //既有產品的圖片從DB把url撈出來填上去
+            $('#prodimg2').prop('src', res[0].productImg2)
+            $('#prodimg3').prop('src', res[0].productImg3)
+            $('#prodimg4').prop('src', res[0].productImg4)
+        });
         $('#queryTab').removeClass("active").addClass('nav-link')
         $('#editTab').prop('class', 'nav-link active')
         $('#productContent').prop('class', 'd-none')
         $('#productEdit').prop('class', 'd-block')
-        $('#pdname').prop('value', pname)  //當使用者點下編輯icon把產品資訊傳到編輯頁面
-        $('#pdprice').prop('value', price)
-        $('.pdtypeselect').prop('value', ptype)
-        $('#pdesc').prop('value', pdesc)
         $('#editProductId').prop('value', pid)  //把產品id帶到編輯頁面
         $('#productImages').prop('class', 'd-block');
-        $('#prodimg1').prop('src', pimg1) //既有產品的圖片從DB把url撈出來填上去
-        $('#prodimg2').prop('src', pimg2)
-        $('#prodimg3').prop('src', pimg3)
-        $('#prodimg4').prop('src', pimg4)
         $('.imgPdId').prop('value', pid); //把產品id帶到新增圖片的隱藏欄位
     }
 
@@ -298,7 +310,6 @@
             });
         }
     );
-
     //透過ajax把圖片上傳的form傳給servlet處理
     function doUpload(index) {
         var formData = new FormData($(".p-img-form")[index]);

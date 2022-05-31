@@ -32,7 +32,7 @@
         <tr>
             <td>${row.productId }</td>
             <td><img class="edit" src="images/edit.png" alt=""
-                     onclick="fnc1('${row.productId}','${row.productName }','${row.productCatalog }','${row.productPrice }','${row.productDesc }','${row.productImg1}', '${row.productImg2}', '${row.productImg3}', '${row.productImg4}')">
+                     onclick="fnc1('${row.productId}')">
             </td>
             <td>${row.productName }</td>
             <td>${row.productCatalog }</td>
