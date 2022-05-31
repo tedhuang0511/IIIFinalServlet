@@ -181,6 +181,22 @@ public class ProductBean {
     }
 
     @Override
+    public String toString() {
+        return "{" +
+                "\"productId\" : " + '\"' + productId + '\"' +
+                ", \"productName\" : " + '\"'+ productName + '\"' +
+                ", \"productCatalog\" : " + '\"'+ productCatalog + '\"' +
+                ", \"productPrice\" : " + '\"'+ productPrice + '\"' +
+                ", \"productStock\" : " + '\"'+ productStock + '\"' +
+                ", \"productDesc\" : " + '\"'+ productDesc + '\"' +
+                ", \"productImg1\" : " + '\"'+ productImg1 + '\"' +
+                ", \"productImg2\" : " + '\"'+ productImg2 + '\"' +
+                ", \"productImg3\" : " + '\"'+ productImg3 + '\"' +
+                ", \"productImg4\" : " + '\"'+ productImg4 + '\"' +
+                "}";
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

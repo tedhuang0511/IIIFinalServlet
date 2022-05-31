@@ -9,6 +9,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,9 +28,17 @@ public class ProductServlet extends HttpServlet {
     }
 
     @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doPost(req,resp);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         //接收參數
         request.setCharacterEncoding("UTF-8");
+        response.setHeader("Content-type", "text/html;charset=UTF-8");
+        response.setHeader("Access-Control-Allow-Origin","*");
+        response.setCharacterEncoding("UTF-8");
         var username = (String) request.getSession().getAttribute("login");
         var pid0 = request.getParameter("editProductId");
         var pdName0 = request.getParameter("pdname");
@@ -84,7 +93,7 @@ public class ProductServlet extends HttpServlet {
         } catch (Exception e) {
             System.out.println(e);
         }
-
+        var out = response.getWriter();
         //判斷增刪修查
         if (pdaction != null && pdaction.equals("Select")) {
             System.out.println("come in select statement at ProductServlet");
@@ -92,7 +101,16 @@ public class ProductServlet extends HttpServlet {
             request.setAttribute("select", result);
             request.getRequestDispatcher(
                     "ProductPages/selectProduct.jsp").forward(request, response);
-        } else if (pdaction != null && pdaction.equals("Insert")) {
+        } else if(pdaction != null && pdaction.equals("Select1")){
+            System.out.println("come in select statement at ProductServlet select1");
+            List<ProductBean> result = productService.select(bean);
+            var arr = new ArrayList<>();
+            for(var pbean: result){
+                arr.add(pbean.toString());
+            }
+            out.print(arr);
+            out.close();
+        }else if (pdaction != null && pdaction.equals("Insert")) {
             System.out.println("come in insert statement at ProductServlet");
             ProductBean result = productService.insert(bean);
             if (result == null) {
