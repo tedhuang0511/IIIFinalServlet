@@ -51,7 +51,7 @@ public class ProductServlet extends HttpServlet {
         var pdaction = request.getParameter("pdaction");
         var imgIndex = request.getParameter("imgIndex");
         var tempTime0 = request.getParameter("datetime");
-        System.out.println(pdaction + " from productservelet " + pid0 + " : " + pdName0 + " : " + pdType0);
+        System.out.println(pdaction + " from productservelet " + pid0 + " : " + pdName0 + " : " + pdType0 + " : " + tempTime0);
 
         //驗證資料
         Map<String, String> errors = new HashMap<>();
