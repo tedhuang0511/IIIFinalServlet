@@ -1,8 +1,10 @@
 package com.ted.model;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +34,7 @@ public class ProductService {
         }
         return result;
     }
-    public ProductBean insert(ProductBean bean) {
+    public ProductBean insert(ProductBean bean) throws Exception {
         ProductBean result = null;
         if(bean!=null && bean.getProductId()!=null) {
             System.out.println(bean.getProductId() + " from product service");

@@ -219,7 +219,6 @@
         };
         $.ajax(settings).done(function (response) {
             var res = JSON.parse(response)
-            alert(res[0].productName)
             $('#pdname').prop('value', res[0].productName)  //當使用者點下編輯icon把產品資訊傳到編輯頁面
             $('#pdprice').prop('value', res[0].productPrice)
             $('.pdtypeselect').prop('value', res[0].productCatalog)
@@ -347,9 +346,8 @@
                 pdaction: action,
                 datetime: getNowFormatDate()
             },
-            success: function (e) {
-                console.log(e);
-                alert("新增/修改成功");
+            success: function (resp) {
+                alert(resp);
             },
             error: function () {
                 alert("新增/修改失敗");

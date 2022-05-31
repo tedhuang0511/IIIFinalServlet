@@ -2,6 +2,7 @@ package com.ted.controller;
 
 import com.ted.model.ProductBean;
 import com.ted.model.ProductService;
+import org.hibernate.HibernateException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -9,6 +10,7 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -128,25 +130,22 @@ public class ProductServlet extends HttpServlet {
             out.close();
         }else if (pdaction != null && pdaction.equals("Insert")) {
             System.out.println("come in insert statement at ProductServlet");
-            ProductBean result = productService.insert(bean);
-            if (result == null) {
-                errors.put("action", "Insert fail");
-                //TODO 如果新增失敗要把失敗訊息丟回ajax
-            } else {
-//                request.setAttribute("insert", result);
+            try{
+                productService.insert(bean);
+                out.print("產品新增完成");
+            }catch (Exception e){
+                out.print(e);
+            }finally {
+                out.close();
             }
-//            request.getRequestDispatcher(
-//                    "/pages/product.jsp").forward(request, response);
         } else if (pdaction != null && pdaction.equals("Update")) {
             System.out.println("come in update statement at ProductServlet");
             ProductBean result = productService.update(bean);
             if (result == null) {
-                errors.put("action", "Update fail");
+                out.println("更新失敗 update failed!");
             } else {
-//                request.setAttribute("update", result);
+                out.println("更新完成!");
             }
-//            request.getRequestDispatcher(
-//                    "/pages/product.jsp").forward(request, response);
         } else if (pdaction != null && pdaction.equals("Delete")) {
             System.out.println("send delete to product service");
             boolean result = productService.delete(bean);

@@ -1,10 +1,13 @@
 package com.ted.model;
 
+import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.springframework.stereotype.Repository;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -65,9 +68,10 @@ public class ProductDAOHibernate implements ProductDAO {
 		}catch (Exception e){
 			System.out.println(e);
 		}
-		//order by product_id
-		//criteriaQuery = criteriaQuery.orderBy(criteriaBuilder.asc(root.get("productId")));
+
 		TypedQuery<ProductBean> typedQuery = this.getSession().createQuery(criteriaQuery);
+		typedQuery.setFirstResult(1);
+		typedQuery.setMaxResults(10);
 		List<ProductBean> result = typedQuery.getResultList();
 		if(result!=null && !result.isEmpty()) {
 			return result;
@@ -75,7 +79,7 @@ public class ProductDAOHibernate implements ProductDAO {
 		return null;
 	}
 	@Override
-	public ProductBean insert(ProductBean bean) {
+	public ProductBean insert(ProductBean bean) throws Exception {
 		if(bean!=null && bean.getProductId()!=null) {
 			ProductBean temp = this.getSession().get(ProductBean.class, bean.getProductId());
 			if(temp==null) {
