@@ -108,16 +108,16 @@ public class ProductDAOHibernate implements ProductDAO {
 			if(temp!=null) {
 				switch (index){
 					case "1":
-						temp.setProductImg1("https://i.imgur.com/7sPQA0H.jpg");
+						temp.setProductImg1("https://s3.ap-northeast-1.amazonaws.com/tedawsbucket20220530/javaproject/2022_05_31_16_00_31_187.jpg");
 						break;
 					case "2":
-						temp.setProductImg2("https://i.imgur.com/7sPQA0H.jpg");
+						temp.setProductImg2("https://s3.ap-northeast-1.amazonaws.com/tedawsbucket20220530/javaproject/2022_05_31_16_00_31_187.jpg");
 						break;
 					case "3":
-						temp.setProductImg3("https://i.imgur.com/7sPQA0H.jpg");
+						temp.setProductImg3("https://s3.ap-northeast-1.amazonaws.com/tedawsbucket20220530/javaproject/2022_05_31_16_00_31_187.jpg");
 						break;
 					case "4":
-						temp.setProductImg4("https://i.imgur.com/7sPQA0H.jpg");
+						temp.setProductImg4("https://s3.ap-northeast-1.amazonaws.com/tedawsbucket20220530/javaproject/2022_05_31_16_00_31_187.jpg");
 				}
 				return temp;
 			}
