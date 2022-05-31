@@ -1,5 +1,6 @@
 package com.ted.model;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -87,7 +88,7 @@ public class ProductDAOHibernate implements ProductDAO {
 	}
 	@Override
 	public ProductBean update(String name, Integer price,
-			String desc, String catalog, Integer id) {
+							  String desc, String catalog, Integer id, Date updateDate, String updateUser) {
 		if(id!=null) {
 			ProductBean temp = this.getSession().get(ProductBean.class, id);
 			if(temp!=null) {
@@ -95,6 +96,8 @@ public class ProductDAOHibernate implements ProductDAO {
 				temp.setProductPrice(price);
 				temp.setProductDesc(desc);
 				temp.setProductCatalog(catalog);
+				temp.setUpdateDate(updateDate);
+				temp.setUpdateUser(updateUser);
 				return temp;
 			}
 		}

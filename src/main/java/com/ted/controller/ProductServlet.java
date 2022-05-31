@@ -9,6 +9,9 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.annotation.*;
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +20,7 @@ import java.util.Map;
 @WebServlet(name = "ProductServlet", value = "/ProductServlet")
 public class ProductServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
-
+    private SimpleDateFormat sFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private ProductService productService;
 
     public void init() {
@@ -47,6 +50,7 @@ public class ProductServlet extends HttpServlet {
         var pDesc = request.getParameter("pdesc");
         var pdaction = request.getParameter("pdaction");
         var imgIndex = request.getParameter("imgIndex");
+        var tempTime0 = request.getParameter("datetime");
         System.out.println(pdaction + " from productservelet " + pid0 + " : " + pdName0 + " : " + pdType0);
 
         //驗證資料
@@ -82,6 +86,15 @@ public class ProductServlet extends HttpServlet {
             if (pdType0 != null && pdType0.length() != 0) {
                 pdType = pdType0;
             }
+            java.util.Date tempTime = null;
+            if(tempTime0!=null && tempTime0.length()!=0) {
+                try {
+                    tempTime = sFormat.parse(tempTime0);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    errors.put("make", "Make must be a date of YYYY-MM-DD");
+                }
+            }
 
             //呼叫Model
             bean.setProductId(pid);
@@ -90,6 +103,9 @@ public class ProductServlet extends HttpServlet {
             bean.setProductPrice(pdPrice);
             bean.setProductDesc(pDesc);
             bean.setUpdateUser(username);
+            bean.setCreateUser(username);
+            bean.setCreateDate(tempTime);
+            bean.setUpdateDate(tempTime);
         } catch (Exception e) {
             System.out.println(e);
         }

@@ -1,5 +1,6 @@
 package com.ted.model;
 
+import java.util.Date;
 import java.util.List;
 
 public interface ProductDAO {
@@ -13,7 +14,7 @@ public interface ProductDAO {
 	ProductBean insert(ProductBean bean);
 
 	ProductBean update(String name, Integer price,
-									   String desc, String catalog, Integer id);
+					   String desc, String catalog, Integer id , Date updateDate, String updateUser);
 
 	ProductBean updateImg(String imgIndex, Integer id);
 

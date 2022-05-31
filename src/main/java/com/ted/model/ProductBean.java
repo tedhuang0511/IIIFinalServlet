@@ -2,6 +2,7 @@ package com.ted.model;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Table(name = "products", schema = "iii")
@@ -40,13 +41,13 @@ public class ProductBean {
     private String createUser;
     @Basic
     @Column(name = "create_date", nullable = true)
-    private Timestamp createDate;
+    private Date createDate;
     @Basic
     @Column(name = "update_user", nullable = true, length = 10)
     private String updateUser;
     @Basic
     @Column(name = "update_date", nullable = true)
-    private Timestamp updateDate;
+    private Date updateDate;
     @Basic
     @Column(name = "product_img1", nullable = true, length = 255)
     private String productImg1 = "https://s3.ap-northeast-1.amazonaws.com/tedawsbucket20220530/javaproject/2022_05_31_16_00_31_187.jpg";
@@ -124,11 +125,11 @@ public class ProductBean {
         this.createUser = createUser;
     }
 
-    public Timestamp getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Timestamp createDate) {
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
 
@@ -140,11 +141,11 @@ public class ProductBean {
         this.updateUser = updateUser;
     }
 
-    public Timestamp getUpdateDate() {
+    public Date getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(Timestamp updateDate) {
+    public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
     }
 

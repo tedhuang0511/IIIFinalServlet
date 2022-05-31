@@ -45,7 +45,7 @@ public class ProductService {
         ProductBean result = null;
         if(bean!=null && bean.getProductId()!=null) {
             result = productDao.update(bean.getProductName(), bean.getProductPrice(),
-                    bean.getProductDesc(), bean.getProductCatalog(), bean.getProductId());
+                    bean.getProductDesc(), bean.getProductCatalog(), bean.getProductId(), bean.getUpdateDate(), bean.getUpdateUser());
         }
         return result;
     }
