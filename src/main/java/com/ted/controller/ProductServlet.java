@@ -2,6 +2,7 @@ package com.ted.controller;
 
 import com.ted.model.ProductBean;
 import com.ted.model.ProductService;
+import org.json.JSONObject;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -27,9 +28,18 @@ public class ProductServlet extends HttpServlet {
     }
 
     @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        doPost(req,resp);
+    }
+
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         //接收參數
         request.setCharacterEncoding("UTF-8");
+        response.setHeader("Content-type", "text/html;charset=UTF-8");
+        response.setHeader("Access-Control-Allow-Origin","*");
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json");
         var username = (String) request.getSession().getAttribute("login");
         var pid0 = request.getParameter("editProductId");
         var pdName0 = request.getParameter("pdname");
@@ -92,6 +102,24 @@ public class ProductServlet extends HttpServlet {
             request.setAttribute("select", result);
             request.getRequestDispatcher(
                     "ProductPages/selectProduct.jsp").forward(request, response);
+        } else if(pdaction != null && pdaction.equals("Select1")){
+            System.out.println("come in select statement at ProductServlet select1");
+            List<ProductBean> result = productService.select(bean);
+            JSONObject obj = new JSONObject();
+            StringBuffer sb = new StringBuffer();
+            var out = response.getWriter();
+            for(var pdbean: result){
+                obj.put("ProductName",pdbean.getProductName());
+                obj.put("ProductId",pdbean.getProductId());
+                obj.put("ProductPrice",pdbean.getProductPrice());
+                obj.put("ProductDescription",pdbean.getProductDesc());
+                obj.put("ProductImage",pdbean.getProductImg1());
+                sb.append(obj).append(",");
+            }
+            sb.setCharAt(sb.lastIndexOf(","),' ');
+            var res = sb.toString();
+            res = "[" + res + "]";
+            out.print(res);
         } else if (pdaction != null && pdaction.equals("Insert")) {
             System.out.println("come in insert statement at ProductServlet");
             ProductBean result = productService.insert(bean);

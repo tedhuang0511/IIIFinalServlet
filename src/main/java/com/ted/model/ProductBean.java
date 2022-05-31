@@ -49,16 +49,16 @@ public class ProductBean {
     private Timestamp updateDate;
     @Basic
     @Column(name = "product_img1", nullable = true, length = 255)
-    private String productImg1 = "https://i.imgur.com/7sPQA0H.jpg";
+    private String productImg1 = "https://s3.ap-northeast-1.amazonaws.com/tedawsbucket20220530/javaproject/2022_05_31_16_00_31_187.jpg";
     @Basic
     @Column(name = "product_img2", nullable = true, length = 255)
-    private String productImg2 = "https://i.imgur.com/7sPQA0H.jpg";
+    private String productImg2 = "https://s3.ap-northeast-1.amazonaws.com/tedawsbucket20220530/javaproject/2022_05_31_16_00_31_187.jpg";
     @Basic
     @Column(name = "product_img3", nullable = true, length = 255)
-    private String productImg3 = "https://i.imgur.com/7sPQA0H.jpg";
+    private String productImg3 = "https://s3.ap-northeast-1.amazonaws.com/tedawsbucket20220530/javaproject/2022_05_31_16_00_31_187.jpg";
     @Basic
     @Column(name = "product_img4", nullable = true, length = 255)
-    private String productImg4 = "https://i.imgur.com/7sPQA0H.jpg";
+    private String productImg4 = "https://s3.ap-northeast-1.amazonaws.com/tedawsbucket20220530/javaproject/2022_05_31_16_00_31_187.jpg";
 
     public Integer getProductId() {
         return productId;
