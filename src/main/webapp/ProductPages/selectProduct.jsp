@@ -44,5 +44,34 @@
     </tbody>
 </table>
 </c:if>
+
+<span>
+    <button id="QQQ">Prev</button>
+    <b id="pdPage">1</b>
+    <button>Next</button>
+</span>
+<div class="container">
+    <div class="row" id="content">
+    </div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination" id="pageid">
+        </ul>
+    </nav>
+</div>
+<table class="table table-success table-hover table-striped w-100">
+    <thead>
+    <tr>
+        <th scope="col">序號</th>
+        <th scope="col">編輯</th>
+        <th scope="col">產品名稱</th>
+        <th scope="col">產品類別</th>
+        <th scope="col">產品價格</th>
+        <th scope="col">庫存量</th>
+        <th scope="col"></th>
+    </tr>
+    </thead>
+    <tbody id="content2">
+    </tbody>
+</table>
 </body>
 </html>

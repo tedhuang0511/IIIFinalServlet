@@ -70,8 +70,6 @@ public class ProductDAOHibernate implements ProductDAO {
 		}
 
 		TypedQuery<ProductBean> typedQuery = this.getSession().createQuery(criteriaQuery);
-		typedQuery.setFirstResult(1);
-		typedQuery.setMaxResults(10);
 		List<ProductBean> result = typedQuery.getResultList();
 		if(result!=null && !result.isEmpty()) {
 			return result;

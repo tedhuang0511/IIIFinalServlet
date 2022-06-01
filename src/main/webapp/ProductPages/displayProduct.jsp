@@ -58,15 +58,15 @@
                 <tr>
                     <th scope="row" style="text-align: end">產品類別</th>
                     <td>
-                    <input type="text" name="pdquerycatalog" list="pdquerycatalog" class="pdquerycatalog" value="">
-                    <datalist id="pdquerycatalog">
-                        <option value="3C">
-                        <option value="家電">
-                        <option value="服飾">
-                        <option value="配件">
-                    </datalist>
+                        <input type="text" name="pdquerycatalog" list="pdquerycatalog" class="pdquerycatalog" value="">
+                        <datalist id="pdquerycatalog">
+                            <option value="3C">
+                            <option value="家電">
+                            <option value="服飾">
+                            <option value="配件">
+                        </datalist>
                     </td>
-<%--                    <td><input type="text" id ="pdquerycatalog"></td>--%>
+                    <%--                    <td><input type="text" id ="pdquerycatalog"></td>--%>
                     <td scope="row" style="text-align: end;font-weight: bold">產品價格</td>
                     <td><input type="text"></td>
                 </tr>
@@ -74,8 +74,29 @@
             </table>
         </div>
         <div id="productList" class="d-none">
-            <div id="test99">
-                <%--從AJAX取得DB select result--%>
+            <h6>Select Product Table Result : <b></b> row(s) selected</h6>
+            <table class="table table-success table-hover table-striped w-100">
+                <thead>
+                <tr>
+                    <th scope="col">序號</th>
+                    <th scope="col">編輯</th>
+                    <th scope="col">產品名稱</th>
+                    <th scope="col">產品類別</th>
+                    <th scope="col">產品價格</th>
+                    <th scope="col">庫存量</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody id="content2">
+                </tbody>
+            </table>
+            <div class="container">
+                <div class="row" id="content">
+                </div>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination" id="pageid">
+                    </ul>
+                </nav>
             </div>
         </div>
     </div> <!--產品維護搜尋條件與結果的區域控制 END-->
@@ -183,16 +204,24 @@
                 <div id="productImages" class="d-none">
                     <table>
                         <tr>
-                            <td>照片1<button onclick="return deleteImgConfirm(`1`);">刪除圖片</button></td>
-                            <td>照片2<button onclick="return deleteImgConfirm(`2`);">刪除圖片</button></td>
+                            <td>照片1
+                                <button onclick="return deleteImgConfirm(`1`);">刪除圖片</button>
+                            </td>
+                            <td>照片2
+                                <button onclick="return deleteImgConfirm(`2`);">刪除圖片</button>
+                            </td>
                         </tr>
                         <tr>
                             <td><img id="prodimg1" src="" alt="Product Image1" width="300px"></td>
                             <td><img id="prodimg2" src="" alt="Product Image2" width="300px"></td>
                         </tr>
                         <tr>
-                            <td>照片3<button onclick="return deleteImgConfirm(`3`);">刪除圖片</button></td>
-                            <td>照片4<button onclick="return deleteImgConfirm(`4`);">刪除圖片</button></td>
+                            <td>照片3
+                                <button onclick="return deleteImgConfirm(`3`);">刪除圖片</button>
+                            </td>
+                            <td>照片4
+                                <button onclick="return deleteImgConfirm(`4`);">刪除圖片</button>
+                            </td>
                         </tr>
                         <tr>
                             <td><img id="prodimg3" src="" alt="Product Image3" width="300px"></td>
@@ -206,11 +235,143 @@
     </div>
 </div><!--產品編輯的區域控制 END-->
 
+<%--JavaScript 製作分頁功能 https://israynotarray.com/javascript/20190505/1432256317/--%>
+<script>
+    var jsonData = {};
+    $('.p-query').click(
+        function () {
+            $.ajax({
+                url: "ProductServlet",
+                method: "post",
+                data: {
+                    pdaction: "Select1",
+                    pdname: $('#pdqueryname').val(), //從搜尋欄位取值送去selectProduct.jsp
+                    pdtypeselect: $('.pdquerycatalog').val()
+                },
+                success: function (responseText) {
+                    if (responseText == "") {
+                        $('#content2').empty();
+                        alert("找不到任何商品!!!")
+                    } else {
+                        jsonData = JSON.parse(responseText);
+                        pagination(jsonData, 1);
+                        console.log(jsonData);
+                    }
+                }
+            });
+        }
+    );
+
+    function pagination(jsonData, nowPage) {
+        console.log(nowPage);
+        let currentPage = nowPage;
+        // 取得資料長度
+        const dataTotal = Object.keys(jsonData).length;
+        $('#productList b').html(dataTotal);
+        // 要顯示在畫面上的資料數量，預設每一頁只顯示10筆資料。
+        const perpage = 10;
+        //總頁數
+        const pageTotal = Math.ceil(dataTotal / perpage);
+        // 當"當前頁數"比"總頁數"大的時候，"當前頁數"就等於"總頁數"
+        if (currentPage > pageTotal) {
+            currentPage = pageTotal;
+        }
+        var minData = (currentPage * perpage) - perpage + 1;
+        var maxData = (currentPage * perpage);
+        console.log("全部資料:" + dataTotal + "每一頁顯示:" + perpage + "總頁數: " + pageTotal);
+
+        const data = [];
+        jsonData.forEach((item, index) => {
+            // 獲取陣列索引，但因為索引是從 0 開始所以要 +1。
+            const num = index + 1;
+
+            // 當 num 比 minData 大且又小於 maxData 就push進去新陣列。
+            if (num >= minData && num <= maxData) {
+                data.push(item);
+            }
+        })
+
+        var page = {
+            pageTotal,
+            currentPage,
+            hasPage: currentPage > 1,
+            hasNext: currentPage < dataTotal,
+        }
+        displayData(data);
+        pageBtn(page);
+    }
+
+    function displayData(data) {
+        let str = '';
+        console.log("--display--");
+        console.log(data);
+        console.log("--display--");
+        data.forEach(function (element) {
+            var id = element.productId;
+            var name = element.productName;
+            var catalog = element.productCatalog;
+            var price = element.productPrice;
+            var stock = element.productStock;
+            str +=
+                `<tr>
+                        <td>` + id + `</td>
+                        <td><img class="edit" src="images/edit.png" alt=""
+                                 onclick="fnc1(` + id + `)">
+                        </td>
+                        <td>` + name + `</td>
+                        <td>` + catalog + `</td>
+                        <td>` + price + `</td>
+                        <td>` + stock + `</td>
+                        <td><button onclick="return deleteProductItemConfirm(` + id + `);">刪除品項</button></td>
+                </tr>`
+        });
+        $('#content2').html(str);
+    }
+
+    function pageBtn(page) {
+        let str = '';
+        const total = page.pageTotal;
+
+        if (page.hasPage) {
+            str += `<li class="page-item"><a class="page-link" href="#" data-page="` + (Number(page.currentPage) - 1) + `">Previous</a></li>`;
+        } else {
+            str += `<li class="page-item disabled"><span class="page-link">Previous</span></li>`;
+        }
+
+
+        for (let i = 1; i <= total; i++) {
+            if (Number(page.currentPage) === i) {
+                str += `<li class="page-item active"><a class="page-link" href="#" data-page="` + i + `">` + i + `</a></li>`;
+            } else {
+                str += `<li class="page-item"><a class="page-link" href="#" data-page="` + i + `">` + i + `</a></li>`;
+            }
+        }
+        ;
+
+        if (page.hasNext) {
+            str += `<li class="page-item"><a class="page-link" href="#" data-page="` + (Number(page.currentPage) + 1) + `">Next</a></li>`;
+        } else {
+            str += `<li class="page-item disabled"><span class="page-link">Next</span></li>`;
+        }
+
+        $('#pageid').html(str);
+    }
+
+    function switchPage(e) {
+        e.preventDefault();
+        if (e.target.nodeName !== 'A') return;
+        const page = e.target.dataset.page;
+        pagination(jsonData, page);
+    }
+
+    $('#pageid').on('click', switchPage)
+</script>
+
 <script>
     //產品清單的編輯按鈕被點擊時觸發fnc1
     function fnc1(pid) {
         var settings = {
-            "url": "http://bosian.ddns.net:8080/IIIFinalServlet_war_exploded/ProductServlet?pdaction=Select1&editProductId="+pid,
+            "url": "http://bosian.ddns.net:8080/IIIFinalServlet_war_exploded/ProductServlet?pdaction=Select1&editProductId=" + pid,
             "method": "GET",
             "timeout": 0,
             "headers": {
@@ -251,16 +412,16 @@
         }
     }
 
-    function deleteImgConfirm(index){
+    function deleteImgConfirm(index) {
         const isDel = confirm("確定刪除圖片?");
-        if(isDel===true){
+        if (isDel === true) {
             doDeleteImg(index);
         }
     }
 
-    function deleteProductItemConfirm(pid){
+    function deleteProductItemConfirm(pid) {
         const isDel = confirm("確定刪除品項?");
-        if(isDel===true){
+        if (isDel === true) {
             doDeleteProduct(pid);
         }
     }
@@ -290,26 +451,27 @@
         $('#productEdit').prop('class', 'd-block')
         $('.productquery').prop('value', '')  //把欄位清空
         $('#productImages').prop('class', 'd-none');
-        $('#editProductId').prop('value',''); //如果使用者點新增品項按鈕,可能之前有先編輯過某產品,所以要把此id欄位清空
+        $('#editProductId').prop('value', ''); //如果使用者點新增品項按鈕,可能之前有先編輯過某產品,所以要把此id欄位清空
     })
-    //根據搜尋欄位給的資訊使用ajax抓資料
-    $('.p-query').click(
-        function () {
-            $.ajax({
-                url: "ProductServlet",
-                method: "post",
-                data: {
-                    pdaction: "Select",
-                    pdname: $('#pdqueryname').val(), //從搜尋欄位取值送去selectProduct.jsp
-                    pdtypeselect: $('.pdquerycatalog').val()
-                },
-                success: function (responseText) {
-                    $('#test99').html(responseText);
-                }
-            });
-        }
-    );
+    //(停用)根據搜尋欄位給的資訊使用ajax抓資料
+    // $('.p-query').click(
+    //     function () {
+    //         $.ajax({
+    //             url: "ProductServlet",
+    //             method: "post",
+    //             data: {
+    //                 pdaction: "Select",
+    //                 pdname: $('#pdqueryname').val(), //從搜尋欄位取值送去selectProduct.jsp
+    //                 pdtypeselect: $('.pdquerycatalog').val()
+    //             },
+    //             success: function (responseText) {
+    //                 $('#test99').html(responseText);
+    //             }
+    //         });
+    //     }
+    // );
     //透過ajax把圖片上傳的form傳給servlet處理
+
     function doUpload(index) {
         var formData = new FormData($(".p-img-form")[index]);
         $.ajax({
@@ -320,10 +482,10 @@
             cache: false,
             contentType: false,
             processData: false,
-            beforeSend: function(){
+            beforeSend: function () {
                 console.log("start upload...");
             },
-            complete: function(){
+            complete: function () {
                 console.log("finish upload...");
             },
             success: function () {
@@ -361,9 +523,9 @@
             url: "ProductServlet",
             method: "post",
             data: {
-                pdaction : "DeleteImg",
-                imgIndex : index,
-                editProductId : $("#editProductId").val()
+                pdaction: "DeleteImg",
+                imgIndex: index,
+                editProductId: $("#editProductId").val()
             },
             success: function () {
                 alert("移除圖片成功");
@@ -380,18 +542,19 @@
             url: "ProductServlet",
             method: "post",
             data: {
-                pdaction : "Delete",
-                editProductId : pid
+                pdaction: "Delete",
+                editProductId: pid
             },
             success: function () {
                 alert("刪除品項成功");
             },
-            error: function(){
+            error: function () {
                 alert("刪除失敗");
             }
         });
     }
 
+    //取得現在時間的js method (YYYY-MM-DD hh:mm:ss)
     function getNowFormatDate() {
         var date = new Date();
         var seperator1 = "-";

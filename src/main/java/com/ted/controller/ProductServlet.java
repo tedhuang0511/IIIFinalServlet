@@ -122,12 +122,16 @@ public class ProductServlet extends HttpServlet {
         } else if(pdaction != null && pdaction.equals("Select1")){
             System.out.println("come in select statement at ProductServlet select1");
             List<ProductBean> result = productService.select(bean);
-            var arr = new ArrayList<>();
-            for(var pbean: result){
-                arr.add(pbean.toString());
+            if(result!=null){
+                var arr = new ArrayList<>();
+                for(var pbean: result){
+                    arr.add(pbean.toString());
+                }
+                out.print(arr);
+            }else{
+                out.print("");
+                out.close();
             }
-            out.print(arr);
-            out.close();
         }else if (pdaction != null && pdaction.equals("Insert")) {
             System.out.println("come in insert statement at ProductServlet");
             try{
