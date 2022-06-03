@@ -11,6 +11,17 @@
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="../css/mycss.css">
+    <style>
+        .hiddenimg {
+            display: none;
+        }
+
+        .hiddentxt:hover ~ .hiddenimg {
+            display: block;
+            position: absolute;
+            z-index: 2
+        }
+    </style>
 </head>
 <body>
 <div id="product01" class="d-block">
@@ -37,6 +48,7 @@
                 </button>
                 <button class="button-54 p-add"><img src="images/add.png" style="width: 20px" alt="">新增
                 </button>
+                <button onclick="CartCheckOut()">測試用結帳按鈕</button>
             </div>
             <table class="table table-hover">
                 <thead>
@@ -74,7 +86,7 @@
             </table>
         </div>
         <div id="productList" class="d-none">
-            <h6>Select Product Table Result : <b></b> row(s) selected</h6>
+            <h6>Select Product Table Result : <b></b> row(s) selected || 目前購物車內的商品數量 : <strong></strong></h6>
             <table class="table table-success table-hover table-striped w-100">
                 <thead>
                 <tr>
@@ -85,12 +97,13 @@
                     <th scope="col">產品價格</th>
                     <th scope="col">庫存量</th>
                     <th scope="col"></th>
+                    <th scope="col">測試購物車</th>
                 </tr>
                 </thead>
                 <tbody id="content2">
                 </tbody>
             </table>
-            <div class="container">
+            <div class="container" style="margin-left: -25px">
                 <div class="row" id="content">
                 </div>
                 <nav aria-label="Page navigation example">
@@ -305,24 +318,27 @@
         let str = '';
         console.log("--display--");
         console.log(data);
-        console.log("--display--");
+        console.log(`--disp${data}lay--`);
         data.forEach(function (element) {
             var id = element.productId;
             var name = element.productName;
             var catalog = element.productCatalog;
             var price = element.productPrice;
             var stock = element.productStock;
-            str +=
+            var img1 = element.productImg1;
+            console.log(img1);
+            str = str +
                 `<tr>
                         <td>` + id + `</td>
                         <td><img class="edit" src="images/edit.png" alt=""
                                  onclick="fnc1(` + id + `)">
                         </td>
-                        <td>` + name + `</td>
+                        <td><span class="hiddentxt">` + name + `</span><span class="hiddenimg"><img src="`+img1+`" width="250" /></span></td>
                         <td>` + catalog + `</td>
                         <td>` + price + `</td>
                         <td>` + stock + `</td>
                         <td><button onclick="return deleteProductItemConfirm(` + id + `);">刪除品項</button></td>
+                        <td><button onclick="return addProductToCart(` + id + `);">放入購物車</button></td>
                 </tr>`
         });
         $('#content2').html(str);
@@ -554,6 +570,46 @@
         });
     }
 
+    function addProductToCart(pid) {
+        $.ajax({
+            url: "CartServlet",
+            method: "post",
+            data: {
+                pdaction: "addToCart",
+                editProductId: pid
+            },
+            success: function (response) {
+                let res = response.toString().substring(0,7);
+                alert(res);
+                var qtyOfCart = response.toString().substring(7,8);
+                cartTotal(qtyOfCart);
+            },
+            error: function () {
+                alert("cart error");
+            }
+        });
+    }
+
+    function CartCheckOut() {
+        $.ajax({
+            url: "CartServlet",
+            method: "post",
+            data: {
+                pdaction: "cartCheckOut",
+            },
+            success: function (res) {
+                if(res=="CharIsEmpty"){
+                    alert("目前購物車內沒有商品")
+                }else{
+                    window.location.href = "checkout.jsp";
+                }
+            },
+            error: function () {
+                alert("cart error");
+            }
+        });
+    }
+
     //取得現在時間的js method (YYYY-MM-DD hh:mm:ss)
     function getNowFormatDate() {
         var date = new Date();
@@ -571,6 +627,10 @@
             + " " + date.getHours() + seperator2 + date.getMinutes()
             + seperator2 + date.getSeconds();
         return currentdate;
+    }
+
+    function cartTotal(qty) {
+        $('#productList strong').text(qty);
     }
 
 </script>
