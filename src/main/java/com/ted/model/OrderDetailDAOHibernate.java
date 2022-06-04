@@ -28,8 +28,9 @@ public class OrderDetailDAOHibernate implements OrderDetailDAO {
 
 		//FROM product
 		Root<OrderDetailBean> root = criteriaQuery.from(OrderDetailBean.class);
-		//如果使用者有輸入產品名稱 或 產品類別才進來
-
+		//where order_id = ?
+		var p1 = criteriaBuilder.equal(root.get("orderId"), id);
+		criteriaQuery.where(p1);
 		TypedQuery<OrderDetailBean> typedQuery = this.getSession().createQuery(criteriaQuery);
 		List<OrderDetailBean> result = typedQuery.getResultList();
 		if(result!=null && !result.isEmpty()) {
@@ -42,8 +43,8 @@ public class OrderDetailDAOHibernate implements OrderDetailDAO {
 	public Integer insert(OrderDetailBean bean) throws Exception {
 		if(bean!=null) {
 			this.getSession().save(bean);
-			return 1;
+			return 1; //新增成功回傳1
 		}
-		return 0;
+		return 0; //失敗則回傳0
 	}
 }

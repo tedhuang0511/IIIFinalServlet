@@ -92,11 +92,11 @@ public class OrderServlet extends HttpServlet {
             if (status0 != null && status0.length() != 0) {
                 status = status0;
             }
-            String cvs = "預設超商";
+            String cvs = "N/A";
             if (cvs0 != null && cvs0.length() != 0) {
                 cvs = cvs0;
             }
-            String address = "預設地址";
+            String address = "N/A";
             if (address0 != null && address0.length() != 0) {
                 address = address0;
             }
@@ -124,17 +124,17 @@ public class OrderServlet extends HttpServlet {
             bean.setUpdateDate(createDate);
 
             if(productList!=null){
-                JSONArray jsonarr = new JSONArray(productList);
+                JSONArray jsonarr = new JSONArray(productList); //把前端json字串轉乘json array
                 for(int i=0; i<jsonarr.length(); i++) {
                     System.out.println("-----------start----------------");
                     System.out.println(jsonarr.get(i).toString());
                     OrderDetailBean odbean = new OrderDetailBean();
-                    JSONObject jobj = new JSONObject(jsonarr.get(i).toString());
+                    JSONObject jobj = new JSONObject(jsonarr.get(i).toString()); //把json array裡面的json物件字串轉成json object
                     System.out.println(jobj.get("productName"));
                     odbean.setOrderId(orderId);
-                    odbean.setProductId(Integer.parseInt((String) jobj.get("productId")));
-                    odbean.setQuantity(1);
-                    odbean.setUnitPrice(Integer.parseInt((String) jobj.get("productPrice")));
+                    odbean.setProductId(Integer.parseInt((String) jobj.get("productId"))); //放入json object裡面 名為productId的key 的value
+                    odbean.setQuantity(1);  //TODO 如何判斷是否有重複的商品
+                    odbean.setUnitPrice(Integer.parseInt((String) jobj.get("productPrice"))); //放入json object裡面 名為producPrice的key 的value
                     odbeanlist.add(odbean);
                     System.out.println("--------------end-------------");
                 }
@@ -143,6 +143,7 @@ public class OrderServlet extends HttpServlet {
         } catch (Exception e) {
             System.out.println(e);
         }
+
         var out = response.getWriter();
         //判斷增刪修查
         if (odaction != null && odaction.equals("Select")) {

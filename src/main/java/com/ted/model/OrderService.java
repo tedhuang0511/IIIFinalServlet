@@ -29,6 +29,7 @@ public class OrderService {
             result1.add(temp1);
             return result1;  //回傳一個list裡面有 1.member order bean 2.這個orderbean的多個detail bean
         } else {
+            //如果request沒有包含orderId,而是有member id 或 status 就會進來
             assert bean != null;
             Integer mid = bean.getMemberId();
             String status = bean.getStatus();
