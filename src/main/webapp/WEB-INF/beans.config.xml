@@ -21,6 +21,9 @@
         <property name="annotatedClasses">
             <array>
                 <value>com.ted.model.ProductBean</value>
+                <value>com.ted.model.MemberOrderBean</value>
+                <value>com.ted.model.OrderDetailBean</value>
+                <value>com.ted.model.MembersBean</value>
             </array>
         </property>
         <property name="hibernateProperties">

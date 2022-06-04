@@ -1,13 +1,10 @@
 package com.ted.model;
 
-import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.springframework.stereotype.Repository;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -39,7 +36,7 @@ public class ProductDAOHibernate implements ProductDAO {
 	}
 
 	@Override
-	public List<ProductBean> select(String pdname, String pdtype) {
+	public List<ProductBean> select(String pdname, String pdtype) {  //這邊的參數取決於前端有哪些選項
 		CriteriaBuilder criteriaBuilder = this.getSession().getCriteriaBuilder();
 		CriteriaQuery<ProductBean> criteriaQuery = criteriaBuilder.createQuery(ProductBean.class);
 

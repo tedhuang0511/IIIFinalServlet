@@ -1,0 +1,120 @@
+package com.ted.model;
+
+import org.hibernate.Session;
+import org.springframework.stereotype.Repository;
+
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
+
+@Repository
+public class MemberOrderDAOHibernate implements MemberOrderDAO {
+	@PersistenceContext
+	private Session session;
+
+	public Session getSession() {
+		return session;
+	}
+
+	@Override
+	public MemberOrderBean select(String id) {
+		System.out.println("DAO的order ID: " + id);
+		CriteriaBuilder criteriaBuilder = this.getSession().getCriteriaBuilder();
+		CriteriaQuery<MemberOrderBean> criteriaQuery = criteriaBuilder.createQuery(MemberOrderBean.class);
+		Root<MemberOrderBean> root = criteriaQuery.from(MemberOrderBean.class);
+		Predicate p1 = criteriaBuilder.equal(root.get("orderId"), id);
+		criteriaQuery.where(p1);
+		TypedQuery<MemberOrderBean> typedQuery = this.getSession().createQuery(criteriaQuery);
+		MemberOrderBean result = typedQuery.getSingleResult();
+		if(result!=null) {
+			return result;
+		}
+		return null;
+	}
+
+	public List<MemberOrderBean> select(Integer memberId, String status) {
+		CriteriaBuilder criteriaBuilder = this.getSession().getCriteriaBuilder();
+		CriteriaQuery<MemberOrderBean> criteriaQuery = criteriaBuilder.createQuery(MemberOrderBean.class);
+
+		//FROM product
+		Root<MemberOrderBean> root = criteriaQuery.from(MemberOrderBean.class);
+
+		Predicate p1,p2;
+		try{
+			if(!Objects.equals(memberId,0) || !Objects.equals(status, "00")){ //如果使用者有輸入會員名稱或訂單狀態才進來
+				if(!Objects.equals(memberId, 0)){
+					//memberId = ?
+					p1 = criteriaBuilder.equal(root.get("memberId"), memberId);
+					criteriaQuery.where(p1);
+				}
+				if(!Objects.equals(status, "00") && status.length()!=0){
+					//status = ?
+					p2 = criteriaBuilder.equal(root.get("status"),status);
+					criteriaQuery.where(p2);
+				}
+				if(!Objects.equals(memberId, 0) && !Objects.equals(status, "00")){
+					p1 = criteriaBuilder.equal(root.get("memberId"), memberId);
+					p2 = criteriaBuilder.equal(root.get("status"),status);
+					criteriaQuery.where(p1,p2);
+				}
+			}
+		}catch (Exception e){
+			System.out.println(e);
+		}
+
+		TypedQuery<MemberOrderBean> typedQuery = this.getSession().createQuery(criteriaQuery);
+		List<MemberOrderBean> result = typedQuery.getResultList();
+		if(result!=null && !result.isEmpty()) {
+			return result;
+		}
+		return null;
+	}
+
+	@Override
+	public MemberOrderBean insert(MemberOrderBean bean) throws Exception {
+		if(bean!=null && bean.getOrderId()!=null) {
+			MemberOrderBean temp = this.getSession().get(MemberOrderBean.class, bean.getSeqno());
+			if(temp==null) {
+				System.out.println("null temp detected! so we do INSERT sql");
+				this.getSession().save(bean);
+				return bean;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public MemberOrderBean update(String name, Integer price,
+								  String desc, String catalog, String id, Date updateDate, String updateUser) {
+		if(id!=null) {
+			MemberOrderBean temp = this.getSession().get(MemberOrderBean.class, id);
+			if(temp!=null) {
+				temp.setOrderId(name);
+
+
+
+
+				return temp;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public boolean delete(String id) {
+		if(id!=null) {
+			MemberOrderBean temp = this.getSession().get(MemberOrderBean.class, id);
+			if(temp!=null) {
+				this.getSession().delete(temp);
+				return true;
+			}
+		}
+		return false;
+	}
+}
