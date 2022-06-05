@@ -149,15 +149,23 @@ public class OrderServlet extends HttpServlet {
         if (odaction != null && odaction.equals("Select")) {
             System.out.println("come in select statement at OrderServlet");
             List<Object> result = orderService.select(bean);
-
             if(result.size()==2){ //如果是有order+order detail
                 MemberOrderBean result1 = (MemberOrderBean) result.get(0);
                 if(result1!=null){
-                    var arr = new ArrayList<>();
-                    for(var mobean: result){
-                        arr.add(mobean.toString());
-                    }
-                    out.print(arr);
+                    //重構字串,把memberorderbean JSON裡面多加一個key(訂單明細),value放orderdetailbean的陣列裡面包json物件
+                    var str = "[{" +
+                            "\"訂單編號\" : " + '\"' + result1.getOrderId() + '\"' +
+                            ", \"會員編號\" : " + '\"'+ result1.getMemberId() + '\"' +
+                            ", \"付款方式\" : " + '\"'+ result1.getPayMethod() + '\"' +
+                            ", \"狀態\" : " + '\"'+ result1.getStatus() + '\"' +
+                            ", \"訂單建立日期\" : " + '\"'+ result1.getCreateDate() + '\"' +
+                            ", \"出貨日期\" : " + '\"'+ result1.getDeliveredDate() + '\"' +
+                            ", \"到貨超商\" : " + '\"'+ result1.getDeliverCvs() + '\"' +
+                            ", \"宅配地址\" : " + '\"'+ result1.getDeliverAddr() + '\"' +
+                            ", \"已交付日期\" : " + '\"'+ result1.getReceivedDate() + '\"' +
+                            ", \"訂單明細\" : " + result.get(1) +
+                            "}]";
+                    out.print(str);
                 }else{
                     out.print("");
                     out.close();

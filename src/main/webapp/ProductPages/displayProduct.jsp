@@ -100,7 +100,7 @@
                     <th scope="col">測試購物車</th>
                 </tr>
                 </thead>
-                <tbody id="content2">
+                <tbody id="productContent2">
                 </tbody>
             </table>
             <div class="container" style="margin-left: -25px">
@@ -262,8 +262,8 @@
                     pdtypeselect: $('.pdquerycatalog').val()
                 },
                 success: function (responseText) {
-                    if (responseText == "") {
-                        $('#content2').empty();
+                    if (responseText === "") {
+                        $('#productContent2').empty();
                         alert("找不到任何商品!!!")
                     } else {
                         jsonData = JSON.parse(responseText);
@@ -341,7 +341,7 @@
                         <td><button onclick="return addProductToCart(` + id + `);">放入購物車</button></td>
                 </tr>`
         });
-        $('#content2').html(str);
+        $('#productContent2').html(str);
     }
 
     function pageBtn(page) {
@@ -362,7 +362,6 @@
                 str += `<li class="page-item"><a class="page-link" href="#" data-page="` + i + `">` + i + `</a></li>`;
             }
         }
-        ;
 
         if (page.hasNext) {
             str += `<li class="page-item"><a class="page-link" href="#" data-page="` + (Number(page.currentPage) + 1) + `">Next</a></li>`;
@@ -598,7 +597,7 @@
                 pdaction: "cartCheckOut",
             },
             success: function (res) {
-                if(res=="CharIsEmpty"){
+                if(res==="CharIsEmpty"){
                     alert("目前購物車內沒有商品")
                 }else{
                     window.location.href = "checkout.jsp";
@@ -623,10 +622,9 @@
         if (strDate >= 0 && strDate <= 9) {
             strDate = "0" + strDate;
         }
-        var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+        return date.getFullYear() + seperator1 + month + seperator1 + strDate
             + " " + date.getHours() + seperator2 + date.getMinutes()
             + seperator2 + date.getSeconds();
-        return currentdate;
     }
 
     function cartTotal(qty) {

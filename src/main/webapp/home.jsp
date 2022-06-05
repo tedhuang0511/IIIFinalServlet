@@ -72,7 +72,7 @@
                         <a class="nav-link dropdown-toggle show" href="#" id="dropdown04" data-bs-toggle="dropdown"
                            aria-expanded="true"> 銷售模組 </a>
                         <ul class="submenu collapse" aria-labelledby="dropdown04">
-                            <li><a class="dropdown-item" href="#">銷售訂單維護</a></li>
+                            <li><a class="dropdown-item orders" href="#">銷售訂單維護</a></li>
                         </ul>
                     </li>
                     <li class="nav-item has-submenu">
@@ -197,6 +197,12 @@
                     </tbody>
                 </table>
             </div>
+
+            <div id="order01" class="d-none">
+                <jsp:include page="orderPages/displayOrder.jsp">
+                    <jsp:param name="key1" value="123"/>
+                </jsp:include>
+            </div>
         </main>
     </div>
 </div>
@@ -251,6 +257,10 @@
     $('.products').on('click', function () {
         $('main>div').prop('class', 'd-none')
         $('#product01').removeClass('d-none')
+    })
+    $('.orders').on('click', function () {
+        $('main>div').prop('class', 'd-none')
+        $('#order01').removeClass('d-none')
     })
     $('.members').on('click', function () {
         $('main>div').prop('class', 'd-none')
