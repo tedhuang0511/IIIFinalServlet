@@ -28,14 +28,12 @@
     </div>
 
     <div id="orderContent">
-        <!--使用者維護搜尋條件的區域控制 START-->
+        <!--訂單管理搜尋區域控制 START-->
         <div class="tab-pane fade show active" id="query" role="tabpanel" aria-labelledby="query-tab">
             <div style="margin-top: -18px; margin-bottom: -8px">
                 <button class="button-54 order-query"><img src=".././images/search.png" style="width: 20px"
-                                                          alt="">查詢
+                                                           alt="">查詢
                 </button>
-<%--                <button class="button-54 user-add"><img src=".././images/add.png" style="width: 20px" alt="">新增--%>
-<%--                </button>--%>
             </div>
             <table class="table table-hover">
                 <thead>
@@ -104,31 +102,30 @@
                 </nav>
             </div>
         </div>
-    </div> <!--使用者維護搜尋條件與結果的區域控制 END-->
-    <!--使用者 編輯 區域控制 START-->
+    </div> <!--訂單管理搜尋區域控制 END-->
+    <!--訂單管理 編輯 區域控制 START-->
     <div id="orderEdit" class="d-none">
         <div class="tab-pane fade show active " role="tabpanel"
              aria-labelledby="orderEdit-tab">
             <div style="margin-top: -18px; margin-bottom: -8px">
-                <input type="hidden" id="orderId" name="orderId" value="">
-                <button class="button-54" onclick="return saveOrModifyConfirm(`Insert`)"><img
+                <button class="button-54" onclick="return orderActionConfirm(`Deliver`)"><img
                         src="images/search.png" style="width: 20px"
                         alt="">訂單已出貨
                 </button>
-                <button class="button-54" onclick="return saveOrModifyConfirm(`Insert`)"><img
+                <button class="button-54" onclick="return orderActionConfirm(`Receive`)"><img
                         src="images/search.png" style="width: 20px"
                         alt="">確認已取貨按鈕
                 </button>
-                <button class="button-54" onclick="return saveOrModifyConfirm(`Update`)"><img
+                <button class="button-54" onclick="return orderActionConfirm(`UpdateDetail`)"><img
                         src="images/search.png" style="width: 20px"
                         alt="">更新訂單明細
                 </button>
-                <button class="button-54" onclick="return saveOrModifyConfirm(`Insert`)"><img
+                <button class="button-54" onclick="return orderActionConfirm(`CancelOrder`)"><img
                         src="images/search.png" style="width: 20px"
                         alt="">取消訂單
                 </button>
 
-                <div class="border border-2 border-info">
+                <div class="border border-2 border-info" style="margin-top: 10px; margin-bottom: 10px">
                     <h3>訂購產品清單</h3>
                     <table class="table table-success table-hover table-striped w-100">
                         <thead>
@@ -136,25 +133,25 @@
                             <th scope="col">產品名稱</th>
                             <th scope="col">產品類別</th>
                             <th scope="col">產品價格</th>
-                            <th scope="col"></th>
+                            <th scope="col">產品照片</th>
                         </tr>
                         </thead>
-                        <tbody>
-                        <tr>
-                            <td>${row.productName }</td>
-                            <td>${row.productCatalog }</td>
-                            <td>${row.productPrice }</td>
-                            <td><img src="${row.productImg1 }" alt="" style="width: 120px"></td>
-                        </tr>
+                        <tbody id="orderdataillist00">
+                            <tr>
+                                <td>aaa</td>
+                                <td>3c</td>
+                                <td>666</td>
+                                <td>aaa.jpg</td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>
                 <div id="memberData" class="border border-2 border-info">
-                    <h3>訂購人資料</h3>
-                    會員姓名:Brad Chao<br>
-                    會員Email:Brad@gmail.com<br>
-                    會員電話:0910101010<br>
-                    會員地址:台中市南屯區公益路51號18樓-3<br>
+                        <h3>訂購人資料</h3>
+                        會員姓名:Brad Chao<br>
+                        會員Email:Brad@gmail.com<br>
+                        會員電話:0910101010<br>
+                        會員地址:台中市南屯區公益路51號18樓-3<br>
                 </div>
 
                 <table class="table table-hover">
@@ -167,13 +164,13 @@
                     </thead>
                     <tbody>
                     <tr>
-                        <td scope="row" style="text-align: end"><label for="editOrderId">訂單編號</label></td>
+                        <td style="text-align: end"><label for="editOrderId">訂單編號</label></td>
                         <td><input type="text" id="editOrderId" value=""></td>
-                        <td scope="row" style="text-align: end"><label for="editOrderStatus">訂單狀態</label></td>
+                        <td style="text-align: end"><label for="editOrderStatus">訂單狀態</label></td>
                         <td><input type="text" id="editOrderStatus" value=""></td>
                     </tr>
                     <tr>
-                        <td scope="row" style="text-align: end">付款方式</td>
+                        <td style="text-align: end">付款方式</td>
                         <td>
                             <input type="text" name="editOrderPayMethod" list="editOrderPayMethod"
                                    class="editOrderPayMethod"
@@ -183,29 +180,30 @@
                                 <option value="線上刷卡宅配">
                             </datalist>
                         </td>
-                        <td scope="row" style="text-align: end"><label for="editMemberId">會員編號</label></td>
+                        <td style="text-align: end"><label for="editMemberId">會員編號</label></td>
                         <td><input type="text" id="editMemberId" value=""></td>
                     </tr>
                     <tr>
-                        <td scope="row" style="text-align: end"><label for="editCreateDate">訂單成立日</label></td>
-                        <td><input type="datetime-local" id="editCreateDate" value=""></td>
-                        <td scope="row" style="text-align: end"><label for="editDeliverDate">訂單出貨日</label></td>
-                        <td><input type="datetime-local" id="editDeliverDate" value=""></td>
+                        <td style="text-align: end"><label for="editCreateDate">訂單成立日</label></td>
+                        <td><input type="text" id="editCreateDate" readonly></td>
+                        <td style="text-align: end"><label for="editDeliverDate">訂單出貨日</label></td>
+                        <td><input type="text" id="editDeliverDate" value=""></td>
                     </tr>
                     <tr>
-                        <td scope="row" style="text-align: end"><label for="editReceivedDate">完成訂單日</label></td>
-                        <td><input type="datetime-local" id="editReceivedDate" value=""></td>
-                        <td></td>
-                        <td></td>
+                        <td style="text-align: end"><label for="editReceivedDate">完成訂單日</label></td>
+                        <td><input type="text" id="editReceivedDate" value=""></td>
+                        <td style="text-align: end"><label for="editCvs">取貨超商</label></td>
+                        <td><input type="text" id="editCvs" value=""></td>
                     </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-    </div><!--使用者 編輯 區域控制 END-->
+    </div><!--訂單管理 編輯 區域控制 END-->
 </div>
 
 <script>
+    //把所有order列出並且加上分頁功能
     var orderJsonData = {};
     $('.order-query').click(
         function () {
@@ -290,7 +288,7 @@
                 `<tr>
                         <td>` + orderid + `</td>
                         <td><img class="edit" src="images/edit.png" alt=""
-                                 onclick="fnc2(` + orderid + `)">
+                                 onclick="editOrderIcon(` + orderid + `)">
                         </td>
                         <td>` + memberid + `</td>
                         <td>` + paymethod + `</td>
@@ -344,6 +342,64 @@
 </script>
 
 <script>
+    //TODO 訂單編輯頁面上方四顆按鈕的處理
+    function orderActionConfirm(action){
+        const isDel = confirm("確定執行?");
+        if (isDel === true) {
+            alert("hi")
+            // xxxxxxxxxxxx(action);
+        }
+    }
+    //產品清單的編輯按鈕被點擊時觸發
+    function editOrderIcon(orderid) {
+        var settings = {
+            "url": "http://bosian.ddns.net:8080/IIIFinalServlet_war_exploded/OrderServlet?odaction=Select&orderId=" + orderid,
+            "method": "GET",
+            "timeout": 0,
+            "headers": {
+                "Cookie": "JSESSIONID=9456E36BD1F5E383BC4944B9D78F5940"
+            }
+        };
+        $.ajax(settings).done(function (response) {
+            let orderliststr = '';
+            var res = JSON.parse(response)
+            $('#editOrderId').prop('value', res[0].訂單編號)  //當使用者點下編輯icon把訂單資訊傳到編輯頁面
+            $('#editOrderStatus').prop('value', res[0].狀態)
+            $('.editOrderPayMethod').prop('value', res[0].付款方式)
+            $('#editMemberId').prop('value', res[0].會員編號)
+            $('#editCreateDate').prop('value', res[0].訂單建立日期)
+            $('#editDeliverDate').prop('value', res[0].出貨日期)
+            $('#editReceivedDate').prop('value', res[0].已交付日期)
+            $('#editCvs').prop('value', res[0].到貨超商)
+            res[0].訂單明細.forEach(function (item) {
+                var productId = item.productId;
+                var settings2 = {
+                    "url": "http://bosian.ddns.net:8080/IIIFinalServlet_war_exploded/ProductServlet?pdaction=Select1&editProductId=" + productId,
+                    "method": "POST",
+                    "timeout": 0,
+                    "headers": {
+                        "Cookie": "JSESSIONID=F66ADC03731A8FA7B65582FE2F15E2E0"
+                    },
+                };
+                $.ajax(settings2).done(function (response) {
+                    var jsondata = JSON.parse(response)
+                    orderliststr = orderliststr +
+                        `<tr>
+                            <td>` + jsondata[0].productName +  `</td>
+                            <td>` + jsondata[0].productCatalog + `</td>
+                            <td>` + jsondata[0].productPrice + `</td>
+                            <td><img src="` + jsondata[0].productImg1 + `" width="120px" /></td>
+                        </tr>`
+                    $('#orderdataillist00').html(orderliststr);
+                });
+            })
+        });
+        $('#orderQueryTab').removeClass("active").addClass('nav-link')
+        $('#orderEditTab').prop('class', 'nav-link active')
+        $('#orderContent').prop('class', 'd-none')
+        $('#orderEdit').prop('class', 'd-block')
+    }
+
     $('.order-query').on('click', function () {
         $('#orderList').removeClass('d-none')
     })
