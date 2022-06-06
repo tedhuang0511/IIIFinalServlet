@@ -96,9 +96,13 @@ public class CartServlet extends HttpServlet {
         }else if (pdaction != null && pdaction.equals("cartCheckOut")) {
             //把購物車清單從session cart抓出來
             List<ProductBean> result = (List<ProductBean>) request.getSession().getAttribute("cart");
+            //把會員ID從session memberId抓出來
+            Integer memberId = (Integer) request.getSession().getAttribute("memberId");
             if(result!=null){
-                //list forward結帳頁面 redirect到結帳頁面
+                //list forward結帳頁面
                 request.setAttribute("cart", result);
+                //memberId forward到結帳頁面
+                request.setAttribute("memberId",memberId);
                 request.getRequestDispatcher("checkout.jsp").forward(request, response);
             }else{
                 out.print("CharIsEmpty");

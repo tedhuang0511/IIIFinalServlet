@@ -45,6 +45,7 @@ public class Login extends HttpServlet {
                 request.changeSessionId(); //新增session
             }
             request.getSession().setAttribute("login",username);//為session設定屬性("login"),值=username
+            request.getSession().setAttribute("memberId",4);//模擬前台會員登入要把member的ID放到session
             page= SUCCESS_PATH;
         }else{
             page= ERROR_PATH;

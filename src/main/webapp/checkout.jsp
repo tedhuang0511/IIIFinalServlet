@@ -52,11 +52,7 @@
 </c:if>
 <br>
 <div id="memberData" class="border border-2 border-info">
-    <h3>訂購人資料</h3>
-    會員姓名:Brad Chao<br>
-    會員Email:Brad@gmail.com<br>
-    會員電話:0910101010<br>
-    會員地址:台中市南屯區公益路51號18樓-3<br>
+<%--    從下方ajax取得資料放入--%>
 </div>
 <br>
 <div class="border border-2 border-info">
@@ -86,9 +82,11 @@
     <br>
     <div>
         <h3>收件⼈資料：</h3>
-        <input type="checkbox" checked>同訂購⼈ <input type="checkbox">修改收件⼈資料<br>
-        姓名：Brad Chao<br>
-        ⼿機號碼：0910101010<br>
+        <input type="radio" id="receiverOption1" name="receiverOption" value="同訂購人"><label for="receiverOption1">同訂購人</label>
+        <input type="radio" id="receiverOption2" name="receiverOption" value="修改收件人資訊"><label for="receiverOption2">修改收件人資訊</label>
+        <br>
+        姓名：<input type="text" id="test004"><br>
+        ⼿機號碼：<input type="text" id="test005"><br>
     </div>
     <button onclick="submitOrder()">確認提交訂單</button>
 </div>
@@ -96,10 +94,36 @@
 
 <script>
     var productList = '${cart}';
+    const memberId = '${memberId}';
 
     function test987(){
         console.log(productList);
     }
+
+    //API取得該會員資料放入html
+    $.ajax({
+        url: "http://bosian.ddns.net:8080/IIIFinalServlet_war_exploded/MemberServlet?memberAction=SelectAll&memberId=4",
+        method: "get",
+        data: {
+            memberAction: "SelectAll",
+            memberId: memberId
+        },
+        success: function (resp) {
+            var memberdata = JSON.parse(resp);
+            $('#test004').prop('value',memberdata[0].memberLastname+memberdata[0].memberFirstname);
+            $('#test005').prop('value',memberdata[0].memberTel);
+            let str = '';
+            str = str + `<h3>訂購人資料</h3>
+                        會員姓名:` + memberdata[0].memberLastname + memberdata[0].memberFirstname + `<br>
+                        會員Email:` + memberdata[0].memberEmail + `<br>
+                        會員電話:` + memberdata[0].memberTel + `<br>
+                        會員地址:` + memberdata[0].memberAddr + `<br>`
+            $('#memberData').html(str);
+        },
+        error: function (resp) {
+            console.log(resp);
+        }
+    })
 
     var payMethod = $("input[name=payMethod]");
 

@@ -2,6 +2,7 @@ package com.ted.model;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
 @Table(name = "members", schema = "iii")
@@ -39,19 +40,19 @@ public class MembersBean {
     private String memberAddr;
     @Basic
     @Column(name = "member_birth", nullable = false)
-    private Timestamp memberBirth;
+    private Date memberBirth;
     @Basic
     @Column(name = "create_user", nullable = false, length = 20)
     private String createUser;
     @Basic
     @Column(name = "create_date", nullable = false)
-    private Timestamp createDate;
+    private Date createDate;
     @Basic
     @Column(name = "update_user", nullable = false, length = 20)
     private String updateUser;
     @Basic
     @Column(name = "update_date", nullable = false)
-    private Timestamp updateDate;
+    private Date updateDate;
 
     public int getMemberId() {
         return memberId;
@@ -133,11 +134,11 @@ public class MembersBean {
         this.memberAddr = memberAddr;
     }
 
-    public Timestamp getMemberBirth() {
+    public Date getMemberBirth() {
         return memberBirth;
     }
 
-    public void setMemberBirth(Timestamp memberBirth) {
+    public void setMemberBirth(Date memberBirth) {
         this.memberBirth = memberBirth;
     }
 
@@ -149,11 +150,11 @@ public class MembersBean {
         this.createUser = createUser;
     }
 
-    public Timestamp getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Timestamp createDate) {
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
 
@@ -165,12 +166,25 @@ public class MembersBean {
         this.updateUser = updateUser;
     }
 
-    public Timestamp getUpdateDate() {
+    public Date getUpdateDate() {
         return updateDate;
     }
 
-    public void setUpdateDate(Timestamp updateDate) {
+    public void setUpdateDate(Date updateDate) {
         this.updateDate = updateDate;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"memberId\" : " + '\"' + memberId + '\"' +
+                ", \"memberAccouunt\" : " + '\"'+ memberAccouunt + '\"' +
+                ", \"memberLastname\" : " + '\"'+ memberLastname + '\"' +
+                ", \"memberFirstname\" : " + '\"'+ memberFirstname + '\"' +
+                ", \"memberEmail\" : " + '\"'+ memberEmail + '\"' +
+                ", \"memberTel\" : " + '\"'+ memberTel + '\"' +
+                ", \"memberAddr\" : " + '\"'+ memberAddr + '\"' +
+                "}";
     }
 
     @Override
