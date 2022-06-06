@@ -14,6 +14,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
+    <style>
+        body{
+            margin-left: 100px; margin-right: 300px;
+        }
+    </style>
 </head>
 <body>
 <h1>Select Product Table Result : ${fn:length(cart)} row(s) selected</h1>
@@ -72,7 +77,11 @@
     <input type="radio" id="onlineCreditCard" name="payMethod" value="線上刷卡宅配">
     <label for="onlineCreditCard">線上刷卡宅配</label><br>
     <div class="d-none" id="test002">
-        信用卡號: <input type="text">
+        信用卡號: <br>
+        <input name="credit-number" class="cc-number" type="tel" maxlength="16" size="20" placeholder="Card Number"><br>
+        <input name="credit-expires" class="cc-expires" type="tel" maxlength="7" placeholder="MM / YY"><br>
+        <input name="credit-cvc" class="cc-cvc" type="tel" maxlength="4" placeholder="CVC"><br>
+        宅配地址: <input type="text" id="test003" size="50">
     </div>
     <br>
     <div>
@@ -105,13 +114,14 @@
                 payMethod: payMethod.filter(":checked").val(), //抓前端表格內容
                 status: "01", //如果他是超商取貨付款就01,線上刷卡就02 //01成立-02已付款-03已出貨-031未付款已出貨-04取消-05完成交付-06退貨
                 cvs: $('.cvs').val(), //抓前端表格內容(下拉式選單的超商名稱)
-                address: "台中市西屯區水源路123號3樓", //如果使用者選擇宅配有輸入地址的話
+                address: $('#test003').val(), //如果使用者選擇宅配有輸入地址的話
                 odaction: "createOrder",
                 createDate: getNowFormatDate(), //前端傳送
                 productList: productList //購物產品清單的json格式"字串"
             },
             success: function (resp) {
                 alert(resp);
+                window.location.href = "home.jsp";
             },
             error: function () {
                 alert("建立訂單失敗");
@@ -122,11 +132,13 @@
     $('#chooseCVS').on('click', function () {
         $('#test001').removeClass("d-none");
         $('#test002').addClass("d-none");
+        $('#test003').prop('value', "");
     })
 
     $('#onlineCreditCard').on('click', function () {
         $('#test002').removeClass("d-none");
         $('#test001').addClass("d-none");
+        $('#test003').prop('value', "台中市南屯區公益路51號18樓-3");
     })
 
     function removeProductFromCart(pid) {

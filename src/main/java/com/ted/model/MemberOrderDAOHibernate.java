@@ -117,4 +117,45 @@ public class MemberOrderDAOHibernate implements MemberOrderDAO {
 		}
 		return false;
 	}
+
+	@Override
+	public boolean deliver(MemberOrderBean bean) {
+		if(bean!=null && bean.getOrderId()!=null) {
+			MemberOrderBean temp = this.getSession().createNamedQuery("byOrderId",MemberOrderBean.class).setParameter("orderId",bean.getOrderId()).getSingleResult();
+			temp.setUpdateDate(bean.getUpdateDate());
+			temp.setDeliveredDate(bean.getUpdateDate());
+			temp.setUpdateUser(bean.getUpdateUser());
+			temp.setStatus("031"); //未付款已出貨
+			this.getSession().save(temp);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean receive(MemberOrderBean bean) {
+		if(bean!=null && bean.getOrderId()!=null) {
+			MemberOrderBean temp = this.getSession().createNamedQuery("byOrderId",MemberOrderBean.class).setParameter("orderId",bean.getOrderId()).getSingleResult();
+			temp.setUpdateDate(bean.getUpdateDate());
+			temp.setReceivedDate(bean.getUpdateDate());
+			temp.setUpdateUser(bean.getUpdateUser());
+			temp.setStatus("05"); //未付款已出貨
+			this.getSession().save(temp);
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean cancelOrder(MemberOrderBean bean) {
+		if(bean!=null && bean.getOrderId()!=null) {
+			MemberOrderBean temp = this.getSession().createNamedQuery("byOrderId",MemberOrderBean.class).setParameter("orderId",bean.getOrderId()).getSingleResult();
+			temp.setUpdateDate(bean.getUpdateDate());
+			temp.setUpdateUser(bean.getUpdateUser());
+			temp.setStatus("04"); //取消訂單
+			this.getSession().save(temp);
+			return true;
+		}
+		return false;
+	}
 }

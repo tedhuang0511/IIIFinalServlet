@@ -6,6 +6,14 @@ import java.util.Date;
 
 @Entity
 @Table(name = "member_order", schema = "iii")
+@NamedQueries(
+        value = {
+                @NamedQuery(
+                        name="byOrderId",
+                        query="from com.ted.model.MemberOrderBean where orderId = :orderId"
+                )
+        }
+)
 public class MemberOrderBean {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
@@ -92,7 +100,7 @@ public class MemberOrderBean {
         return deliveredDate;
     }
 
-    public void setDeliveredDate(Timestamp deliveredDate) {
+    public void setDeliveredDate(Date deliveredDate) {
         this.deliveredDate = deliveredDate;
     }
 
@@ -116,7 +124,7 @@ public class MemberOrderBean {
         return receivedDate;
     }
 
-    public void setReceivedDate(Timestamp receivedDate) {
+    public void setReceivedDate(Date receivedDate) {
         this.receivedDate = receivedDate;
     }
 

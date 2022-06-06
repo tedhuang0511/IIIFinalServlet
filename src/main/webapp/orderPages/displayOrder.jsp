@@ -356,13 +356,14 @@
             method: "post",
             data: {
                 odaction: action,
+                updateDate: getNowFormatDate(),
                 orderId: $('#editOrderId').val()
             },
             success: function (res) {
                 alert(res);
             },
             error: function () {
-                alert("cart error");
+                alert("unexpect error");
             }
         });
     }

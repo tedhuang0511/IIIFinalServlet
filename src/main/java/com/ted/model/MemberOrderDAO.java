@@ -14,4 +14,8 @@ public interface MemberOrderDAO {
                            String desc, String catalog, String id, Date updateDate, String updateUser);
 
     boolean delete(String id);
+
+    boolean deliver(MemberOrderBean bean);
+    boolean receive(MemberOrderBean bean);
+    boolean cancelOrder(MemberOrderBean bean);
 }

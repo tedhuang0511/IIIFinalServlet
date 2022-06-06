@@ -57,19 +57,26 @@ public class OrderService {
         return result;
     }
 
-    public MemberOrderBean update(MemberOrderBean bean) {
-        MemberOrderBean result = null;
-//        if(bean!=null && bean.getProductId()!=null) {
-//            result = memberOrderDAO.update(bean.getProductName(), bean.getProductPrice(),
-//                    bean.getProductDesc(), bean.getProductCatalog(), bean.getProductId(), bean.getUpdateDate(), bean.getUpdateUser());
-//        }
+    public Boolean deliver(MemberOrderBean bean) {
+        Boolean result = null;
+        if(bean!=null && bean.getOrderId()!=null) {
+            result = memberOrderDAO.deliver(bean);
+        }
         return result;
     }
 
-    public boolean delete(MemberOrderBean bean) {
+    public Boolean receive(MemberOrderBean bean) {
+        Boolean result = null;
+        if(bean!=null && bean.getOrderId()!=null) {
+            result = memberOrderDAO.receive(bean);
+        }
+        return result;
+    }
+
+    public boolean cancelOrder(MemberOrderBean bean) {
         boolean result = false;
         if(bean!=null && bean.getOrderId()!=null) {
-            result = memberOrderDAO.delete(bean.getOrderId());
+            result = memberOrderDAO.cancelOrder(bean);
         }
         return result;
     }

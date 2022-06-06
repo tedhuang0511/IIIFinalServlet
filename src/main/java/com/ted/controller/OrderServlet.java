@@ -57,8 +57,9 @@ public class OrderServlet extends HttpServlet {
         var address0 = request.getParameter("address");
         var odaction = request.getParameter("odaction");
         var createDate0 = request.getParameter("createDate");
+        var updateDate0 = request.getParameter("updateDate");
         var productList = request.getParameter("productList");
-        System.out.println(odaction + " from productservelet " + orderId0 + " : " + memberId0 + " : " + payMethod + " : " + cvs0 + " : " + address0 + " : " + createDate0);
+        System.out.println(odaction + " from productservelet " + orderId0 + " : " + memberId0 + " : " + payMethod + " : " + cvs0 + " : " + address0 + " : " + createDate0 + " : " +updateDate0);
 
         Map<String, String> errors = new HashMap<>();
         request.setAttribute("errors", errors);
@@ -109,6 +110,15 @@ public class OrderServlet extends HttpServlet {
                     errors.put("createDate", "Make must be a date of YYYY-MM-DD");
                 }
             }
+            java.util.Date updateDate = null;
+            if(updateDate0!=null && updateDate0.length()!=0) {
+                try {
+                    updateDate = sFormat.parse(updateDate0);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                    errors.put("createDate", "Make must be a date of YYYY-MM-DD");
+                }
+            }
 
             //呼叫Model
             bean.setSeqno(seqno);
@@ -121,7 +131,7 @@ public class OrderServlet extends HttpServlet {
             bean.setUpdateUser(username);
             bean.setCreateUser(username);
             bean.setCreateDate(createDate);
-            bean.setUpdateDate(createDate);
+            bean.setUpdateDate(updateDate);
 
             if(productList!=null){
                 JSONArray jsonarr = new JSONArray(productList); //把前端json字串轉乘json array
@@ -202,32 +212,29 @@ public class OrderServlet extends HttpServlet {
             }finally {
                 out.close();
             }
-//        } else if (pdaction != null && pdaction.equals("Update")) {
-//            System.out.println("come in update statement at ProductServlet");
-//            ProductBean result = productService.update(bean);
-//            if (result == null) {
-//                out.println("更新失敗 update failed!");
-//            } else {
-//                out.println("更新完成!");
-//            }
-//        } else if (pdaction != null && pdaction.equals("Delete")) {
-//            System.out.println("send delete to product service");
-//            boolean result = productService.delete(bean);
-//            System.out.println(result);
-////            if(!result) {
-////                request.setAttribute("delete", 0);
-////            } else {
-////                request.setAttribute("delete", 1);
-////            }
-////            request.getRequestDispatcher(
-////                    "/pages/product.jsp").forward(request, response);
-//        } else if (pdaction != null && pdaction.equals("DeleteImg")) {
-//            System.out.println("send img delete to ps");
-//            productService.deleteImg(bean, imgIndex);
-//        } else {
-//            errors.put("action", "Unknown Action:" + pdaction);
-////            request.getRequestDispatcher(
-////                    "/pages/product.jsp").forward(request, response);
+        } else if (odaction != null && odaction.equals("Deliver")) {
+            System.out.println("come in update statement at OrderServlet");
+            Boolean result = orderService.deliver(bean);
+            if (!result) {
+                out.println("更新失敗 update failed!");
+            } else {
+                out.println("更新完成!");
+            }
+        } else if (odaction != null && odaction.equals("Receive")) {
+            boolean result = orderService.receive(bean);
+            if(!result) {
+                out.println("更新失敗 update failed!");
+            } else {
+                out.println("更新完成!");
+            }
+        } else if (odaction != null && odaction.equals("CancelOrder")) {
+            System.out.println("CancelOrder in orderservlet");
+            boolean result = orderService.cancelOrder(bean);
+            if(!result) {
+                out.println("訂單取消失敗 cancel failed!");
+            } else {
+                out.println("訂單取消完成!");
+            }
         }
     }
 }
