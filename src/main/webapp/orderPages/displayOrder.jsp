@@ -108,7 +108,7 @@
         <div class="tab-pane fade show active " role="tabpanel"
              aria-labelledby="orderEdit-tab">
             <div style="margin-top: -18px; margin-bottom: -8px">
-                <button class="button-54" onclick="return orderActionConfirm(`Deliver`)"><img
+                <button class="button-54 orderActionButtons" data-id="" onclick="return orderActionConfirm(`Deliver`)"><img
                         src="images/search.png" style="width: 20px"
                         alt="">訂單已出貨
                 </button>
@@ -346,10 +346,27 @@
     function orderActionConfirm(action){
         const isDel = confirm("確定執行?");
         if (isDel === true) {
-            alert("hi")
-            // xxxxxxxxxxxx(action);
+            doOrderAction(action);
         }
     }
+
+    function doOrderAction(action){
+        $.ajax({
+            url: "OrderServlet",
+            method: "post",
+            data: {
+                odaction: action,
+                orderId: $('#editOrderId').val()
+            },
+            success: function (res) {
+                alert(res);
+            },
+            error: function () {
+                alert("cart error");
+            }
+        });
+    }
+
     //產品清單的編輯按鈕被點擊時觸發
     function editOrderIcon(orderid) {
         var settings = {
