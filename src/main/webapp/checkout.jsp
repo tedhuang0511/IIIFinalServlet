@@ -180,29 +180,32 @@
     //建立訂單的API
     function submitOrder() {
         if ($("input[name=payMethod]").filter(":checked").val()=="LinePay"){
-            console.log("WQEEEEEEEEEEEEEEASDASDASXXXXXXXXXXX")
+            //如果付款方式是linepay去呼叫linepay request, 取得 paymentUrl 後跳轉
+            //跳轉到processing頁面後呼叫payment confirm, 如果response success 就呼叫下面那段的ajax
+            alert('LINEPAY!');
+        } else{
+            $.ajax({
+                url: "OrderServlet",
+                method: "post",
+                data: {
+                    orderId: createOrderId(),  //前端處裡(檔名組成=YYYYMMDDhhmmSS)
+                    memberId: 4, //應該要抓session的會員資訊,但目前前台網頁還沒整合到project無法做session控管所以寫死
+                    payMethod: payMethod.filter(":checked").val(), //抓前端表格內容
+                    cvs: $('.cvs').val(), //抓前端表格內容(下拉式選單的超商名稱)
+                    address: $('#test003').val(), //如果使用者選擇宅配有輸入地址的話
+                    odaction: "createOrder",
+                    createDate: getNowFormatDate(), //前端傳送
+                    productList: jsonproductList //購物產品清單的json格式"字串"
+                },
+                success: function (resp) {
+                    alert(resp);
+                    window.location.href = "home.jsp";
+                },
+                error: function () {
+                    alert("建立訂單失敗");
+                }
+            });
         }
-        $.ajax({
-            url: "OrderServlet",
-            method: "post",
-            data: {
-                orderId: createOrderId(),  //前端處裡(檔名組成=YYYYMMDDhhmmSS)
-                memberId: 4, //應該要抓session的會員資訊,但目前前台網頁還沒整合到project無法做session控管所以寫死
-                payMethod: payMethod.filter(":checked").val(), //抓前端表格內容
-                cvs: $('.cvs').val(), //抓前端表格內容(下拉式選單的超商名稱)
-                address: $('#test003').val(), //如果使用者選擇宅配有輸入地址的話
-                odaction: "createOrder",
-                createDate: getNowFormatDate(), //前端傳送
-                productList: jsonproductList //購物產品清單的json格式"字串"
-            },
-            success: function (resp) {
-                alert(resp);
-                window.location.href = "home.jsp";
-            },
-            error: function () {
-                alert("建立訂單失敗");
-            }
-        });
     }
 
     $('#LinePay').on('click', function () {
