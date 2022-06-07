@@ -212,7 +212,7 @@ public class MemberFormServlet extends HttpServlet {
 		
 		//有錯誤，再丟入填寫頁面顯示
 		if(errors!=null && !errors.isEmpty()) {
-			System.out.println("有錯誤，再丟入填寫頁面顯示"+errors.size());
+//			System.out.println("有錯誤，再丟入填寫頁面顯示"+errors.size());
 //			request.getRequestDispatcher(
 //					"/pages/register/registerForm.jsp").forward(request, response);
 		}

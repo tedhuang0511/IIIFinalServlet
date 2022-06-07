@@ -63,10 +63,15 @@ public class CartServlet extends HttpServlet {
 
         var out = response.getWriter();
         int totalQTYinCart = 0;
-        //判斷增刪修查
+
         if (pdaction != null && pdaction.equals("addToCart")) {
             System.out.println("come in select statement at CartServlet");
             List<ProductBean> result = productService.select(bean);
+
+            //Map<productId,quantity>
+
+
+
             if(request.getSession().getAttribute("cart")!=null){  //如果購物車session已存在
                 List<ProductBean> temp = (List<ProductBean>) request.getSession().getAttribute("cart"); //把session放的list拿出來
                 temp.add(result.get(0)); //把這次抓到的bean存進去
@@ -77,21 +82,22 @@ public class CartServlet extends HttpServlet {
                 request.getSession().setAttribute("cart", result); //如果購物車session不存在 就直接new一個session把list存進去
                 totalQTYinCart = result.size();
             }
-            out.print("購物車新增成功"+totalQTYinCart);
+            out.print("購物車新增成功"+totalQTYinCart); //如果有改動會影響checkout.jsp做substring
             out.close();
         } else if(pdaction != null && pdaction.equals("removeProductFromCart")){
             List<ProductBean> result = productService.select(bean);
             List<ProductBean> temp = (List<ProductBean>) request.getSession().getAttribute("cart"); //把session放的list拿出來
-            System.out.println(temp.size()+": temp數量");
+            String output = "購物車內並沒有此商品";
             for(int i=0; i<temp.size();i++){
                 if(temp.get(i).getProductName().equals(result.get(0).getProductName())){
                     temp.remove(i);
+                    output = "產品移除成功";
+                    break;  //只會移除一個產品
                 }
             }
-            System.out.println("result: "+ result.get(0).getProductName());
             request.getSession().removeAttribute("cart"); //把舊有的購物車session移除
             request.getSession().setAttribute("cart",temp); //把新的list存回購物車session
-            out.print("產品移除成功");
+            out.print(output);
             out.close();
         }else if (pdaction != null && pdaction.equals("cartCheckOut")) {
             //把購物車清單從session cart抓出來
@@ -104,6 +110,16 @@ public class CartServlet extends HttpServlet {
                 //memberId forward到結帳頁面
                 request.setAttribute("memberId",memberId);
                 request.getRequestDispatcher("checkout.jsp").forward(request, response);
+            }else{
+                out.print("CharIsEmpty");
+                out.close();
+            }
+        }else if (pdaction != null && pdaction.equals("cartCheckOut2")) {
+            //把購物車清單從session cart抓出來
+            List<ProductBean> result = (List<ProductBean>) request.getSession().getAttribute("cart");
+            if(result!=null){
+                out.println(result);
+                out.close();
             }else{
                 out.print("CharIsEmpty");
                 out.close();
