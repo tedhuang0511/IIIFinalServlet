@@ -180,6 +180,7 @@
     //建立訂單的API
     function submitOrder() {
         if ($("input[name=payMethod]").filter(":checked").val()=="LinePay"){
+            //https://sandbox-pay.line.me/zh_TW/deal/integrate
             //如果付款方式是linepay去呼叫linepay request, 取得 paymentUrl 後跳轉
             //跳轉到processing頁面後呼叫payment confirm, 如果response success 就呼叫下面那段的ajax
             alert('LINEPAY!');
