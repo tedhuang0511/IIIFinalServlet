@@ -597,7 +597,7 @@
                 pdaction: "cartCheckOut",
             },
             success: function (res) {
-                if(res==="CharIsEmpty"){
+                if(res==="CartIsEmpty"){
                     alert("目前購物車內沒有商品")
                 }else{
                     window.location.href = "checkout.jsp";

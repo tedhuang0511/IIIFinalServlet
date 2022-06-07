@@ -15,44 +15,42 @@
             integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
             crossorigin="anonymous"></script>
     <style>
-        body{
-            margin-left: 100px; margin-right: 300px;
+        body {
+            margin-left: 100px;
+            margin-right: 300px;
         }
     </style>
 </head>
 <body>
-<h1>Select Product Table Result : ${fn:length(cart)} row(s) selected</h1>
-<c:if test="${not empty cart}">
-    <div class="border border-2 border-info">
-        <table class="table table-success table-hover table-striped w-100">
-            <thead>
-            <tr>
-                <th scope="col">產品名稱</th>
-                <th scope="col">產品類別</th>
-                <th scope="col">產品價格</th>
-                <th scope="col"></th>
-                <th scope="col"></th>
-            </tr>
-            </thead>
-            <tbody>
-            <c:forEach var="row" items="${cart}">
-                <tr>
-                    <td>${row.productName }</td>
-                    <td>${row.productCatalog }</td>
-                    <td>${row.productPrice }</td>
-                    <td><img src="${row.productImg1 }" alt="" style="width: 120px"></td>
-                    <td>
-                        <button onclick="removeProductFromCart(${row.productId})">移除</button>
-                    </td>
-                </tr>
-            </c:forEach>
-            </tbody>
-        </table>
-    </div>
-</c:if>
+<h1>Select Product Table Result : <b></b> row(s) selected</h1>
+<div class="border border-2 border-info">
+    <table class="table table-success table-hover table-striped w-100" style="margin-bottom: 0">
+        <thead>
+        <tr>
+            <th scope="col">產品名稱</th>
+            <th scope="col">產品圖片</th>
+            <th scope="col">產品單價</th>
+            <th scope="col">數量</th>
+            <th scope="col">單項總額</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody id="test0608">
+        </tbody>
+        <tfoot>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>訂單總額=<b id="totalpricehtml"></b></td>
+        </tfoot>
+    </table>
+</div>
+
 <br>
 <div id="memberData" class="border border-2 border-info">
-<%--    從下方ajax取得資料放入--%>
+    <%--    從下方ajax取得資料放入--%>
 </div>
 <br>
 <div class="border border-2 border-info">
@@ -82,7 +80,8 @@
     <br>
     <div>
         <h3>收件⼈資料：</h3>
-        <input type="radio" id="receiverOption1" name="receiverOption" value="同訂購人"><label for="receiverOption1">同訂購人</label>
+        <input type="radio" id="receiverOption1" name="receiverOption" value="同訂購人"><label
+            for="receiverOption1">同訂購人</label>
         <input type="radio" id="receiverOption2" name="receiverOption" value="修改收件人資訊"><label for="receiverOption2">修改收件人資訊</label>
         <br>
         姓名：<input type="text" id="test004"><br>
@@ -93,36 +92,75 @@
 <button onclick="test987()">test</button>
 
 <script>
-    var productList = '${cart}';
+    var productList;
     const memberId = '${memberId}';
 
-    function test987(){
+    function test987() {
         console.log(productList);
+        console.log(typeof productList)
     }
 
+    $(function () {
+        $.ajax({
+            url: "CartServlet",
+            method: "get",
+            data: {
+                pdaction: "cartCheckOut2"
+            },
+            success: function (resp) {
+                productList = JSON.parse(resp);
+                let str = '';
+                let totalprice = 0;
+                // $('#test005').prop('value', memberdata[0].memberTel);
+                productList.forEach(function (e) {
+                    totalprice = totalprice + e.單項總額
+                    str = str +
+                        `<tr>
+                        <td>` + e.productName + `</td>
+                        <td><img src="` + e.productImg + `" width="120" /></td>
+                        <td>` + e.productPrice + `</td>
+                        <td>` + `<button onclick="return addProductToCart(`
+                              + e.productId + `);">+</button>`
+                              + e.qty + `<button onclick="return addProductToCart(`
+                              + e.productId + `);">-</button>` + `</td>
+                        <td>` + e.單項總額 + `</td>
+                        <td><button onclick="return deleteProductItemConfirm(` + e.productId + `);">刪除品項</button></td>
+                        </tr>`
+                })
+                $('#test0608').html(str);
+                $('#totalpricehtml').text(totalprice);
+            },
+            error: function (resp) {
+                console.log(resp);
+            }
+        })
+    })
+
     //API取得該會員資料放入html
-    $.ajax({
-        url: "http://bosian.ddns.net:8080/IIIFinalServlet_war_exploded/MemberServlet?memberAction=SelectAll&memberId=4",
-        method: "get",
-        data: {
-            memberAction: "SelectAll",
-            memberId: memberId
-        },
-        success: function (resp) {
-            var memberdata = JSON.parse(resp);
-            $('#test004').prop('value',memberdata[0].memberLastname+memberdata[0].memberFirstname);
-            $('#test005').prop('value',memberdata[0].memberTel);
-            let str = '';
-            str = str + `<h3>訂購人資料</h3>
+    $(function () {
+        $.ajax({
+            url: "http://bosian.ddns.net:8080/IIIFinalServlet_war_exploded/MemberServlet?memberAction=SelectAll&memberId=4",
+            method: "get",
+            data: {
+                memberAction: "SelectAll",
+                memberId: memberId
+            },
+            success: function (resp) {
+                var memberdata = JSON.parse(resp);
+                $('#test004').prop('value', memberdata[0].memberLastname + memberdata[0].memberFirstname);
+                $('#test005').prop('value', memberdata[0].memberTel);
+                let str = '';
+                str = str + `<h3>訂購人資料</h3>
                         會員姓名:` + memberdata[0].memberLastname + memberdata[0].memberFirstname + `<br>
                         會員Email:` + memberdata[0].memberEmail + `<br>
                         會員電話:` + memberdata[0].memberTel + `<br>
                         會員地址:` + memberdata[0].memberAddr + `<br>`
-            $('#memberData').html(str);
-        },
-        error: function (resp) {
-            console.log(resp);
-        }
+                $('#memberData').html(str);
+            },
+            error: function (resp) {
+                console.log(resp);
+            }
+        })
     })
 
     var payMethod = $("input[name=payMethod]");
@@ -193,14 +231,18 @@
             + " " + date.getHours() + seperator2 + date.getMinutes()
             + seperator2 + date.getSeconds();
     }
+
     function createOrderId() {
         var date = new Date();
         var month = date.getMonth() + 1;
         var strDate = date.getDate();
         return date.getFullYear() + addZero(month) + addZero(strDate) + addZero(date.getHours()) + addZero(date.getMinutes()) + addZero(date.getSeconds());
     }
+
     function addZero(i) {
-        if (i < 10) {i = "0" + i}
+        if (i < 10) {
+            i = "0" + i
+        }
         return i;
     }
 </script>
