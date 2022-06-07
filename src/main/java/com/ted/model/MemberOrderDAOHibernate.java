@@ -125,7 +125,11 @@ public class MemberOrderDAOHibernate implements MemberOrderDAO {
 			temp.setUpdateDate(bean.getUpdateDate());
 			temp.setDeliveredDate(bean.getUpdateDate());
 			temp.setUpdateUser(bean.getUpdateUser());
-			temp.setStatus("031"); //未付款已出貨
+			if(Objects.equals(temp.getStatus(), "01")){
+				temp.setStatus("031"); //如果是貨到付款情況下出貨
+			}else{
+				temp.setStatus("03"); //03=已付款情況下出貨
+			}
 			this.getSession().save(temp);
 			return true;
 		}
@@ -139,7 +143,7 @@ public class MemberOrderDAOHibernate implements MemberOrderDAO {
 			temp.setUpdateDate(bean.getUpdateDate());
 			temp.setReceivedDate(bean.getUpdateDate());
 			temp.setUpdateUser(bean.getUpdateUser());
-			temp.setStatus("05"); //未付款已出貨
+			temp.setStatus("05"); //消費者取貨
 			this.getSession().save(temp);
 			return true;
 		}

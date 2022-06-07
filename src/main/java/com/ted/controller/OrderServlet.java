@@ -91,8 +91,12 @@ public class OrderServlet extends HttpServlet {
                 }
             }
             String status = "00";
-            if (status0 != null && status0.length() != 0) {
-                status = status0;
+            if (payMethod != null && payMethod.length() != 0) {
+                if(payMethod.equals("貨到付款")){
+                    status = "01";
+                }else{
+                    status = "02";
+                }
             }
             String cvs = "N/A";
             if (cvs0 != null && cvs0.length() != 0) {
@@ -144,7 +148,7 @@ public class OrderServlet extends HttpServlet {
                     System.out.println(jobj.get("productName"));
                     odbean.setOrderId(orderId);
                     odbean.setProductId((Integer) jobj.get("productId")); //放入json object裡面 名為productId的key 的value
-                    odbean.setQuantity((Integer) jobj.get("qty"));  //TODO 如何判斷是否有重複的商品
+                    odbean.setQuantity((Integer) jobj.get("qty"));
                     odbean.setUnitPrice((Integer) jobj.get("productPrice")); //放入json object裡面 名為producPrice的key 的value
                     odbeanlist.add(odbean);
                     System.out.println("--------------end-------------");

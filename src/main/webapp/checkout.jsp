@@ -56,31 +56,40 @@
 <div class="border border-2 border-info">
     <input type="hidden" name="orderId" value="">
     <h3>請選擇付款方式:</h3>
-    <input type="radio" id="chooseCVS" name="payMethod" value="超商取貨付款">
-    <label for="chooseCVS">超商取貨付款</label><br>
-    <div class="d-none" id="test001">
-        請選擇您要取貨的超商:
-        <input type="text" name="cvs" list="cvs" class="cvs" value="">
-        <datalist id="cvs">
-            <option value="全家 台中公益路大進店">
-            <option value="全家 台中精誠店">
-            <option value="7-ELEVEN 三中門市">
-            <option value="7-ELEVEN 明義門市">
-        </datalist>
-    </div>
-    <input type="radio" id="onlineCreditCard" name="payMethod" value="線上刷卡宅配">
-    <label for="onlineCreditCard">線上刷卡宅配</label><br>
+    <input type="radio" id="LinePay" name="payMethod" value="LinePay">
+    <label for="LinePay">LinePay(提交訂單後會自動跳轉)</label><br>
+    <input type="radio" id="payLater" name="payMethod" value="貨到付款">
+    <label for="payLater">貨到付款</label><br>
+    <input type="radio" id="onlineCreditCard" name="payMethod" value="線上刷卡">
+    <label for="onlineCreditCard">線上刷卡</label><br>
     <div class="d-none" id="test002">
         信用卡號: <br>
         <input name="credit-number" class="cc-number" type="tel" maxlength="16" size="20" placeholder="Card Number"><br>
         <input name="credit-expires" class="cc-expires" type="tel" maxlength="7" placeholder="MM / YY"><br>
         <input name="credit-cvc" class="cc-cvc" type="tel" maxlength="4" placeholder="CVC"><br>
-        宅配地址: <input type="text" id="test003" size="50">
     </div>
+    <br>
+    <h3>配送方式:</h3>
+    <input type="radio" id="deliver01" name="deliverWay">
+    <label for="deliver01">超商取貨</label><br>
+        <div class="d-none" id="test001">
+            <input type="text" name="cvs" list="cvs" class="cvs" value="">
+            <datalist id="cvs">
+                <option value="全家 台中公益路大進店">
+                <option value="全家 台中精誠店">
+                <option value="7-ELEVEN 三中門市">
+                <option value="7-ELEVEN 明義門市">
+            </datalist>
+        </div>
+    <input type="radio" id="deliver02" name="deliverWay">
+    <label for="deliver02">宅配</label><br>
+        <div id="test006" class="d-none">
+            宅配地址: <input type="text" id="test003" size="50">
+        </div>
     <br>
     <div>
         <h3>收件⼈資料：</h3>
-        <input type="radio" id="receiverOption1" name="receiverOption" value="同訂購人"><label
+        <input type="radio" id="receiverOption1" name="receiverOption" value="同訂購人" checked><label
             for="receiverOption1">同訂購人</label>
         <input type="radio" id="receiverOption2" name="receiverOption" value="修改收件人資訊"><label for="receiverOption2">修改收件人資訊</label>
         <br>
@@ -97,8 +106,8 @@
     const memberId = '${memberId}';
 
     function test987() {
-        console.log(productList);
-        console.log(typeof productList)
+        console.log(payMethod.filter(":checked").val());
+        console.log(typeof payMethod.filter(":checked").val())
     }
 
     //API取得session內購物車產品清單
@@ -167,23 +176,19 @@
     })
 
     var payMethod = $("input[name=payMethod]");
-    var finalStatus;
-    if($("input[name=payMethod]").filter(":checked").val()==="線上刷卡宅配"){
-        finalStatus = "02";
-    }else{
-        finalStatus = "01";
-    }
 
     //建立訂單的API
     function submitOrder() {
+        if ($("input[name=payMethod]").filter(":checked").val()=="LinePay"){
+            console.log("WQEEEEEEEEEEEEEEASDASDASXXXXXXXXXXX")
+        }
         $.ajax({
             url: "OrderServlet",
             method: "post",
             data: {
                 orderId: createOrderId(),  //前端處裡(檔名組成=YYYYMMDDhhmmSS)
-                memberId: 1, //應該要抓session的會員資訊,但目前前台網頁還沒整合到project無法做session控管所以寫死
+                memberId: 4, //應該要抓session的會員資訊,但目前前台網頁還沒整合到project無法做session控管所以寫死
                 payMethod: payMethod.filter(":checked").val(), //抓前端表格內容
-                status: finalStatus, //如果他是超商取貨付款就01,線上刷卡就02 //01成立-02已付款-03已出貨-031未付款已出貨-04取消-05完成交付-06退貨
                 cvs: $('.cvs').val(), //抓前端表格內容(下拉式選單的超商名稱)
                 address: $('#test003').val(), //如果使用者選擇宅配有輸入地址的話
                 odaction: "createOrder",
@@ -200,17 +205,27 @@
         });
     }
 
-    $('#chooseCVS').on('click', function () {
-        $('#test001').removeClass("d-none");
+    $('#LinePay').on('click', function () {
         $('#test002').addClass("d-none");
+    })
+    $('#payLater').on('click', function () {
+        $('#test002').addClass("d-none");
+    })
+    $('#onlineCreditCard').on('click', function () {
+        $('#test002').removeClass("d-none");
+    })
+    $('#deliver02').on('click',function(){
+        $('#test001').addClass("d-none");
+        $('#test006').removeClass("d-none");
+        $('#test003').prop('value', "台中市南屯區公益路51號18樓-3");
+        $('.cvs').prop('value',"");
+    })
+    $('#deliver01').on('click',function(){
+        $('#test001').removeClass("d-none");
+        $('#test006').addClass("d-none");
         $('#test003').prop('value', "");
     })
 
-    $('#onlineCreditCard').on('click', function () {
-        $('#test002').removeClass("d-none");
-        $('#test001').addClass("d-none");
-        $('#test003').prop('value', "台中市南屯區公益路51號18樓-3");
-    })
 
     function removeProductFromCart(pid) {
         $.ajax({
