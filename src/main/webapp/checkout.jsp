@@ -42,8 +42,8 @@
         <td></td>
         <td></td>
         <td></td>
+        <td>訂單總額= $ <b id="totalpricehtml"></b></td>
         <td></td>
-        <td>訂單總額=<b id="totalpricehtml"></b></td>
         </tfoot>
     </table>
 </div>
@@ -93,6 +93,7 @@
 
 <script>
     var productList;
+    let jsonproductList = "XX";
     const memberId = '${memberId}';
 
     function test987() {
@@ -100,6 +101,7 @@
         console.log(typeof productList)
     }
 
+    //API取得session內購物車產品清單
     $(function () {
         $.ajax({
             url: "CartServlet",
@@ -108,6 +110,7 @@
                 pdaction: "cartCheckOut2"
             },
             success: function (resp) {
+                jsonproductList = resp;
                 productList = JSON.parse(resp);
                 let str = '';
                 let totalprice = 0;
@@ -164,6 +167,12 @@
     })
 
     var payMethod = $("input[name=payMethod]");
+    var finalStatus;
+    if($("input[name=payMethod]").filter(":checked").val()==="線上刷卡宅配"){
+        finalStatus = "02";
+    }else{
+        finalStatus = "01";
+    }
 
     //建立訂單的API
     function submitOrder() {
@@ -174,12 +183,12 @@
                 orderId: createOrderId(),  //前端處裡(檔名組成=YYYYMMDDhhmmSS)
                 memberId: 1, //應該要抓session的會員資訊,但目前前台網頁還沒整合到project無法做session控管所以寫死
                 payMethod: payMethod.filter(":checked").val(), //抓前端表格內容
-                status: "01", //如果他是超商取貨付款就01,線上刷卡就02 //01成立-02已付款-03已出貨-031未付款已出貨-04取消-05完成交付-06退貨
+                status: finalStatus, //如果他是超商取貨付款就01,線上刷卡就02 //01成立-02已付款-03已出貨-031未付款已出貨-04取消-05完成交付-06退貨
                 cvs: $('.cvs').val(), //抓前端表格內容(下拉式選單的超商名稱)
                 address: $('#test003').val(), //如果使用者選擇宅配有輸入地址的話
                 odaction: "createOrder",
                 createDate: getNowFormatDate(), //前端傳送
-                productList: productList //購物產品清單的json格式"字串"
+                productList: jsonproductList //購物產品清單的json格式"字串"
             },
             success: function (resp) {
                 alert(resp);

@@ -60,6 +60,7 @@ public class OrderServlet extends HttpServlet {
         var updateDate0 = request.getParameter("updateDate");
         var productList = request.getParameter("productList");
         System.out.println(odaction + " from productservelet " + orderId0 + " : " + memberId0 + " : " + payMethod + " : " + cvs0 + " : " + address0 + " : " + createDate0 + " : " +updateDate0);
+        System.out.println("XXXXX"+productList+"XXXXXXXXX");
 
         Map<String, String> errors = new HashMap<>();
         request.setAttribute("errors", errors);
@@ -142,9 +143,9 @@ public class OrderServlet extends HttpServlet {
                     JSONObject jobj = new JSONObject(jsonarr.get(i).toString()); //把json array裡面的json物件字串轉成json object
                     System.out.println(jobj.get("productName"));
                     odbean.setOrderId(orderId);
-                    odbean.setProductId(Integer.parseInt((String) jobj.get("productId"))); //放入json object裡面 名為productId的key 的value
-                    odbean.setQuantity(1);  //TODO 如何判斷是否有重複的商品
-                    odbean.setUnitPrice(Integer.parseInt((String) jobj.get("productPrice"))); //放入json object裡面 名為producPrice的key 的value
+                    odbean.setProductId((Integer) jobj.get("productId")); //放入json object裡面 名為productId的key 的value
+                    odbean.setQuantity((Integer) jobj.get("qty"));  //TODO 如何判斷是否有重複的商品
+                    odbean.setUnitPrice((Integer) jobj.get("productPrice")); //放入json object裡面 名為producPrice的key 的value
                     odbeanlist.add(odbean);
                     System.out.println("--------------end-------------");
                 }
