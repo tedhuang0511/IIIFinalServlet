@@ -35,6 +35,15 @@ public class CartServlet extends HttpServlet {
         doPost(req,resp);
     }
 
+    //計算目前購物車總共有多少數量
+    private Integer totalQTYinCart(HashMap<Integer,Integer> map){
+        int totalQtyInCart = 0;
+        for(int id: map.keySet()){
+            totalQtyInCart += map.get(id); //算出目前所有產品的數量加總
+        }
+        return totalQtyInCart;
+    }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
         //接收參數
@@ -42,78 +51,68 @@ public class CartServlet extends HttpServlet {
         response.setHeader("Content-type", "text/html;charset=UTF-8");
         response.setHeader("Access-Control-Allow-Origin","*");
         response.setCharacterEncoding("UTF-8");
-        var pid0 = request.getParameter("editProductId");
+        var productId0 = request.getParameter("editProductId");
+        var quantity0 = request.getParameter("quantity");
         var pdaction = request.getParameter("pdaction");
-        System.out.println(pdaction + " from cartServlet " + pid0);
 
-        //驗證資料
-        Map<String, String> errors = new HashMap<>();
-        request.setAttribute("errors", errors);
-
-        int pid = 0; //如果抓不到id就給預設id為0
-        if (pid0 != null && pid0.length() != 0) {
-            try {
-                pid = Integer.parseInt(pid0);
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-                errors.put("id", "Id must be an integer");
-            }
+        //轉換資料
+        var quantity = 1; //如果沒給quantity參數預設給1
+        if (quantity0!=null&&quantity0.length()!=0){
+            quantity = Integer.parseInt(quantity0);
         }
-        ProductBean bean = new ProductBean();
-        bean.setProductId(pid);
+        //轉換資料
+        var productId = 0;
+        if (productId0!=null&&productId0.length()!=0){
+            productId = Integer.parseInt(productId0);
+        }
 
         var out = response.getWriter();
-        int totalQTYinCart = 0;
-
+        Integer totalQtyInCart = 0;
         if (pdaction != null && pdaction.equals("addToCart")) {
-            System.out.println("come in select statement at CartServlet");
-            List<ProductBean> result = productService.select(bean);
-            int productId = result.get(0).getProductId();
             //new一個map裡面放 productId跟quantity
             HashMap<Integer,Integer> cartList = new HashMap<>();
 
             if(request.getSession().getAttribute("cart")!=null){  //如果購物車session已存在
                 HashMap<Integer,Integer> temp = (HashMap<Integer, Integer>) request.getSession().getAttribute("cart"); //把購物車session的map抓出
                 if(temp.get(productId)==null){   //如果map裡面抓不到這個productId的key
-                    temp.put(productId,1); //map新增一個productId,qty
+                    temp.put(productId,quantity); //map新增一個productId,qty
                 }else{
-                    temp.put(productId, temp.get(productId) + 1);
+                    temp.put(productId, temp.get(productId) + quantity);
                 }
-//                List<ProductBean> temp = (List<ProductBean>) request.getSession().getAttribute("cart"); //把session放的list拿出來
-//                temp.add(result.get(0)); //把這次抓到的bean存進去
                 request.getSession().removeAttribute("cart"); //把舊有的購物車session移除
                 request.getSession().setAttribute("cart",temp); //把新的list存回購物車session
-                for(int id: temp.keySet()){
-                    totalQTYinCart = totalQTYinCart + temp.get(id);
-                }
+                totalQtyInCart = totalQTYinCart(temp);
             }else{
-                cartList.put(productId,result.size());
-                request.getSession().setAttribute("cart", cartList); //如果購物車session不存在 就直接new一個session把map存進去
-                totalQTYinCart = 1; //新的session,新的購物車,所以目前購物車內數量一定是1
+                //如果購物車session不存在 就直接new一個session把map存進去
+                cartList.put(productId,quantity);
+                request.getSession().setAttribute("cart", cartList);
+                totalQtyInCart = totalQTYinCart(cartList);
             }
-            out.print("購物車新增成功"+totalQTYinCart); //如果有改動會影響checkout.jsp做substring
+            out.print("購物車新增成功"+totalQtyInCart); //如果有改動會影響checkout.jsp做substring
             out.close();
         } else if(pdaction != null && pdaction.equals("removeProductFromCart")){
-            Integer productId = productService.select(bean).get(0).getProductId();
-            HashMap<Integer,Integer> temp = (HashMap<Integer, Integer>) request.getSession().getAttribute("cart"); //把session放的list拿出來
+            HashMap<Integer,Integer> temp = (HashMap<Integer, Integer>) request.getSession().getAttribute("cart"); //把session存放的map拿出來
             String output = "購物車內並沒有此商品";
-//            for(int i=0; i<temp.size();i++){
-//                if(temp.get(i).getProductName().equals(result.get(0).getProductName())){
-//                    temp.remove(i);
-//                    output = "產品移除成功";
-//                    break;  //只會移除一個產品
-//                }
-//            }
             if(temp.get(productId)!=null){
-                temp.put(productId,temp.get(productId)-1);
+                //如果此商品數量剩餘1 直接把產品從map移除 ; 商品數量大於1 則 -1
+                if(temp.get(productId)==1){
+                    temp.remove(productId);
+                }else{
+                    if(quantity == 1){
+                        temp.put(productId,temp.get(productId) -1 );
+                    }
+                    else if(quantity>0&&quantity<temp.get(productId)){ //判斷一下前端輸入的值是否在合法範圍
+                        temp.put(productId,quantity );
+                    }else{
+                        out.println("Unexpect error");
+                    }
+                }
                 output = "商品已移除，購物車內目前商品數量=";
             }
             request.getSession().removeAttribute("cart"); //把舊有的購物車session移除
             request.getSession().setAttribute("cart",temp); //把新的Map存回購物車session
-            for(int id: temp.keySet()){
-                totalQTYinCart = totalQTYinCart + temp.get(id);
-            }
-            out.print(output+totalQTYinCart);
+            totalQtyInCart = totalQTYinCart(temp);
+            out.print(output+totalQtyInCart);
             out.close();
         }else if (pdaction != null && pdaction.equals("cartCheckOut")) {
             //把購物車清單從session cart抓出來
@@ -121,24 +120,25 @@ public class CartServlet extends HttpServlet {
             //把會員ID從session memberId抓出來
             Integer memberId = (Integer) request.getSession().getAttribute("memberId");
             if(result!=null&&result.size()!=0){
-                //list forward結帳頁面
+                //map forward結帳頁面
                 request.setAttribute("cart", result);
                 //memberId forward到結帳頁面
                 request.setAttribute("memberId",memberId);
                 request.getRequestDispatcher("checkout.jsp").forward(request, response);
             }else{
-                out.print("CharIsEmpty");
+                out.print("CartIsEmpty");
                 out.close();
             }
         }else if (pdaction != null && pdaction.equals("cartCheckOut2")) {
             //把購物車清單從session cart抓出來
             HashMap<Integer,Integer> result = (HashMap<Integer, Integer>) request.getSession().getAttribute("cart");
             if(result!=null&&result.size()!=0){
+                //把map轉成json object as response
                 out.print(new JSONObject(result));
                 //out.println(request.getSession().getId());
                 out.close();
             }else{
-                out.print("CharIsEmpty");
+                out.print("CartIsEmpty");
                 out.close();
             }
         }
