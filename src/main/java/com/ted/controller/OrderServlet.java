@@ -212,6 +212,8 @@ public class OrderServlet extends HttpServlet {
                     }
                 }
                 out.print("訂單新增完成" + "   明細增加 : " + result + " 筆");
+                //把session購物車清空
+                request.getSession().removeAttribute("cart");
             }catch (Exception e){
                 out.print(e);
             }finally {

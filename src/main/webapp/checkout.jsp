@@ -103,6 +103,7 @@
 <script>
     var productList;
     let jsonproductList = "XX";
+    let totalprice = 0;
     const memberId = '${memberId}';
 
     function test987() {
@@ -122,7 +123,6 @@
                 jsonproductList = resp;
                 productList = JSON.parse(resp);
                 let str = '';
-                let totalprice = 0;
                 // $('#test005').prop('value', memberdata[0].memberTel);
                 productList.forEach(function (e) {
                     totalprice = totalprice + e.單項總額
@@ -180,10 +180,61 @@
     //建立訂單的API
     function submitOrder() {
         if ($("input[name=payMethod]").filter(":checked").val()=="LinePay"){
-            //https://sandbox-pay.line.me/zh_TW/deal/integrate
-            //如果付款方式是linepay去呼叫linepay request, 取得 paymentUrl 後跳轉
-            //跳轉到processing頁面後呼叫payment confirm, 如果response success 就呼叫下面那段的ajax
-            alert('LINEPAY!');
+
+            //跳轉到processing頁面後呼叫payment confirm, 如果response success 就呼叫下面那段的ajax (在linepayProcessing.jsp)
+            $.ajax({
+                url: "OrderServlet",
+                method: "post",
+                data: {
+                    orderId: createOrderId(),  //前端處裡(檔名組成=YYYYMMDDhhmmSS)
+                    memberId: 4, //應該要抓session的會員資訊,但目前前台網頁還沒整合到project無法做session控管所以寫死
+                    payMethod: payMethod.filter(":checked").val(), //抓前端表格內容
+                    cvs: $('.cvs').val(), //抓前端表格內容(下拉式選單的超商名稱)
+                    address: $('#test003').val(), //如果使用者選擇宅配有輸入地址的話
+                    odaction: "createOrder",
+                    createDate: getNowFormatDate(), //前端傳送
+                    productList: jsonproductList //購物產品清單的json格式"字串"
+                },
+                success: function () {
+                    //https://sandbox-pay.line.me/zh_TW/deal/integrate
+                    //如果付款方式是linepay去呼叫linepay request, 取得 paymentUrl 後跳轉
+                    const linepayOrderId = createOrderId();
+                    var settings = {
+                        "url": "https://cors-anywhere.herokuapp.com/"+"https://sandbox-api-pay.line.me/v2/payments/request",
+                        "method": "POST",
+                        "timeout": 0,
+                        "headers": {
+                            "Content-Type": "application/json",
+                            "X-LINE-ChannelId": "1657198233",
+                            "X-LINE-ChannelSecret": "65e7b255439f40f09ddfcf567e1dd996"
+                        },
+                        "data": JSON.stringify({
+                            "amount": totalprice,
+                            "productImageUrl": "https://s3.ap-northeast-1.amazonaws.com/tedawsbucket20220530/javaproject/2022_06_05_17_23_10_805.jpg",
+                            "confirmUrl": "http://localhost:8080/IIIFinalServlet_war_exploded/linepayProcessing.jsp?",
+                            "productName": "Java EEIT 42",
+                            "orderId": linepayOrderId,
+                            "currency": "TWD"
+                        }),
+                    };
+
+                    $.ajax(settings).done(function (response) {
+                        console.log(response);
+                        if(response.returnCode==='0000'){
+                            console.log("request success");
+                            var paymentUrl = response.info.paymentUrl.web;
+                            window.location.href = paymentUrl;
+                            sessionStorage.setItem("totalprice", totalprice);
+                        }else{
+                            alert("連線至linypay付款系統失敗");
+                        }
+                    });
+
+                },
+                error: function () {
+                    alert("建立訂單失敗");
+                }
+            });
         } else{
             $.ajax({
                 url: "OrderServlet",
