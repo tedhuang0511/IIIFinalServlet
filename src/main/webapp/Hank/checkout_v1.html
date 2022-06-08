@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>這裡放購物網抬頭</title>
+    <!-- Favicons Icon -->
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon" />
+    <!-- Mobile Specific -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- CSS Style -->
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.css" media="all">
+    <link rel="stylesheet" type="text/css" href="css/font-face-css.css">
+    <link rel="stylesheet" type="text/css" href="css/owl.carousel.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery.mobile-menu.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css" media="all">
+    <link rel="stylesheet" type="text/css" href="css/revslider.css">
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css?family=Montserrat:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i"
+        rel="stylesheet">
+</head>
+
+<body class="checkout-page">
+    <div id="page">
+        <!-- Navigation -->
+
+        <!-- main-container -->
+        <div class="main-container col2-right-layout">
+            <div class="main container">
+                <div class="row">
+                    <section class="col-sm-12 col-xs-12">
+                        <div class="col-main">
+                            <div class="page-title">
+                                <h1>結帳</h1>
+                            </div>
+                            <ol class="one-page-checkout" id="checkoutSteps">
+                                <li id="opc-billing" class="section allow ">
+                                    <!-- 綁定會員資料 -->
+                                    <div class="step-title"><span class="number">1</span>
+                                        <h3>訂購人資料</h3>
+                                    </div>
+                                    <div id="checkout-step-billing" class="step a-item">
+                                        <table>
+                                            <tr>
+                                                <th>姓名:</th>
+                                                <td>*宗*</td>
+                                            </tr>
+                                            <tr>
+                                                <th>E-Mail:</th>
+                                                <td>****@gmail.com</td>
+                                            </tr>
+                                            <tr>
+                                                <th>手機:</th>
+                                                <td>0983-***-360</td>
+                                            </tr>
+                                            <tr>
+                                                <th>市話:</th>
+                                                <td>04-2*******</td>
+                                            </tr>
+                                            <tr>
+                                                <th>地址:</th>
+                                                <td>台中市南屯區公益路二段51號18樓</td>
+                                            </tr>
+                                        </table>
+
+                                    </div>
+                                </li>
+                                <li id="opc-shipping" class="section">
+                                    <div class="step-title"><span class="number">2</span>
+                                        <h3 class="one_page_heading">寄送方式</h3>
+
+                                    </div>
+                                    <div id="checkout-step-billing" class="step a-item">
+                                        <!-- <input type="radio" name="billing[use_for_shipping]"
+                                            id="billing:use_for_shipping_yes" value="1"
+                                            onClick="$('shipping:same_as_billing').checked = true;" class="radio">
+                                        <label for="billing:use_for_shipping_yes">宅配到府
+                                        </label> -->
+                                        <input type="radio" name="opc-shipping_method" id="FamilyMart" value="0"
+                                            checked="checked" onClick="$('shipping:same_as_billing').checked = false;"
+                                            class="radio">
+                                        <label for="FamilyMart">全家超商取貨
+                                        </label>
+                                        <input type="radio" name="opc-shipping_method" id="7-ELEVEN" value="0"
+                                            checked="checked" onClick="$('shipping:same_as_billing').checked = false;"
+                                            class="radio">
+                                        <label for="7-ELEVEN">7-11超商取貨
+                                        </label>
+                                        <input type="radio" name="opc-shipping_method" id="iBox" value="0"
+                                            checked="checked" onClick="$('shipping:same_as_billing').checked = false;"
+                                            class="radio">
+                                        <label for="iBox">i郵箱取貨
+                                        </label>
+                                        <br>
+                                        <tr>
+                                            <th>門市名稱：</th>
+                                            <td>
+                                                <input type="text">
+                                                <a class="search">選擇取貨門市</a>
+                                            </td>
+                                        </tr>
+                                        <br>
+                                        <tr>
+                                            <th>門市地址：</th>
+                                            <td>
+                                                <input type="text">
+                                            </td>
+                                        </tr>
+                                    </div>
+
+                                </li>
+                                <li id="opc-shipping_method" class="section">
+                                    <div class="step-title"><span class="number">3</span>
+                                        <h3 class="one_page_heading">收件人資料</h3>
+
+                                    </div>
+                                    <div id="checkout-step-billing" class="step a-item">
+                                        <input type="radio" name="customerInfo" id="sameAsOrder" value="0"
+                                            checked="checked" onClick="$('shipping:same_as_billing').checked = false;"
+                                            class="radio">
+                                        <label for="sameAsOrder">同訂購人
+                                        </label>
+                                        <input type="radio" name="customerInfo" id="customReceiver" value="0"
+                                            checked="checked" onClick="$('shipping:same_as_billing').checked = false;"
+                                            class="radio">
+                                        <label for="customReceiver">修改收件人資料
+                                        </label>
+                                        <br>
+                                        <tr>
+                                            <th>姓名：</th>
+                                            <td>
+                                                <input type="text">
+
+                                            </td>
+                                        </tr>
+                                        <br>
+                                        <tr>
+                                            <th>手機：</th>
+                                            <td>
+                                                <input type="text">
+                                            </td>
+                                        </tr>
+                                    </div>
+                                </li>
+                                <li id="opc-payment" class="section">
+                                    <div class="step-title"><span class="number">4</span>
+                                        <h3 class="one_page_heading">付款方式</h3>
+                                    </div>
+                                    <div id="checkout-step-billing" class="step a-item">
+                                        <input type="radio" name="payment" id="creditCard" value="0" checked="checked"
+                                            onClick="$('shipping:same_as_billing').checked = false;" class="radio">
+                                        <label for="creditCard">信用卡
+                                        </label>
+                                        <input type="radio" name="payment" id="COD" value="0" checked="checked"
+                                            onClick="$('shipping:same_as_billing').checked = false;" class="radio">
+                                        <label for="COD">門市取貨付款
+                                        </label>
+                                        <br>
+                                        <tr>
+                                            <th>信用卡號：</th>
+                                            <td>
+                                                <input type="text">
+
+                                            </td>
+                                        </tr>
+                                        <br>
+                                        <tr>
+                                            <th>有效日期：</th>
+                                            <td>
+                                                <select name="validMonth" id="" style="width: 80px;">
+                                                    <option value="0">請選擇</option>
+                                                    <option value="1">01</option>
+                                                    <option value="2">02</option>
+                                                    <option value="3">03</option>
+                                                    <option value="4">04</option>
+                                                    <option value="5">05</option>
+                                                    <option value="6">06</option>
+                                                    <option value="7">07</option>
+                                                    <option value="8">08</option>
+                                                    <option value="9">09</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                </select>
+                                                <select name="validYear" id="" style="width: 80px;">
+                                                    <option value="0">請選擇</option>
+                                                    <option value="1">01</option>
+                                                    <option value="2">02</option>
+                                                    <option value="3">03</option>
+                                                    <option value="4">04</option>
+                                                    <option value="5">05</option>
+                                                    <option value="6">06</option>
+                                                    <option value="7">07</option>
+                                                    <option value="8">08</option>
+                                                    <option value="9">09</option>
+                                                    <option value="10">10</option>
+                                                    <option value="11">11</option>
+                                                    <option value="12">12</option>
+                                                </select>
+                                                <input type="text" placeholder="信用卡背面末三碼">
+                                            </td>
+                                        </tr>
+                                    </div>
+                                </li>
+                                <li id="opc-review" class="section">
+                                    <div class="step-title"><span class="number">5</span>
+                                        <h3 class="one_page_heading">訂單總覽</h3>
+
+                                    </div>
+                                    <div id="checkout-step-billing" class="step a-item">
+                                        <button type="button" class="button continue"
+                                            onClick="billing.save()"><span>結帳</span></button>
+                                    </div>
+                                </li>
+
+                            </ol>
+
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+        </div>
+        <!--End main-container -->
+
+    </div>
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/revslider.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/jquery.mobile-menu.min.js"></script>
+</body>
+
+</html>
