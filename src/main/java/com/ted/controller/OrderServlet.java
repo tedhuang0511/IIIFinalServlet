@@ -59,7 +59,7 @@ public class OrderServlet extends HttpServlet {
         var createDate0 = request.getParameter("createDate");
         var updateDate0 = request.getParameter("updateDate");
         var productList = request.getParameter("productList");
-        System.out.println(odaction + " from productservelet " + orderId0 + " : " + memberId0 + " : " + payMethod + " : " + cvs0 + " : " + address0 + " : " + createDate0 + " : " +updateDate0);
+        System.out.println(odaction + " from orderservelet " + orderId0 + " : " + memberId0 + " : " + payMethod + " : " + cvs0 + " : " + address0 + " : " + createDate0 + " : " +updateDate0);
         System.out.println("XXXXX"+productList+"XXXXXXXXX");
 
         Map<String, String> errors = new HashMap<>();
@@ -91,12 +91,8 @@ public class OrderServlet extends HttpServlet {
                 }
             }
             String status = "00";
-            if (payMethod != null && payMethod.length() != 0) {
-                if(payMethod.equals("貨到付款")){
-                    status = "01";
-                }else{
-                    status = "02";
-                }
+            if (status0 != null && status0.length() != 0) {
+                status = status0;
             }
             String cvs = "N/A";
             if (cvs0 != null && cvs0.length() != 0) {
@@ -202,6 +198,11 @@ public class OrderServlet extends HttpServlet {
         }else if (odaction != null && odaction.equals("createOrder")) {
             System.out.println("come in insert statement at OrderServlet");
             try {
+                if(payMethod.equals("貨到付款")){
+                    bean.setStatus("01");
+                }else{
+                    bean.setStatus("02");
+                }
                 orderService.insert(bean);
                 System.out.println("odbean數量: " + odbeanlist.size());
                 int result = 0;

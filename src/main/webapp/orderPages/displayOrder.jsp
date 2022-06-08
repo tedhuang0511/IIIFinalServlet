@@ -57,8 +57,9 @@
                                class="queryOrderPayMethod"
                                value="">
                         <datalist id="queryOrderPayMethod">
-                            <option value="超商取貨付款">
-                            <option value="線上刷卡宅配">
+                            <option value="貨到付款">
+                            <option value="線上刷卡">
+                            <option value="LinePay">
                         </datalist>
                     </td>
                     <td scope="row" style="text-align: end"><label for="queryMemberId">會員編號</label></td>
@@ -131,9 +132,10 @@
                         <thead>
                         <tr>
                             <th scope="col">產品名稱</th>
-                            <th scope="col">產品類別</th>
                             <th scope="col">產品價格</th>
                             <th scope="col">產品照片</th>
+                            <th scope="col">購買數量</th>
+                            <th scope="col">單項總計</th>
                         </tr>
                         </thead>
                         <tbody id="orderdataillist00">
@@ -142,8 +144,16 @@
                                 <td>3c</td>
                                 <td>666</td>
                                 <td>aaa.jpg</td>
+                                <td>aaa.jpg</td>
                             </tr>
                         </tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>訂單總計：<b id="ordertotalprice"></b></td>
+                        </tr>
                     </table>
                 </div>
                 <div id="memberData" class="border border-2 border-info">
@@ -380,6 +390,7 @@
         };
         $.ajax(settings).done(function (response) {
             let orderliststr = '';
+            let ordertotalprice = 0;
             var res = JSON.parse(response)
             $('#editOrderId').prop('value', res[0].訂單編號)  //當使用者點下編輯icon把訂單資訊傳到編輯頁面
             $('#editOrderStatus').prop('value', res[0].狀態)
@@ -401,14 +412,17 @@
                 };
                 $.ajax(settings2).done(function (response) {
                     var jsondata = JSON.parse(response)
+                    ordertotalprice = ordertotalprice + (parseInt(item.quantity) * parseInt(item.unitPrice));
                     orderliststr = orderliststr +
                         `<tr>
                             <td>` + jsondata[0].productName +  `</td>
-                            <td>` + jsondata[0].productCatalog + `</td>
                             <td>` + jsondata[0].productPrice + `</td>
                             <td><img src="` + jsondata[0].productImg1 + `" width="120px" /></td>
+                            <td>` + item.quantity + `</td>
+                            <td>` + item.quantity * item.unitPrice + `</td>
                         </tr>`
                     $('#orderdataillist00').html(orderliststr);
+                    $('#ordertotalprice').text(ordertotalprice)
                 });
             })
         });
