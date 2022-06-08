@@ -151,7 +151,7 @@
     //API取得該會員資料放入html
     $(function () {
         $.ajax({
-            url: "http://bosian.ddns.net:8080/IIIFinalServlet_war_exploded/MemberServlet?memberAction=SelectAll&memberId=4",
+            url: "http://localhost:8080/IIIFinalServlet_war_exploded/MemberServlet?memberAction=SelectAll&memberId=4",
             method: "get",
             data: {
                 memberAction: "SelectAll",

@@ -371,7 +371,7 @@
     //產品清單的編輯按鈕被點擊時觸發
     function editOrderIcon(orderid) {
         var settings = {
-            "url": "http://bosian.ddns.net:8080/IIIFinalServlet_war_exploded/OrderServlet?odaction=Select&orderId=" + orderid,
+            "url": "http://localhost:8080/IIIFinalServlet_war_exploded/OrderServlet?odaction=Select&orderId=" + orderid,
             "method": "GET",
             "timeout": 0,
             "headers": {
@@ -392,7 +392,7 @@
             res[0].訂單明細.forEach(function (item) {
                 var productId = item.productId;
                 var settings2 = {
-                    "url": "http://bosian.ddns.net:8080/IIIFinalServlet_war_exploded/ProductServlet?pdaction=Select1&editProductId=" + productId,
+                    "url": "http://localhost:8080/IIIFinalServlet_war_exploded/ProductServlet?pdaction=Select1&editProductId=" + productId,
                     "method": "POST",
                     "timeout": 0,
                     "headers": {

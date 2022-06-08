@@ -84,6 +84,7 @@ public class CartServlet extends HttpServlet {
                 request.getSession().setAttribute("cart", temp); //把新的list存回購物車session
                 totalQtyInCart = totalQTYinCart(temp);
             } else {
+                System.out.println(request.getSession().getId());
                 //如果購物車session不存在 就直接new一個session把map存進去
                 cartList.put(productId, quantity);
                 request.getSession().setAttribute("cart", cartList);
@@ -131,12 +132,16 @@ public class CartServlet extends HttpServlet {
                 out.close();
             }
         } else if (pdaction != null && pdaction.equals("cartCheckOut2")) {
+            System.out.println("cartCheckOut2--------");
+            System.out.println(request.getSession().getId());
+            System.out.println("cartCheckOut2---------");
             //把購物車清單從session cart抓出來
             HashMap<Integer, Integer> result = (HashMap<Integer, Integer>) request.getSession().getAttribute("cart");
             if (result != null && result.size() != 0) {
                 //把map轉成json object as response
                 JSONArray jarr = new JSONArray();
                 for (var k : result.keySet()) {
+                    System.out.println("key: " + k + "value: " + result.get(k));
                     ProductBean temp = new ProductBean();
                     temp.setProductId(k);
                     ProductBean bean = productService.select(temp).get(0);

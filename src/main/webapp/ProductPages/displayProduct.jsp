@@ -386,7 +386,7 @@
     //產品清單的編輯按鈕被點擊時觸發fnc1
     function fnc1(pid) {
         var settings = {
-            "url": "http://bosian.ddns.net:8080/IIIFinalServlet_war_exploded/ProductServlet?pdaction=Select1&editProductId=" + pid,
+            "url": "http://localhost:8080/IIIFinalServlet_war_exploded/ProductServlet?pdaction=Select1&editProductId=" + pid,
             "method": "GET",
             "timeout": 0,
             "headers": {
