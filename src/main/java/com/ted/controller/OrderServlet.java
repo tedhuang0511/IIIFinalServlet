@@ -1,8 +1,7 @@
 package com.ted.controller;
 
-import com.ted.model.MemberOrderBean;
-import com.ted.model.OrderDetailBean;
-import com.ted.model.OrderService;
+import com.ted.model.*;
+import com.ted.utils.JavaMail;
 import org.hibernate.criterion.Order;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -28,12 +27,14 @@ public class OrderServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private SimpleDateFormat sFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private OrderService orderService;
+    private MembersService membersService;
 
     public void init() {
         ServletContext application = this.getServletContext();
         ApplicationContext context = (ApplicationContext) application.getAttribute(
                 WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
         orderService = context.getBean("orderService", OrderService.class);
+        membersService = context.getBean("membersService", MembersService.class);
     }
 
     @Override
@@ -66,6 +67,7 @@ public class OrderServlet extends HttpServlet {
         request.setAttribute("errors", errors);
 
         MemberOrderBean bean = new MemberOrderBean();
+        MembersBean mbean = new MembersBean();
         List<OrderDetailBean> odbeanlist = new ArrayList<>();
         try {
             //轉換資料
@@ -122,6 +124,7 @@ public class OrderServlet extends HttpServlet {
             }
 
             //呼叫Model
+            mbean.setMemberId(memberId);
             bean.setSeqno(seqno);
             bean.setOrderId(orderId);
             bean.setMemberId(memberId);
@@ -220,6 +223,13 @@ public class OrderServlet extends HttpServlet {
             }finally {
                 out.close();
             }
+            //發送訂單明細到member的email
+            var member = membersService.select(mbean).get(0);
+            System.out.println(member.getMemberEmail());
+            JavaMail javaMail = new JavaMail(member.getMemberEmail(),member.getMemberLastname()+" "+member.getMemberFirstname());
+            String res = javaMail.sendMail(javaMail.createText(productList));
+            System.out.println(res);
+            //發送訂單明細到member的email
         } else if (odaction != null && odaction.equals("Deliver")) {
             System.out.println("come in update statement at OrderServlet");
             Boolean result = orderService.deliver(bean);
