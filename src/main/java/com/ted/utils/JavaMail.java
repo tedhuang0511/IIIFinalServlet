@@ -25,8 +25,8 @@ public class JavaMail {
         this.title = "Java webapp 網路購物訂單確認信";
         String host = "smtp.gmail.com";
         int port = 587;
-        username = "sbbty218@gmail.com";
-        password = "xrqonlxqjfhweukl";
+        username = "";
+        password = "";
 
         props = new Properties();
         props.put("mail.smtp.host", host);
