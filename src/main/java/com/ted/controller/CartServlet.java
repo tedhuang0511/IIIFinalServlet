@@ -84,7 +84,6 @@ public class CartServlet extends HttpServlet {
                 request.getSession().setAttribute("cart", temp); //把新的list存回購物車session
                 totalQtyInCart = totalQTYinCart(temp);
             } else {
-                System.out.println(request.getSession().getId());
                 //如果購物車session不存在 就直接new一個session把map存進去
                 cartList.put(productId, quantity);
                 request.getSession().setAttribute("cart", cartList);
@@ -115,6 +114,23 @@ public class CartServlet extends HttpServlet {
             totalQtyInCart = totalQTYinCart(temp);
             out.print(output + totalQtyInCart);
             out.close();
+        }else if (pdaction != null && pdaction.equals("removeSingleProducts")) {
+            HashMap<Integer, Integer> temp = (HashMap<Integer, Integer>) request.getSession().getAttribute("cart"); //把session存放的map拿出來
+            String output = "購物車內並沒有此商品";
+            if (temp.get(productId) != null) {
+                //如果此商品數量大於1 直接把產品從map移除
+                if (temp.get(productId) > 0) {
+                    temp.remove(productId);
+                } else {
+                    out.print("完全移除商品有誤");
+                }
+                output = "此商品已完全移除，購物車內目前商品數量=";
+            }
+            request.getSession().removeAttribute("cart"); //把舊有的購物車session移除
+            request.getSession().setAttribute("cart", temp); //把新的Map存回購物車session
+            totalQtyInCart = totalQTYinCart(temp);
+            out.print(output + totalQtyInCart);
+            out.close();
         } else if (pdaction != null && pdaction.equals("cartCheckOut")) {
             //TODO 這段基本上可以刪除 前端按鈕點下去後直接跳轉check out就好 但是memberId的attr傳遞要改寫
             //把購物車清單從session cart抓出來
@@ -132,16 +148,12 @@ public class CartServlet extends HttpServlet {
                 out.close();
             }
         } else if (pdaction != null && pdaction.equals("cartCheckOut2")) {
-            System.out.println("cartCheckOut2--------");
-            System.out.println(request.getSession().getId());
-            System.out.println("cartCheckOut2---------");
             //把購物車清單從session cart抓出來
             HashMap<Integer, Integer> result = (HashMap<Integer, Integer>) request.getSession().getAttribute("cart");
             if (result != null && result.size() != 0) {
                 //把map轉成json object as response
                 JSONArray jarr = new JSONArray();
                 for (var k : result.keySet()) {
-                    System.out.println("key: " + k + "value: " + result.get(k));
                     ProductBean temp = new ProductBean();
                     temp.setProductId(k);
                     ProductBean bean = productService.select(temp).get(0);
@@ -151,7 +163,7 @@ public class CartServlet extends HttpServlet {
                     jo2.put("productPrice", bean.getProductPrice());
                     jo2.put("productImg", bean.getProductImg1());
                     jo2.put("qty", result.get(k));
-                    jo2.put("單項總額",bean.getProductPrice()*result.get(k));
+                    jo2.put("singleTotal",bean.getProductPrice()*result.get(k));
                     jarr.put(jo2);
                 }
                 out.print(jarr);
