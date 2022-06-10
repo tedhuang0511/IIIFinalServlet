@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -125,7 +125,7 @@
                 let str = '';
                 // $('#test005').prop('value', memberdata[0].memberTel);
                 productList.forEach(function (e) {
-                    totalprice = totalprice + e.單項總額
+                    totalprice = totalprice + e.singleTotal
                     str = str +
                         `<tr>
                         <td>` + e.productName + `</td>
@@ -135,7 +135,7 @@
                               + e.productId + `);">+</button>`
                               + e.qty + `<button onclick="return addProductToCart(`
                               + e.productId + `);">-</button>` + `</td>
-                        <td>` + e.單項總額 + `</td>
+                        <td>` + e.singleTotal + `</td>
                         <td><button onclick="return deleteProductItemConfirm(` + e.productId + `);">刪除品項</button></td>
                         </tr>`
                 })
@@ -222,8 +222,7 @@
                         console.log(response);
                         if(response.returnCode==='0000'){
                             console.log("request success");
-                            var paymentUrl = response.info.paymentUrl.web;
-                            window.location.href = paymentUrl;
+                            window.location.href = response.info.paymentUrl.web;
                             sessionStorage.setItem("totalprice", totalprice);
                         }else{
                             alert("連線至linypay付款系統失敗");
