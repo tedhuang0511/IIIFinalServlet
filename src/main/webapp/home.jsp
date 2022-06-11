@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <html>
@@ -80,8 +80,7 @@
                            aria-expanded="true"> 報表資訊 </a>
                         <ul class="submenu collapse" aria-labelledby="dropdown05">
                             <li><a class="dropdown-item" href="#">銷售報表</a></li>
-                            <li><a class="dropdown-item" href="#">交易明細表</a></li>
-                            <li><a class="dropdown-item" href="#">會員報表</a></li>
+                            <li><a class="dropdown-item productSalesReport" href="#">產品銷售表</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -203,6 +202,12 @@
                     <jsp:param name="key1" value="123"/>
                 </jsp:include>
             </div>
+
+            <div id="productSalesReport01" class="d-none">
+                <jsp:include page="reportPages/displayProductSalesReport.jsp">
+                    <jsp:param name="key1" value="123"/>
+                </jsp:include>
+            </div>
         </main>
     </div>
 </div>
@@ -248,6 +253,7 @@
         document.getElementById("time").innerHTML =
             "Hello ${sessionScope.login}! 現在時間:" + date.toLocaleTimeString();
     }
+
     setInterval(timer, 500);
 
     $('.users').on('click', function () {
@@ -268,6 +274,10 @@
     })
     $('.m-query').on('click', function () {
         $('#memberList').removeClass('d-none')
+    })
+    $('.productSalesReport').on('click', function () {
+        $('main>div').prop('class', 'd-none')
+        $('#productSalesReport01').removeClass('d-none')
     })
 
 </script>
