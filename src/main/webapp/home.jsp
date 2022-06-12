@@ -278,6 +278,7 @@
     $('.productSalesReport').on('click', function () {
         $('main>div').prop('class', 'd-none')
         $('#productSalesReport01').removeClass('d-none')
+        $('#productSalesReportContent').addClass('d-none')
     })
 
 </script>

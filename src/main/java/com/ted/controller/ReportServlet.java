@@ -1,6 +1,8 @@
 package com.ted.controller;
 
 import com.ted.model.MembersService;
+import com.ted.model.viewTables.OrderReportService;
+import com.ted.model.viewTables.OrdersumBean;
 import com.ted.model.viewTables.ProductSalesService;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,6 +24,7 @@ public class ReportServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
     private SimpleDateFormat sFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private ProductSalesService productSalesService;
+    private OrderReportService orderReportService;
 
     @Override
     public void init() {
@@ -29,6 +32,7 @@ public class ReportServlet extends HttpServlet {
         ApplicationContext context = (ApplicationContext) application.getAttribute(
                 WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE);
         productSalesService = context.getBean("productSalesService", ProductSalesService.class);
+        orderReportService = context.getBean("orderReportService", OrderReportService.class);
     }
 
     @Override
@@ -41,6 +45,7 @@ public class ReportServlet extends HttpServlet {
 
         String temp0 = request.getParameter("startDate");
         String temp1 = request.getParameter("endDate");
+        String reportType = request.getParameter("reportType");
 
         System.out.println("start: " + temp0 + " end: " + temp1);
 
@@ -58,14 +63,34 @@ public class ReportServlet extends HttpServlet {
             System.out.println(e);
         }
 
-        JSONArray jarr = new JSONArray();
-        List<Object[]> list = productSalesService.select(startDate, endDate);
-        for (var bean : list) {
-            Map<Object,Object> res = new HashMap<>();
-            res.put(bean[0],bean[1]);
-            jarr.put(new JSONObject(res));
+        if("order".equals(reportType)){
+            JSONArray jarr = new JSONArray();
+            List<OrdersumBean> res = orderReportService.select(startDate, endDate);
+            if(res.size()!=0 && res!=null){
+                for(var bean : res){
+                    JSONObject jobj = new JSONObject(bean.toString());
+                    jarr.put(jobj);
+                }
+                out.print(jarr);
+            }else{
+                out.print("No result");
+            }
+            out.close();
+        }else if("product".equals(reportType)){
+            JSONArray jarr = new JSONArray();
+            List<Object[]> res = productSalesService.select(startDate, endDate);
+            if(res.size()!=0 && res!=null){
+                for (var bean : res) {
+                    Map<Object,Object> map = new HashMap<>();
+                    map.put(bean[0],bean[1]);
+                    jarr.put(new JSONObject(map));
+                }
+                out.print(jarr);
+            }else{
+                out.print("No result");
+            }
+            out.close();
         }
-        out.print(jarr);
     }
 
     @Override

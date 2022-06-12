@@ -2,9 +2,10 @@ package com.ted.model.viewTables;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Date;
 
 @Entity
-@Table(name = "ordersum", schema = "iii", catalog = "")
+@Table(name = "ordersum", schema = "iii")
 public class OrdersumBean {
     @Id
     @Basic
@@ -14,14 +15,17 @@ public class OrdersumBean {
     @Column(name = "member_id", nullable = false)
     private int memberId;
     @Basic
+    @Column(name = "status", nullable = false, length = 11)
+    private String status;
+    @Basic
     @Column(name = "pay_method", nullable = false, length = 15)
     private String payMethod;
     @Basic
     @Column(name = "create_date", nullable = true)
-    private Timestamp createDate;
+    private Date createDate;
     @Basic
     @Column(name = "order_total_amount", nullable = true, precision = 0)
-    private Long orderTotalAmount;
+    private java.math.BigDecimal orderTotalAmount;
 
     public String getOrderId() {
         return orderId;
@@ -39,6 +43,14 @@ public class OrdersumBean {
         this.memberId = memberId;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public String getPayMethod() {
         return payMethod;
     }
@@ -47,20 +59,32 @@ public class OrdersumBean {
         this.payMethod = payMethod;
     }
 
-    public Timestamp getCreateDate() {
+    public Date getCreateDate() {
         return createDate;
     }
 
-    public void setCreateDate(Timestamp createDate) {
+    public void setCreateDate(Date createDate) {
         this.createDate = createDate;
     }
 
-    public Long getOrderTotalAmount() {
+    public java.math.BigDecimal getOrderTotalAmount() {
         return orderTotalAmount;
     }
 
-    public void setOrderTotalAmount(Long orderTotalAmount) {
+    public void setOrderTotalAmount(java.math.BigDecimal orderTotalAmount) {
         this.orderTotalAmount = orderTotalAmount;
+    }
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"orderId\" : " + '\"' + orderId + '\"' +
+                ", \"memberId\" : " + '\"'+ memberId + '\"' +
+                ", \"status\" : " + '\"'+ status + '\"' +
+                ", \"payMethod\" : " + '\"'+ payMethod + '\"' +
+                ", \"createDate\" : " + '\"'+ createDate + '\"' +
+                ", \"orderTotalAmount\" : " + '\"'+ orderTotalAmount + '\"' +
+                "}";
     }
 
     @Override
@@ -72,6 +96,7 @@ public class OrdersumBean {
 
         if (memberId != that.memberId) return false;
         if (orderId != null ? !orderId.equals(that.orderId) : that.orderId != null) return false;
+        if (status != null ? !status.equals(that.status) : that.status != null) return false;
         if (payMethod != null ? !payMethod.equals(that.payMethod) : that.payMethod != null) return false;
         if (createDate != null ? !createDate.equals(that.createDate) : that.createDate != null) return false;
         if (orderTotalAmount != null ? !orderTotalAmount.equals(that.orderTotalAmount) : that.orderTotalAmount != null)
@@ -84,6 +109,7 @@ public class OrdersumBean {
     public int hashCode() {
         int result = orderId != null ? orderId.hashCode() : 0;
         result = 31 * result + memberId;
+        result = 31 * result + (status != null ? status.hashCode() : 0);
         result = 31 * result + (payMethod != null ? payMethod.hashCode() : 0);
         result = 31 * result + (createDate != null ? createDate.hashCode() : 0);
         result = 31 * result + (orderTotalAmount != null ? orderTotalAmount.hashCode() : 0);

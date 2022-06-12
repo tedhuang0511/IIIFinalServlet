@@ -85,7 +85,8 @@
             method: "get",
             data: {
                 startDate: $('#productSalesFrom').val().toString().replace("T", " ") + ":00",
-                endDate: $('#productSalesEnd').val().toString().replace("T", " ") + ":00"
+                endDate: $('#productSalesEnd').val().toString().replace("T", " ") + ":00",
+                reportType: "product"
             },
             success: function (resp) {
                 var Jsonresult = JSON.parse(resp);

@@ -25,8 +25,8 @@ public class JavaMail {
         this.title = "Java webapp 網路購物訂單確認信";
         String host = "smtp.gmail.com";
         int port = 587;
-        username = "";
-        password = "";
+        username = "sbbty218@gmail.com";
+        password = "xrqonlxqjfhweukl";
 
         props = new Properties();
         props.put("mail.smtp.host", host);
@@ -76,7 +76,7 @@ public class JavaMail {
         int totalPrice = 0;
         for (int i = 0; i < jsonarr.length(); i++) {
             JSONObject jobj = new JSONObject(jsonarr.get(i).toString()); //把json array裡面的json物件字串轉成json object
-            totalPrice = totalPrice + (Integer)jobj.get("單項總額");
+            totalPrice = totalPrice + (Integer)jobj.get("singleTotal");
             str = str + "<tr>" +
                     "    <td style=\"padding: 16px; font-size: 18px;\">" + jobj.get("productName") + "\uD83D\uDD25" + "</td>\n" +
                     "    <td style=\"padding: 16px;\">" + "<img src=\"" + jobj.get("productImg") + "\" width=\"100px\">" + "</td>\n" +
@@ -106,18 +106,18 @@ public class JavaMail {
         return text1;
     }
 
-    public static void main(String[] args) {
-        JavaMail javaMail = new JavaMail("sbbty218@gmail.com","Ted Huang");
-        String res = javaMail.sendMail(javaMail.createText("[\n" +
-                "    {\n" +
-                "        \"productId\": 52,\n" +
-                "        \"qty\": 1,\n" +
-                "        \"productImg\": \"https://s3.ap-northeast-1.amazonaws.com/tedawsbucket20220530/javaproject/2022_06_02_21_50_52_422.jpg\",\n" +
-                "        \"單項總額\": 18899,\n" +
-                "        \"productName\": \"Samsung S22 Ultra\",\n" +
-                "        \"productPrice\": 18899\n" +
-                "    }\n" +
-                "]"));
-        System.out.println(res);
-    }
+//    public static void main(String[] args) {
+//        JavaMail javaMail = new JavaMail("sbbty218@gmail.com","Ted Huang");
+//        String res = javaMail.sendMail(javaMail.createText("[\n" +
+//                "    {\n" +
+//                "        \"productId\": 52,\n" +
+//                "        \"qty\": 1,\n" +
+//                "        \"productImg\": \"https://s3.ap-northeast-1.amazonaws.com/tedawsbucket20220530/javaproject/2022_06_02_21_50_52_422.jpg\",\n" +
+//                "        \"singleTotal\": 18899,\n" +
+//                "        \"productName\": \"Samsung S22 Ultra\",\n" +
+//                "        \"productPrice\": 18899\n" +
+//                "    }\n" +
+//                "]"));
+//        System.out.println(res);
+//    }
 }

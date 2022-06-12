@@ -25,6 +25,7 @@
                 <value>com.ted.model.OrderDetailBean</value>
                 <value>com.ted.model.MembersBean</value>
                 <value>com.ted.model.viewTables.ProductsaleBean</value>
+                <value>com.ted.model.viewTables.OrdersumBean</value>
             </array>
         </property>
         <property name="hibernateProperties">
